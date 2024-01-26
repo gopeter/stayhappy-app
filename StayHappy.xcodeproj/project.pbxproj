@@ -1,0 +1,631 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
+		45B6F6E42B4EF0B8003A42F8 /* ContentViewBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E32B4EF0B8003A42F8 /* ContentViewBack.swift */; };
+		45B6F6E62B4EF0B8003A42F8 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E52B4EF0B8003A42F8 /* Item.swift */; };
+		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
+		45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */; };
+		45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */; };
+		45B6F7012B4EF0BA003A42F8 /* StayHappyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */; };
+		45B6F7032B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */; };
+		45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2372B628E5B0076D062 /* MomentsView.swift */; };
+		45E1655B2B4EF68700F55A17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655A2B4EF68700F55A17 /* ContentView.swift */; };
+		45E165602B4EF96700F55A17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655F2B4EF96700F55A17 /* Event.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		45B6F6F32B4EF0BA003A42F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45B6F6D62B4EF0B8003A42F8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45B6F6DD2B4EF0B8003A42F8;
+			remoteInfo = StayHappy;
+		};
+		45B6F6FD2B4EF0BA003A42F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45B6F6D62B4EF0B8003A42F8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45B6F6DD2B4EF0B8003A42F8;
+			remoteInfo = StayHappy;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
+		45B6F6E32B4EF0B8003A42F8 /* ContentViewBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewBack.swift; sourceTree = "<group>"; };
+		45B6F6E52B4EF0B8003A42F8 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StayHappy.entitlements; sourceTree = "<group>"; };
+		45B6F6ED2B4EF0BA003A42F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		45B6F6F22B4EF0BA003A42F8 /* StayHappyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StayHappyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyTests.swift; sourceTree = "<group>"; };
+		45B6F6FC2B4EF0BA003A42F8 /* StayHappyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StayHappyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyUITests.swift; sourceTree = "<group>"; };
+		45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		45BBE2372B628E5B0076D062 /* MomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsView.swift; sourceTree = "<group>"; };
+		45E1655A2B4EF68700F55A17 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		45E1655F2B4EF96700F55A17 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		45B6F6DB2B4EF0B8003A42F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45B6F6EF2B4EF0BA003A42F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45B6F6F92B4EF0BA003A42F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		45B6F6D52B4EF0B8003A42F8 = {
+			isa = PBXGroup;
+			children = (
+				45B6F6E02B4EF0B8003A42F8 /* StayHappy */,
+				45B6F6F52B4EF0BA003A42F8 /* StayHappyTests */,
+				45B6F6FF2B4EF0BA003A42F8 /* StayHappyUITests */,
+				45B6F6DF2B4EF0B8003A42F8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		45B6F6DF2B4EF0B8003A42F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */,
+				45B6F6F22B4EF0BA003A42F8 /* StayHappyTests.xctest */,
+				45B6F6FC2B4EF0BA003A42F8 /* StayHappyUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		45B6F6E02B4EF0B8003A42F8 /* StayHappy */ = {
+			isa = PBXGroup;
+			children = (
+				45E1655E2B4EF72900F55A17 /* Model */,
+				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
+				45E1655A2B4EF68700F55A17 /* ContentView.swift */,
+				45BBE2372B628E5B0076D062 /* MomentsView.swift */,
+				45B6F6E32B4EF0B8003A42F8 /* ContentViewBack.swift */,
+				45B6F6E52B4EF0B8003A42F8 /* Item.swift */,
+				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
+				45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */,
+				45B6F6ED2B4EF0BA003A42F8 /* Info.plist */,
+				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
+			);
+			path = StayHappy;
+			sourceTree = "<group>";
+		};
+		45B6F6E92B4EF0BA003A42F8 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		45B6F6F52B4EF0BA003A42F8 /* StayHappyTests */ = {
+			isa = PBXGroup;
+			children = (
+				45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */,
+			);
+			path = StayHappyTests;
+			sourceTree = "<group>";
+		};
+		45B6F6FF2B4EF0BA003A42F8 /* StayHappyUITests */ = {
+			isa = PBXGroup;
+			children = (
+				45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */,
+				45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */,
+			);
+			path = StayHappyUITests;
+			sourceTree = "<group>";
+		};
+		45E1655E2B4EF72900F55A17 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				45E1655F2B4EF96700F55A17 /* Event.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		45B6F6DD2B4EF0B8003A42F8 /* StayHappy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45B6F7062B4EF0BA003A42F8 /* Build configuration list for PBXNativeTarget "StayHappy" */;
+			buildPhases = (
+				45B6F6DA2B4EF0B8003A42F8 /* Sources */,
+				45B6F6DB2B4EF0B8003A42F8 /* Frameworks */,
+				45B6F6DC2B4EF0B8003A42F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StayHappy;
+			productName = StayHappy;
+			productReference = 45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */;
+			productType = "com.apple.product-type.application";
+		};
+		45B6F6F12B4EF0BA003A42F8 /* StayHappyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45B6F7092B4EF0BA003A42F8 /* Build configuration list for PBXNativeTarget "StayHappyTests" */;
+			buildPhases = (
+				45B6F6EE2B4EF0BA003A42F8 /* Sources */,
+				45B6F6EF2B4EF0BA003A42F8 /* Frameworks */,
+				45B6F6F02B4EF0BA003A42F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				45B6F6F42B4EF0BA003A42F8 /* PBXTargetDependency */,
+			);
+			name = StayHappyTests;
+			productName = StayHappyTests;
+			productReference = 45B6F6F22B4EF0BA003A42F8 /* StayHappyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		45B6F6FB2B4EF0BA003A42F8 /* StayHappyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45B6F70C2B4EF0BA003A42F8 /* Build configuration list for PBXNativeTarget "StayHappyUITests" */;
+			buildPhases = (
+				45B6F6F82B4EF0BA003A42F8 /* Sources */,
+				45B6F6F92B4EF0BA003A42F8 /* Frameworks */,
+				45B6F6FA2B4EF0BA003A42F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				45B6F6FE2B4EF0BA003A42F8 /* PBXTargetDependency */,
+			);
+			name = StayHappyUITests;
+			productName = StayHappyUITests;
+			productReference = 45B6F6FC2B4EF0BA003A42F8 /* StayHappyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		45B6F6D62B4EF0B8003A42F8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					45B6F6DD2B4EF0B8003A42F8 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					45B6F6F12B4EF0BA003A42F8 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 45B6F6DD2B4EF0B8003A42F8;
+					};
+					45B6F6FB2B4EF0BA003A42F8 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 45B6F6DD2B4EF0B8003A42F8;
+					};
+				};
+			};
+			buildConfigurationList = 45B6F6D92B4EF0B8003A42F8 /* Build configuration list for PBXProject "StayHappy" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 45B6F6D52B4EF0B8003A42F8;
+			productRefGroup = 45B6F6DF2B4EF0B8003A42F8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				45B6F6DD2B4EF0B8003A42F8 /* StayHappy */,
+				45B6F6F12B4EF0BA003A42F8 /* StayHappyTests */,
+				45B6F6FB2B4EF0BA003A42F8 /* StayHappyUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		45B6F6DC2B4EF0B8003A42F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */,
+				45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45B6F6F02B4EF0BA003A42F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45B6F6FA2B4EF0BA003A42F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		45B6F6DA2B4EF0B8003A42F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45B6F6E42B4EF0B8003A42F8 /* ContentViewBack.swift in Sources */,
+				45B6F6E62B4EF0B8003A42F8 /* Item.swift in Sources */,
+				45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */,
+				45E1655B2B4EF68700F55A17 /* ContentView.swift in Sources */,
+				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
+				45E165602B4EF96700F55A17 /* Event.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45B6F6EE2B4EF0BA003A42F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45B6F6F82B4EF0BA003A42F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45B6F7032B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift in Sources */,
+				45B6F7012B4EF0BA003A42F8 /* StayHappyUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		45B6F6F42B4EF0BA003A42F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45B6F6DD2B4EF0B8003A42F8 /* StayHappy */;
+			targetProxy = 45B6F6F32B4EF0BA003A42F8 /* PBXContainerItemProxy */;
+		};
+		45B6F6FE2B4EF0BA003A42F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45B6F6DD2B4EF0B8003A42F8 /* StayHappy */;
+			targetProxy = 45B6F6FD2B4EF0BA003A42F8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		45B6F7042B4EF0BA003A42F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		45B6F7052B4EF0BA003A42F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		45B6F7072B4EF0BA003A42F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StayHappy/StayHappy.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"StayHappy/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StayHappy/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.stayhappy.StayHappy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		45B6F7082B4EF0BA003A42F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StayHappy/StayHappy.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"StayHappy/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StayHappy/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.stayhappy.StayHappy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		45B6F70A2B4EF0BA003A42F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.stayhappy.StayHappyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StayHappy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/StayHappy";
+			};
+			name = Debug;
+		};
+		45B6F70B2B4EF0BA003A42F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.stayhappy.StayHappyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StayHappy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/StayHappy";
+			};
+			name = Release;
+		};
+		45B6F70D2B4EF0BA003A42F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.stayhappy.StayHappyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = StayHappy;
+			};
+			name = Debug;
+		};
+		45B6F70E2B4EF0BA003A42F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.stayhappy.StayHappyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = StayHappy;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		45B6F6D92B4EF0B8003A42F8 /* Build configuration list for PBXProject "StayHappy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45B6F7042B4EF0BA003A42F8 /* Debug */,
+				45B6F7052B4EF0BA003A42F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45B6F7062B4EF0BA003A42F8 /* Build configuration list for PBXNativeTarget "StayHappy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45B6F7072B4EF0BA003A42F8 /* Debug */,
+				45B6F7082B4EF0BA003A42F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45B6F7092B4EF0BA003A42F8 /* Build configuration list for PBXNativeTarget "StayHappyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45B6F70A2B4EF0BA003A42F8 /* Debug */,
+				45B6F70B2B4EF0BA003A42F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45B6F70C2B4EF0BA003A42F8 /* Build configuration list for PBXNativeTarget "StayHappyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45B6F70D2B4EF0BA003A42F8 /* Debug */,
+				45B6F70E2B4EF0BA003A42F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 45B6F6D62B4EF0B8003A42F8 /* Project object */;
+}

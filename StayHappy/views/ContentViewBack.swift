@@ -9,9 +9,13 @@ import SwiftData
 import SwiftUI
 
 struct ContentViewBack: View {
+    var body: some View {
+        Text("ContentViewBack")
+    }
+    
+    /*
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-
     var body: some View {
         NavigationSplitView {
             List {
@@ -53,9 +57,10 @@ struct ContentViewBack: View {
             }
         }
     }
+     */
 }
 
 #Preview {
     ContentViewBack()
-        .modelContainer(for: Item.self, inMemory: true)
+       // .modelContainer(for: Item.self, inMemory: true)
 }

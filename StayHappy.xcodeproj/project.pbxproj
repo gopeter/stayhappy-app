@@ -8,16 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
-		45B6F6E42B4EF0B8003A42F8 /* ContentViewBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E32B4EF0B8003A42F8 /* ContentViewBack.swift */; };
-		45B6F6E62B4EF0B8003A42F8 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E52B4EF0B8003A42F8 /* Item.swift */; };
+		45B6F6E62B4EF0B8003A42F8 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E52B4EF0B8003A42F8 /* Moment.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
 		45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */; };
 		45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */; };
 		45B6F7012B4EF0BA003A42F8 /* StayHappyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */; };
 		45B6F7032B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */; };
-		45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2372B628E5B0076D062 /* MomentsView.swift */; };
-		45E1655B2B4EF68700F55A17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655A2B4EF68700F55A17 /* ContentView.swift */; };
+		45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2372B628E5B0076D062 /* EventsView.swift */; };
+		45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */; };
+		45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2412B68E5E10076D062 /* MomentsView.swift */; };
+		45BBE2462B69939D0076D062 /* EventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2452B69939D0076D062 /* EventFormView.swift */; };
+		45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655A2B4EF68700F55A17 /* RootView.swift */; };
 		45E165602B4EF96700F55A17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655F2B4EF96700F55A17 /* Event.swift */; };
+		45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F72E2B6BC2CF005C0E77 /* EventView.swift */; };
+		45E4F7312B6C3B2F005C0E77 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7302B6C3B2F005C0E77 /* SearchView.swift */; };
+		45E4F7332B6C3B7E005C0E77 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7322B6C3B7E005C0E77 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +45,7 @@
 /* Begin PBXFileReference section */
 		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
-		45B6F6E32B4EF0B8003A42F8 /* ContentViewBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewBack.swift; sourceTree = "<group>"; };
-		45B6F6E52B4EF0B8003A42F8 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		45B6F6E52B4EF0B8003A42F8 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StayHappy.entitlements; sourceTree = "<group>"; };
@@ -51,9 +55,15 @@
 		45B6F6FC2B4EF0BA003A42F8 /* StayHappyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StayHappyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyUITests.swift; sourceTree = "<group>"; };
 		45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		45BBE2372B628E5B0076D062 /* MomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsView.swift; sourceTree = "<group>"; };
-		45E1655A2B4EF68700F55A17 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		45BBE2372B628E5B0076D062 /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
+		45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
+		45BBE2412B68E5E10076D062 /* MomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsView.swift; sourceTree = "<group>"; };
+		45BBE2452B69939D0076D062 /* EventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormView.swift; sourceTree = "<group>"; };
+		45E1655A2B4EF68700F55A17 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		45E1655F2B4EF96700F55A17 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		45E4F72E2B6BC2CF005C0E77 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		45E4F7302B6C3B2F005C0E77 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		45E4F7322B6C3B7E005C0E77 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,16 +114,15 @@
 		45B6F6E02B4EF0B8003A42F8 /* StayHappy */ = {
 			isa = PBXGroup;
 			children = (
-				45E1655E2B4EF72900F55A17 /* Model */,
-				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
-				45E1655A2B4EF68700F55A17 /* ContentView.swift */,
-				45BBE2372B628E5B0076D062 /* MomentsView.swift */,
-				45B6F6E32B4EF0B8003A42F8 /* ContentViewBack.swift */,
-				45B6F6E52B4EF0B8003A42F8 /* Item.swift */,
-				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */,
 				45B6F6ED2B4EF0BA003A42F8 /* Info.plist */,
+				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
+				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
+				45E1655E2B4EF72900F55A17 /* models */,
+				45BBE23A2B67E8250076D062 /* partials */,
+				45BBE23D2B68453F0076D062 /* ui */,
+				45BBE2392B67E7E80076D062 /* views */,
 			);
 			path = StayHappy;
 			sourceTree = "<group>";
@@ -143,12 +152,42 @@
 			path = StayHappyUITests;
 			sourceTree = "<group>";
 		};
-		45E1655E2B4EF72900F55A17 /* Model */ = {
+		45BBE2392B67E7E80076D062 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				45BBE2452B69939D0076D062 /* EventFormView.swift */,
+				45BBE2372B628E5B0076D062 /* EventsView.swift */,
+				45E4F72E2B6BC2CF005C0E77 /* EventView.swift */,
+				45BBE2412B68E5E10076D062 /* MomentsView.swift */,
+				45E4F7322B6C3B7E005C0E77 /* ProfileView.swift */,
+				45E1655A2B4EF68700F55A17 /* RootView.swift */,
+				45E4F7302B6C3B2F005C0E77 /* SearchView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		45BBE23A2B67E8250076D062 /* partials */ = {
+			isa = PBXGroup;
+			children = (
+				45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */,
+			);
+			path = partials;
+			sourceTree = "<group>";
+		};
+		45BBE23D2B68453F0076D062 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		45E1655E2B4EF72900F55A17 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				45B6F6E52B4EF0B8003A42F8 /* Moment.swift */,
 				45E1655F2B4EF96700F55A17 /* Event.swift */,
 			);
-			path = Model;
+			path = models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,12 +320,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45B6F6E42B4EF0B8003A42F8 /* ContentViewBack.swift in Sources */,
-				45B6F6E62B4EF0B8003A42F8 /* Item.swift in Sources */,
-				45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */,
-				45E1655B2B4EF68700F55A17 /* ContentView.swift in Sources */,
+				45E4F7312B6C3B2F005C0E77 /* SearchView.swift in Sources */,
+				45B6F6E62B4EF0B8003A42F8 /* Moment.swift in Sources */,
+				45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */,
+				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
+				45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */,
 				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
+				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Event.swift in Sources */,
+				45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */,
+				45E4F7332B6C3B7E005C0E77 /* ProfileView.swift in Sources */,
+				45BBE2462B69939D0076D062 /* EventFormView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +495,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"StayHappy/Preview Content\"";
+				DEVELOPMENT_TEAM = JU865Y955R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StayHappy/Info.plist;
@@ -487,6 +532,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"StayHappy/Preview Content\"";
+				DEVELOPMENT_TEAM = JU865Y955R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StayHappy/Info.plist;

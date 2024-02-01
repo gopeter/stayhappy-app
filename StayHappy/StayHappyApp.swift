@@ -8,6 +8,21 @@
 import SwiftUI
 import SwiftData
 
+enum Views: String {
+    case events
+    case moments
+    case search
+    case profile
+}
+
+class GlobalData: ObservableObject {
+    @Published var activeView: Views
+    
+    init(activeView: Views) {
+        self.activeView = activeView
+    }
+}
+
 @main
 struct StayHappyApp: App {
     var sharedModelContainer: ModelContainer = {
@@ -26,7 +41,8 @@ struct StayHappyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView().environmentObject(GlobalData(activeView: .events))
+
         }
         .modelContainer(sharedModelContainer)
     }

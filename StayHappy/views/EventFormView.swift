@@ -5,12 +5,12 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import SwiftData
 import SwiftUI
+import os.log
 
 struct EventFormView: View {
+    @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) private var context
 
     let event: Event?
 
@@ -22,7 +22,7 @@ struct EventFormView: View {
     var disableForm: Bool {
         title == ""
     }
-    
+
     init(event: Event?) {
         self.event = event
 
@@ -33,15 +33,39 @@ struct EventFormView: View {
     }
 
     func addEvent() {
-        let newEvent = Event(title: title, isHighlight: isHighlight, startAt: startAt, endAt: startAt)
-        context.insert(newEvent)
-        dismiss()
+        do {
+            var newEvent = EventMutation(title: title, isHighlight: isHighlight, startAt: startAt)
+            try appDatabase.saveEvent(&newEvent)
+
+            dismiss()
+        } catch {
+            // TODO: log something useful
+            Logger.debug.error("Error: \(error.localizedDescription)")
+        }
     }
 
     var body: some View {
         VStack {
             Form {
-                Text("Add Event").font(.title).fontWeight(.bold).listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color("AppBackgroundColor"))
+                HStack(spacing: 0) {
+                    Text("Add Event")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Spacer()
+                    
+                    
+                    
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Image("x-symbol")
+                            .resizable()
+                            .frame(width: 18.0, height: 18.0)
+                         
+                    })
+                }.listRowBackground(Color("AppBackgroundColor"))
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
 
                 Section {
                     TextField("Title", text: $title)
@@ -73,7 +97,6 @@ struct EventFormView: View {
 
                 }.listRowInsets(.init()).listRowBackground(Color("AppBackgroundColor"))
             }.background(Color("AppBackgroundColor")).scrollContentBackground(.hidden)
-
         }
     }
 }

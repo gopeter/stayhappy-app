@@ -5,8 +5,8 @@
 //  Created by Peter Oesteritz on 10.01.24.
 //
 
+import GRDBQuery
 import SwiftUI
-import SwiftData
 
 enum Views: String {
     case events
@@ -17,7 +17,7 @@ enum Views: String {
 
 class GlobalData: ObservableObject {
     @Published var activeView: Views
-    
+
     init(activeView: Views) {
         self.activeView = activeView
     }
@@ -25,25 +25,41 @@ class GlobalData: ObservableObject {
 
 @main
 struct StayHappyApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Event.self,
-        ])
-        
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
-            RootView().environmentObject(GlobalData(activeView: .events))
-
+            RootView()
+                .environment(\.appDatabase, .init())
+                .environmentObject(GlobalData(activeView: .events))
         }
-        .modelContainer(sharedModelContainer)
+    }
+}
+
+// MARK: - Give SwiftUI access to the database
+
+//
+// Define a new environment key that grants access to an AppDatabase.
+//
+// The technique is documented at
+// <https://developer.apple.com/documentation/swiftui/environmentkey>.
+
+private struct AppDatabaseKey: EnvironmentKey {
+    static var defaultValue: AppDatabase { .init() }
+}
+
+extension EnvironmentValues {
+    var appDatabase: AppDatabase {
+        get { self[AppDatabaseKey.self] }
+        set { self[AppDatabaseKey.self] = newValue }
+    }
+}
+
+// In this app, views observe the database with the @Query property
+// wrapper, defined in the GRDBQuery package. Its documentation recommends to
+// define a dedicated initializer for `appDatabase` access, so we comply:
+
+extension Query where Request.DatabaseContext == AppDatabase {
+    /// Convenience initializer for requests that feed from `AppDatabase`.
+    init(_ request: Request) {
+        self.init(request, in: \.appDatabase)
     }
 }

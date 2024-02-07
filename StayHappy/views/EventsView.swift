@@ -5,11 +5,14 @@
 //  Created by Peter Oesteritz on 25.01.24.
 //
 
-import SwiftData
+import GRDBQuery
 import SwiftUI
 
 struct EventsView: View {
-    @Query(sort: \Event.startAt, order: .reverse) var events: [Event]
+    @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
+
+    @State private var searchText = ""
+    @State private var searchIsActive = false
 
     var body: some View {
         NavigationStack {
@@ -19,34 +22,35 @@ struct EventsView: View {
                         EventView(event: event)
                     }
                 }
+
                 Spacer(minLength: 70)
             }.background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Events '24")
+                .navigationTitle("Events")
                 .toolbar {
                     Menu {
-                        Section("Primary Actions") {
-                            Button("First") {}
-                            Button("Second") {}
+                        Section("Period") {
+                            Picker("Period", selection: $events.period) {
+                                Text("Upcoming events").tag(EventListRequest.Period.upcoming)
+                                Text("Past events").tag(EventListRequest.Period.past)
+                            }
                         }
 
-                        Button {
-                            // Add this item to a list of favorites.
-                        } label: {
-                            Label("Add to Favorites", systemImage: "heart")
+                        Section("Ordering") {
+                            Picker("Ordering", selection: $events.ordering) {
+                                Text("Ascending").tag(EventListRequest.Ordering.asc)
+                                Text("Descending").tag(EventListRequest.Ordering.desc)
+                            }
                         }
 
-                        Divider()
-
-                        Button(role: .destructive) {} label: {
-                            Label("Delete", systemImage: "trash")
-                        }
                     } label: {
-                        
-                        Image("settings-2-symbol").resizable().frame(width: 18.0, height: 18.0).foregroundStyle(.gray)
+                        Image("settings-2-symbol")
+                            .resizable()
+                            .frame(width: 18.0, height: 18.0)
+                            .foregroundStyle(.gray)
                     }
                 }
-        }
+        }.searchable(text: $searchText, isPresented: $searchIsActive)
     }
 }
 

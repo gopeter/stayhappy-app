@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		454014F52B712FDD003A7E24 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 454014F42B712FDD003A7E24 /* GRDB */; };
+		454014F82B71322B003A7E24 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014F72B71322B003A7E24 /* Database.swift */; };
+		454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = 454014FC2B722437003A7E24 /* GRDBQuery */; };
+		454014FF2B7278C0003A7E24 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014FE2B7278C0003A7E24 /* Log.swift */; };
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
-		45B6F6E62B4EF0B8003A42F8 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E52B4EF0B8003A42F8 /* Moment.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
 		45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */; };
 		45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */; };
@@ -18,6 +21,7 @@
 		45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */; };
 		45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2412B68E5E10076D062 /* MomentsView.swift */; };
 		45BBE2462B69939D0076D062 /* EventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2452B69939D0076D062 /* EventFormView.swift */; };
+		45C99AB52B73984600F61E8D /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 45C99AB42B73984600F61E8D /* Pow */; };
 		45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655A2B4EF68700F55A17 /* RootView.swift */; };
 		45E165602B4EF96700F55A17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655F2B4EF96700F55A17 /* Event.swift */; };
 		45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F72E2B6BC2CF005C0E77 /* EventView.swift */; };
@@ -43,9 +47,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		454014F72B71322B003A7E24 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		454014FE2B7278C0003A7E24 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
-		45B6F6E52B4EF0B8003A42F8 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StayHappy.entitlements; sourceTree = "<group>"; };
@@ -71,6 +76,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45C99AB52B73984600F61E8D /* Pow in Frameworks */,
+				454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */,
+				454014F52B712FDD003A7E24 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +99,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		454014F62B7131FD003A7E24 /* db */ = {
+			isa = PBXGroup;
+			children = (
+				454014F72B71322B003A7E24 /* Database.swift */,
+			);
+			path = db;
+			sourceTree = "<group>";
+		};
 		45B6F6D52B4EF0B8003A42F8 = {
 			isa = PBXGroup;
 			children = (
@@ -116,9 +132,11 @@
 			children = (
 				45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */,
 				45B6F6ED2B4EF0BA003A42F8 /* Info.plist */,
+				454014FE2B7278C0003A7E24 /* Log.swift */,
 				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
 				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
+				454014F62B7131FD003A7E24 /* db */,
 				45E1655E2B4EF72900F55A17 /* models */,
 				45BBE23A2B67E8250076D062 /* partials */,
 				45BBE23D2B68453F0076D062 /* ui */,
@@ -184,7 +202,6 @@
 		45E1655E2B4EF72900F55A17 /* models */ = {
 			isa = PBXGroup;
 			children = (
-				45B6F6E52B4EF0B8003A42F8 /* Moment.swift */,
 				45E1655F2B4EF96700F55A17 /* Event.swift */,
 			);
 			path = models;
@@ -206,6 +223,11 @@
 			dependencies = (
 			);
 			name = StayHappy;
+			packageProductDependencies = (
+				454014F42B712FDD003A7E24 /* GRDB */,
+				454014FC2B722437003A7E24 /* GRDBQuery */,
+				45C99AB42B73984600F61E8D /* Pow */,
+			);
 			productName = StayHappy;
 			productReference = 45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */;
 			productType = "com.apple.product-type.application";
@@ -278,6 +300,11 @@
 				Base,
 			);
 			mainGroup = 45B6F6D52B4EF0B8003A42F8;
+			packageReferences = (
+				454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
+				45C99AB32B73984600F61E8D /* XCRemoteSwiftPackageReference "Pow" */,
+			);
 			productRefGroup = 45B6F6DF2B4EF0B8003A42F8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -321,10 +348,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				45E4F7312B6C3B2F005C0E77 /* SearchView.swift in Sources */,
-				45B6F6E62B4EF0B8003A42F8 /* Moment.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */,
+				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */,
+				454014F82B71322B003A7E24 /* Database.swift in Sources */,
 				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
 				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Event.swift in Sources */,
@@ -672,6 +700,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.24.2;
+			};
+		};
+		454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDBQuery";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.0;
+			};
+		};
+		45C99AB32B73984600F61E8D /* XCRemoteSwiftPackageReference "Pow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmergeTools/Pow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		454014F42B712FDD003A7E24 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+		454014FC2B722437003A7E24 /* GRDBQuery */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */;
+			productName = GRDBQuery;
+		};
+		45C99AB42B73984600F61E8D /* Pow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45C99AB32B73984600F61E8D /* XCRemoteSwiftPackageReference "Pow" */;
+			productName = Pow;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 45B6F6D62B4EF0B8003A42F8 /* Project object */;
 }

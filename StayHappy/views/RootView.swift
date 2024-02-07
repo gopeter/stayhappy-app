@@ -5,24 +5,24 @@
 //  Created by Peter Oesteritz on 10.01.24.
 //
 
-import SwiftData
 import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var globalData: GlobalData
-
+    
+    // TODO: check if this is the right place to do this
+    init() {
+       applyUIStyling()
+    }
+    
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             VStack {
-                switch globalData.activeView {
-                case .events:
-                    EventsView()
-                case .moments:
-                    MomentsView()
-                case .search:
-                    SearchView()
-                case .profile:
-                    ProfileView()
+                TabView(selection: $globalData.activeView) {
+                    EventsView().tag(Views.events).toolbar(.hidden, for: .tabBar)
+                    MomentsView().tag(Views.moments).toolbar(.hidden, for: .tabBar)
+                    SearchView().tag(Views.search).toolbar(.hidden, for: .tabBar)
+                    ProfileView().tag(Views.profile).toolbar(.hidden, for: .tabBar)
                 }
             }
 
@@ -31,44 +31,16 @@ struct RootView: View {
     }
 }
 
+private func applyUIStyling() {
+    UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
+    UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
+//      UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).tintColor = <Color.yourTintColor>
+//      UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = <Color.yourBackgroundColor>
+//      UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: <your promptText, e.g., "Search", attributes: [.foregroundColor: <Color.yourForegroundColor>])
+}
+
 #Preview {
-    do {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Event.self, configurations: config)
-
-        let calendar = Calendar.current
-        let today = Date()
-        
-        container.mainContext.insert(Event(title: "Essen mit Christoph", startAt: calendar.date(byAdding: .day, value: 10, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Zocken mit Chris und Philipp", isHighlight: true, startAt: calendar.date(byAdding: .day, value: 9, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Jan und Andreas da", startAt: calendar.date(byAdding: .day, value: 8, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Therapie", startAt: calendar.date(byAdding: .day, value: 7, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Skiurlaub", startAt: calendar.date(byAdding: .day, value: 6, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Connie Frühschoppen", startAt: calendar.date(byAdding: .day, value: 5, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Arctic Monkeys Konzert", isHighlight: true, startAt: calendar.date(byAdding: .day, value: 4, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "StayHappy Livegang", startAt: calendar.date(byAdding: .day, value: 3, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Zocken mit Chris und Philipp", startAt: calendar.date(byAdding: .day, value: 2, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Entenbraten", startAt: calendar.date(byAdding: .day, value: 1, to: Date())!, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "TV Total", startAt: today, endAt: Date()))
-        
-        container.mainContext.insert(Event(title: "Killers of the Flower Moon", startAt: calendar.date(byAdding: .day, value: -1, to: Date())!, endAt: Date()))
-        
-        
-        container.mainContext.insert(Event(title: "BBQ", startAt: calendar.date(byAdding: .day, value: -2, to: Date())!, endAt: Date()))
-        
-        return RootView().modelContainer(container).environmentObject(GlobalData(activeView: .events))
-
-    } catch {
-        fatalError("Failed to create model container.")
-    }
+    RootView()
+        .environment(\.appDatabase, .init())
+        .environmentObject(GlobalData(activeView: .events))
 }

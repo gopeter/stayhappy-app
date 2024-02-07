@@ -37,9 +37,10 @@ struct NavigationBarView: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerSize: CGSize(width: 14, height: 14)).fill(Color("ToolbarBackgroundColor"))
+            RoundedRectangle(cornerRadius: 16).fill(Color("ToolbarBackgroundColor"))
                 .frame(height: 54)
                 .padding(.horizontal)
+                .shadow(radius: 15)
             
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", view: Views.events, action: {
@@ -71,5 +72,5 @@ struct NavigationBarView: View {
 }
 
 #Preview {
-    NavigationBarView()
+    NavigationBarView().environmentObject(GlobalData(activeView: .events))
 }

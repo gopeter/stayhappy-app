@@ -36,22 +36,41 @@ struct EventView: View {
    
     var body: some View {
         HStack(spacing: 20) {
-            VStack(spacing: 4) {
-                Text(event.startAt.formatted(.dateTime.month())).frame(alignment: .leading).font(.footnote)
+            // Date
+            VStack(spacing: 0) {
+                Text(event.startAt.formatted(.dateTime.month()))
+                    .frame(alignment: .leading)
+                    .font(.footnote)
                 
-                Text(event.startAt.formatted(.dateTime.day())).frame(alignment: .leading).font(.title2).fontWeight(.bold)
+                Text(event.startAt.formatted(.dateTime.day()))
+                    .frame(alignment: .leading)
+                    .font(.title2)
+                    .fontWeight(.bold)
             }.frame(minWidth: 40, maxWidth: 40)
 
+            // Heart
             ZStack {
-                Rectangle().fill(Color(UIColor.systemGray5)).frame(width: 1, alignment: .center)
+                Rectangle()
+                    .fill(Color(UIColor.systemGray4))
+                    .frame(width: 1, alignment: .center)
                 
-                ZStack {
-                    Circle().frame(width: 30, height: 30).foregroundStyle(Color(UIColor.systemGray5)).overlay(content: { Image("star-symbol").foregroundStyle(event.isHighlight ? Color.yellow : Color.gray) })
-                }
+                Circle()
+                    .frame(width: 26, height: 26)
+                    .foregroundStyle(Color("AppBackgroundColor"))
+                    .overlay(
+                        content: {
+                            Image("heart-symbol")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 18, height: 18)
+                                .foregroundStyle(event.isHighlight ? Color.yellow : Color.gray)
+                        }
+                    )
             }
             
+            // Content Card
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(Color("CardBackgroundColor"))
                     .frame(alignment: Alignment.top)
                        
@@ -60,7 +79,7 @@ struct EventView: View {
                     
                     Text(event.title)
                     
-                }.padding(.horizontal, 14).padding(.vertical, 10)
+                }.padding(.horizontal, 15).padding(.vertical, 10)
             }.padding(.vertical, 10)
             
         }.padding(.horizontal)
@@ -68,5 +87,5 @@ struct EventView: View {
 }
 
 #Preview {
-    EventView(event: Event(title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date()))
+    EventView(event: Event(id: 1, title: "Arctic Monkeys Concert", isHighlight: true, startAt: Date(), endAt: Date(), createdAt: Date(), updatedAt: Date()))
 }

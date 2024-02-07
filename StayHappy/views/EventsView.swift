@@ -11,7 +11,6 @@ import SwiftUI
 struct EventsView: View {
     @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
 
-    @State private var searchText = ""
     @State private var searchIsActive = false
 
     var body: some View {
@@ -50,7 +49,7 @@ struct EventsView: View {
                             .foregroundStyle(.gray)
                     }
                 }
-        }.searchable(text: $searchText, isPresented: $searchIsActive)
+        }.searchable(text: $events.searchText, isPresented: $searchIsActive)
     }
 }
 

@@ -81,11 +81,17 @@ struct Event: Identifiable, Equatable {
 
 extension Event: Codable, FetchableRecord, PersistableRecord {
     fileprivate enum Columns {
+        static let title = Column(CodingKeys.title)
         static let startAt = Column(CodingKeys.startAt)
     }
 }
 
 extension DerivableRequest<Event> {
+    func filterBySearchText(_ searchText: String) -> Self {
+        let pattern = "%\(searchText)%"
+        return filter(sql: "event.title LIKE ?", arguments: [pattern])
+    }
+    
     func filterByPeriod(_ dateCompareOperator: String) -> Self {
         let startOfToday = Calendar.current.startOfDay(for: Date())
         let formatter = DateFormatter()
@@ -108,6 +114,7 @@ extension DerivableRequest<Event> {
         case desc
     }
 
+    var searchText: String = ""
     var period: Period
     var ordering: Ordering
 
@@ -122,10 +129,15 @@ extension DerivableRequest<Event> {
 
     func fetchValue(_ db: Database) throws -> [Event] {
         let dateCompareOperator = period == Period.upcoming ? ">=" : "<"
+        var events = Event.all()
         
-        return try Event
-            .all()
-            .filterByPeriod(dateCompareOperator)
+        if (searchText == "") {
+            events = events.filterByPeriod(dateCompareOperator)
+        } else {
+            events = events.filterBySearchText(searchText)
+        }
+        
+        return try events
             .order(ordering == Ordering.desc ? Event.Columns.startAt.desc : Event.Columns.startAt.asc)
             .fetchAll(db)
     }

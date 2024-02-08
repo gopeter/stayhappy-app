@@ -7,6 +7,7 @@
 
 import GRDBQuery
 import SwiftUI
+import SwiftUIIntrospect
 
 struct EventsView: View {
     @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
@@ -20,10 +21,12 @@ struct EventsView: View {
                     ForEach(events) { event in
                         EventView(event: event)
                     }
-                }
-
+                }.searchable(text: $events.searchText, isPresented: $searchIsActive)
+                
                 Spacer(minLength: 70)
-            }.background(Color("AppBackgroundColor"))
+            }
+            
+            .background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
                 .navigationTitle("Events")
                 .toolbar {
@@ -49,7 +52,11 @@ struct EventsView: View {
                             .foregroundStyle(.gray)
                     }
                 }
-        }.searchable(text: $events.searchText, isPresented: $searchIsActive)
+        }.introspect(.searchField , on: .iOS(.v17)) { searchField in
+            searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
+            searchField.searchTextField.borderStyle = .none
+            searchField.searchTextField.layer.cornerRadius = 10
+        }
     }
 }
 

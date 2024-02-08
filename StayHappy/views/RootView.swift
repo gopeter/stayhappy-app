@@ -33,10 +33,8 @@ struct RootView: View {
 
 private func applyUIStyling() {
     UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
+    
     UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
-//      UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).tintColor = <Color.yourTintColor>
-//      UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = <Color.yourBackgroundColor>
-//      UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: <your promptText, e.g., "Search", attributes: [.foregroundColor: <Color.yourForegroundColor>])
 }
 
 #Preview {

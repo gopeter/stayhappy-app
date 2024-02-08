@@ -65,6 +65,16 @@ extension AppDatabase {
             try event.save(db)
         }
     }
+    
+    func updateEvent(_ event: Event) throws {
+        if event.title.isEmpty {
+            throw ValidationError.missingName
+        }
+
+        try db.write { db in
+            try event.save(db)
+        }
+    }
 }
 
 // MARK: - Event Model
@@ -91,24 +101,24 @@ extension DerivableRequest<Event> {
         let pattern = "%\(searchText)%"
         return filter(sql: "event.title LIKE ?", arguments: [pattern])
     }
-    
+
     func filterByPeriod(_ dateCompareOperator: String) -> Self {
         let startOfToday = Calendar.current.startOfDay(for: Date())
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        
+
         return filter(sql: "event.startAt \(dateCompareOperator) ?", arguments: [formatter.string(from: startOfToday)])
     }
 }
 
 // MARK: - Event Model Requests
 
- struct EventListRequest: Queryable {
-     enum Period {
-         case upcoming
-         case past
-     }
-     
+struct EventListRequest: Queryable {
+    enum Period {
+        case upcoming
+        case past
+    }
+
     enum Ordering {
         case asc
         case desc
@@ -130,13 +140,13 @@ extension DerivableRequest<Event> {
     func fetchValue(_ db: Database) throws -> [Event] {
         let dateCompareOperator = period == Period.upcoming ? ">=" : "<"
         var events = Event.all()
-        
-        if (searchText == "") {
+
+        if searchText == "" {
             events = events.filterByPeriod(dateCompareOperator)
         } else {
             events = events.filterBySearchText(searchText)
         }
-        
+
         return try events
             .order(ordering == Ordering.desc ? Event.Columns.startAt.desc : Event.Columns.startAt.asc)
             .fetchAll(db)

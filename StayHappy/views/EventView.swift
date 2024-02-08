@@ -5,14 +5,38 @@
 //  Created by Peter Oesteritz on 01.02.24.
 //
 
+import os.log
+import Pow
 import SwiftUI
 
 struct EventView: View {
+    @Environment(\.appDatabase) private var appDatabase
+
     let formatter = DateComponentsFormatter()
     var event: Event
     
     init(event: Event) {
         self.event = event
+    }
+    
+    func toggleHighlight(for event: Event) {
+        do {
+            // TODO: is there really no simple way to destruct the event as params?
+            var updatedEvent = EventMutation(
+                id: event.id,
+                title: event.title,
+                isHighlight: !event.isHighlight,
+                startAt: event.startAt,
+                endAt: event.endAt,
+                createdAt: event.createdAt,
+                updatedAt: event.updatedAt
+            )
+        
+            try appDatabase.saveEvent(&updatedEvent)
+        } catch {
+            // TODO: log something useful
+            Logger.debug.error("Error: \(error.localizedDescription)")
+        }
     }
     
     func formatStartAtDate(startAt: Date) -> String {
@@ -51,21 +75,41 @@ struct EventView: View {
             // Heart
             ZStack {
                 Rectangle()
-                    .fill(Color(UIColor.systemGray4))
+                    .fill(Color(uiColor: .systemGray4))
                     .frame(width: 1, alignment: .center)
                 
-                Circle()
-                    .frame(width: 26, height: 26)
-                    .foregroundStyle(Color("AppBackgroundColor"))
-                    .overlay(
-                        content: {
-                            Image("heart-symbol")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 18, height: 18)
-                                .foregroundStyle(event.isHighlight ? Color.yellow : Color.gray)
-                        }
-                    )
+                Button {
+                    toggleHighlight(for: event)
+                } label: {
+                    ZStack {
+                        Circle()
+                            .frame(width: 26, height: 26)
+                            .foregroundStyle(Color("AppBackgroundColor"))
+                            
+                        Image("heart-symbol")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(Color(uiColor: .systemGray4))
+                            .opacity(event.isHighlight ? 0 : 1)
+                            .animation(.easeInOut(duration: 0.1), value: event.isHighlight)
+                        
+                        Image("heart-filled-symbol")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(Color.red)
+                            .opacity(event.isHighlight ? 1 : 0)
+                            .animation(.easeInOut(duration: 0.1), value: event.isHighlight)
+                    }
+                }
+                .changeEffect(
+                    .spray {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.red)
+                    }, value: event.isHighlight, isEnabled: !event.isHighlight
+                )
+                .tint(event.isHighlight ? .red : .gray)
             }
             
             // Content Card

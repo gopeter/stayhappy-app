@@ -11,7 +11,6 @@ import SwiftUIIntrospect
 
 struct EventsView: View {
     @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
-
     @State private var searchIsActive = false
 
     var body: some View {
@@ -48,8 +47,8 @@ struct EventsView: View {
                     } label: {
                         Image("settings-2-symbol")
                             .resizable()
-                            .frame(width: 18.0, height: 18.0)
-                            .foregroundStyle(.gray)
+                            .frame(width: 20.0, height: 20.0)
+                            
                     }
                 }
         }.introspect(.searchField , on: .iOS(.v17)) { searchField in

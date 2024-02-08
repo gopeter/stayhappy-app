@@ -22,11 +22,9 @@ struct NavigationItem: Identifiable {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(isActive ? Color("TextColor") : Color.gray)
+                    .foregroundStyle(isActive ? Color.accentColor : Color.gray)
                 Spacer()
             }.frame(height: 54)
-            
-                    
         }).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
     }
 }
@@ -40,7 +38,7 @@ struct NavigationBarView: View {
             RoundedRectangle(cornerRadius: 16).fill(Color("ToolbarBackgroundColor"))
                 .frame(height: 54)
                 .padding(.horizontal)
-                .shadow(radius: 15)
+                .shadow(color: Color.black.opacity(0.2), radius: 10)
             
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", view: Views.events, action: {

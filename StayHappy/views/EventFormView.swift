@@ -54,8 +54,6 @@ struct EventFormView: View {
                     
                     Spacer()
                     
-                    
-                    
                     Button(action: {
                         dismiss()
                     }, label: {

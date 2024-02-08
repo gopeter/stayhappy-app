@@ -25,11 +25,12 @@ struct EventsView: View {
                         }
                     } else {
                         VStack {
+                            Spacer(minLength: 80)
                             HStack {
                                 Spacer()
-                                Text("Oops, looks like there's no data...").border(Color.orange, width: 1)
+                                Text(isSearching ? "No events found" : "No events created").foregroundStyle(.gray)
                                 Spacer()
-                            }.border(Color.cyan, width: 1)
+                            }
                         }
                     }
                 }

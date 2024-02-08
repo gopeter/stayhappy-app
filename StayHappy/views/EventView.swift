@@ -9,6 +9,12 @@ import os.log
 import Pow
 import SwiftUI
 
+public struct HighlightButtonStyle: ButtonStyle {
+    public func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+    }
+}
+
 struct EventView: View {
     @Environment(\.appDatabase) private var appDatabase
 
@@ -78,6 +84,8 @@ struct EventView: View {
                     .fill(Color(uiColor: .systemGray4))
                     .frame(width: 1, alignment: .center)
                 
+                
+                
                 Button {
                     toggleHighlight(for: event)
                 } label: {
@@ -92,7 +100,8 @@ struct EventView: View {
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Color(uiColor: .systemGray4))
                             .opacity(event.isHighlight ? 0 : 1)
-                            .animation(.easeInOut(duration: 0.1), value: event.isHighlight)
+                            .scaleEffect(event.isHighlight ? CGSize(width: 0.3, height: 0.3) : CGSize(width: 1.0, height: 1.0))
+                            .animation(.easeInOut(duration: 0.2), value: event.isHighlight)
                         
                         Image("heart-filled-symbol")
                             .resizable()
@@ -100,15 +109,18 @@ struct EventView: View {
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Color.red)
                             .opacity(event.isHighlight ? 1 : 0)
-                            .animation(.easeInOut(duration: 0.1), value: event.isHighlight)
+                            .scaleEffect(event.isHighlight ? CGSize(width: 1.0, height: 1.0) : CGSize(width: 0.3, height: 0.3))
+                            .animation(.easeInOut(duration: 0.2), value: event.isHighlight)
                     }
                 }
+                
                 .changeEffect(
                     .spray {
                         Image(systemName: "heart.fill")
                             .foregroundStyle(.red)
                     }, value: event.isHighlight, isEnabled: !event.isHighlight
                 )
+                .buttonStyle(HighlightButtonStyle())
                 .tint(event.isHighlight ? .red : .gray)
             }
             

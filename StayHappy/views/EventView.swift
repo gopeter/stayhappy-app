@@ -127,7 +127,7 @@ struct EventView: View {
                 isEventDetailSheetVisible.toggle()
             } label: {
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(Color("CardBackgroundColor"))
                         .frame(alignment: Alignment.top)
                 

@@ -12,12 +12,14 @@ struct EventFormView: View {
     @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
 
-    let event: Event?
-
     @State private var title: String
     @State private var startAt: Date
     // @State private var endAt: Date
     @State private var isHighlight: Bool
+
+    @FocusState private var isFocused: Bool
+
+    let event: Event?
 
     var disableForm: Bool {
         title == ""
@@ -52,7 +54,7 @@ struct EventFormView: View {
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
     }
-    
+
     func deleteEvent() {
         do {
             try appDatabase.deleteEvents([event!.id])
@@ -85,14 +87,14 @@ struct EventFormView: View {
                     .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
 
                 Section {
-                    TextField("Title", text: $title)
+                    TextField("Title", text: $title).focused($isFocused)
                     DatePicker("Date", selection: $startAt, displayedComponents: [.date])
                     // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                     Toggle("Highlight", isOn: $isHighlight)
                 }.listRowBackground(Color("CardBackgroundColor"))
 
                 HStack {
-                    if (event != nil) {
+                    if event != nil {
                         Button(role: .destructive, action: deleteEvent, label: {
                             HStack {
                                 Spacer()
@@ -100,10 +102,10 @@ struct EventFormView: View {
                                 Spacer()
                             }
                         }).buttonStyle(.bordered)
-                        
+
                         Spacer(minLength: 20)
                     }
-                    
+
                     Button(action: addEvent, label: {
                         HStack {
                             Spacer()
@@ -113,9 +115,13 @@ struct EventFormView: View {
                     }).buttonStyle(.borderedProminent).disabled(disableForm)
 
                 }.listRowInsets(.init()).listRowBackground(Color("AppBackgroundColor"))
-            }.background(Color("AppBackgroundColor")).scrollContentBackground(.hidden)
+            }.background(Color("AppBackgroundColor"))
+                .scrollContentBackground(.hidden)
+                .onAppear {
+                    isFocused = true
+                }
+            }
         }
-    }
 }
 
 #Preview {

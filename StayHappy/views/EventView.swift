@@ -17,7 +17,8 @@ public struct HighlightButtonStyle: ButtonStyle {
 
 struct EventView: View {
     @Environment(\.appDatabase) private var appDatabase
-
+    @State private var isEventDetailSheetVisible: Bool = false
+    
     let formatter = DateComponentsFormatter()
     var event: Event
     
@@ -84,8 +85,6 @@ struct EventView: View {
                     .fill(Color(uiColor: .systemGray4))
                     .frame(width: 1, alignment: .center)
                 
-                
-                
                 Button {
                     toggleHighlight(for: event)
                 } label: {
@@ -113,7 +112,6 @@ struct EventView: View {
                             .animation(.easeInOut(duration: 0.2), value: event.isHighlight)
                     }
                 }
-                
                 .changeEffect(
                     .spray {
                         Image(systemName: "heart.fill")
@@ -125,18 +123,31 @@ struct EventView: View {
             }
             
             // Content Card
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color("CardBackgroundColor"))
-                    .frame(alignment: Alignment.top)
-                       
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(formatStartAtDate(startAt: event.startAt)).font(.footnote).foregroundStyle(.gray)
-                    
-                    Text(event.title)
-                    
-                }.padding(.horizontal, 15).padding(.vertical, 10)
-            }.padding(.vertical, 10)
+            Button {
+                isEventDetailSheetVisible.toggle()
+            } label: {
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(Color("CardBackgroundColor"))
+                        .frame(alignment: Alignment.top)
+                
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(formatStartAtDate(startAt: event.startAt))
+                            .font(.footnote)
+                            .foregroundStyle(.gray)
+                        
+                        Text(event.title)
+                        
+                    }.padding(.horizontal, 15).padding(.vertical, 10)
+                
+                }.padding(.vertical, 10)
+            }
+            .sheet(isPresented: $isEventDetailSheetVisible) {
+                NavigationStack {
+                    EventFormView(event: event)
+                }
+            }
+            .buttonStyle(.plain)
             
         }.padding(.horizontal)
     }

@@ -65,14 +65,10 @@ extension AppDatabase {
             try event.save(db)
         }
     }
-    
-    func updateEvent(_ event: Event) throws {
-        if event.title.isEmpty {
-            throw ValidationError.missingName
-        }
 
+    func deleteEvents(_ ids: [Int64]) throws {
         try db.write { db in
-            try event.save(db)
+            _ = try Event.deleteAll(db, ids: ids)
         }
     }
 }

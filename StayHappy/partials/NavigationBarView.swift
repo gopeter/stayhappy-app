@@ -10,7 +10,6 @@ import SwiftUI
 struct NavigationItem: Identifiable {
     let id: String = UUID().uuidString
     let icon: String
-    let view: Views?
     let action: () -> Void
     let isActive: Bool
     
@@ -41,15 +40,15 @@ struct NavigationBarView: View {
                 .shadow(color: Color.black.opacity(0.2), radius: 10)
             
             HStack(spacing: 0) {
-                NavigationItem(icon: "calendar-range-symbol", view: Views.events, action: {
+                NavigationItem(icon: "calendar-range-symbol", action: {
                     globalData.activeView = Views.events
                 }, isActive: globalData.activeView == Views.events).button()
                 
-                NavigationItem(icon: "coffee-symbol", view: Views.moments, action: {
+                NavigationItem(icon: "coffee-symbol", action: {
                     globalData.activeView = Views.moments
                 }, isActive: globalData.activeView == Views.moments).button()
                 
-                NavigationItem(icon: "plus-circle-symbol", view: Views.events, action: {
+                NavigationItem(icon: "plus-circle-symbol", action: {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
                     NavigationStack {
@@ -57,11 +56,11 @@ struct NavigationBarView: View {
                     }
                 }
                 
-                NavigationItem(icon: "search-symbol", view: Views.search, action: {
+                NavigationItem(icon: "search-symbol", action: {
                     globalData.activeView = Views.search
                 }, isActive: globalData.activeView == Views.search).button()
                 
-                NavigationItem(icon: "user-symbol", view: Views.profile, action: {
+                NavigationItem(icon: "user-symbol", action: {
                     globalData.activeView = Views.profile
                 }, isActive: globalData.activeView == Views.profile).button()
             }.padding(.horizontal)

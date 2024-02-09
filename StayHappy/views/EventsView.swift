@@ -15,6 +15,7 @@ struct EventsView: View {
     @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
     @State private var isSearching = false
     @State var searchText = ""
+
     let searchTextPublisher = PassthroughSubject<String, Never>()
 
     var body: some View {
@@ -39,22 +40,31 @@ struct EventsView: View {
 
                 Spacer(minLength: 70)
             }
+            // Navigation
+            .navigationTitle("Events")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .navigationDestination(for: Event.self) { event in
+                FormView(event: event)
+            }
+            // Style
+            .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
+            // Search
             .searchable(text: $searchText, isPresented: $isSearching)
-            .onChange(of: searchText, { _, newSearchText in
+            .onChange(of: searchText) { _, newSearchText in
                 searchTextPublisher.send(newSearchText)
-            })
+            }
             .onReceive(
                 searchTextPublisher
                     .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             ) { _ in
                 $events.searchText.wrappedValue = searchText
             }
-            .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
-            .navigationTitle("Events")
+            // Disable jumpy behaviour when search is active
             .transaction { transaction in
-                // disable jumpy behaviour when search is active
+                
                 transaction.animation = nil
             }
+            // Actions
             .toolbar {
                 Menu {
                     Section("Period") {
@@ -72,11 +82,14 @@ struct EventsView: View {
                     }
 
                 } label: {
-                    Image("filter-symbol")
-                        .resizable()
-                        .frame(width: 20.0, height: 20.0)
+                    VStack(spacing: 0) {
+                        Spacer()
+                        Image("filter-symbol")
+                        
+                    }
                 }
             }
+            
         }.introspect(.searchField, on: .iOS(.v17)) { searchField in
             if colorScheme == .dark {
                 searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")

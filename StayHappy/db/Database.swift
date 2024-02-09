@@ -62,6 +62,15 @@ extension AppDatabase {
             }
         }
         
+        migrator.registerMigration("createMoment") { db in
+            try db.create(table: "moment") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.column("title", .text).notNull()
+                t.column("createdAt", .date).defaults(sql: "CURRENT_TIMESTAMP")
+                t.column("updatedAt", .date).defaults(sql: "CURRENT_TIMESTAMP")
+            }
+        }
+        
         return migrator
     }
 }

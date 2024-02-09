@@ -12,6 +12,10 @@
 		454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = 454014FC2B722437003A7E24 /* GRDBQuery */; };
 		454014FF2B7278C0003A7E24 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014FE2B7278C0003A7E24 /* Log.swift */; };
 		454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D32B76148D007956A0 /* KeyboardVisibility.swift */; };
+		454328D82B763480007956A0 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D72B763480007956A0 /* Moment.swift */; };
+		454328DA2B763527007956A0 /* MomentFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D92B763527007956A0 /* MomentFormView.swift */; };
+		454328DC2B7635AC007956A0 /* FormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328DB2B7635AC007956A0 /* FormView.swift */; };
+		454328E22B76D4F3007956A0 /* HighlightButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */; };
 		459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 459792C62B74FEBD0047A555 /* SwiftUIIntrospect */; };
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
@@ -52,6 +56,10 @@
 		454014F72B71322B003A7E24 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		454014FE2B7278C0003A7E24 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		454328D32B76148D007956A0 /* KeyboardVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardVisibility.swift; sourceTree = "<group>"; };
+		454328D72B763480007956A0 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
+		454328D92B763527007956A0 /* MomentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentFormView.swift; sourceTree = "<group>"; };
+		454328DB2B7635AC007956A0 /* FormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormView.swift; sourceTree = "<group>"; };
+		454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightButtonStyle.swift; sourceTree = "<group>"; };
 		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
 		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -189,7 +197,9 @@
 				45BBE2452B69939D0076D062 /* EventFormView.swift */,
 				45BBE2372B628E5B0076D062 /* EventsView.swift */,
 				45E4F72E2B6BC2CF005C0E77 /* EventView.swift */,
+				454328DB2B7635AC007956A0 /* FormView.swift */,
 				45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */,
+				454328D92B763527007956A0 /* MomentFormView.swift */,
 				45BBE2412B68E5E10076D062 /* MomentsView.swift */,
 				45E1655A2B4EF68700F55A17 /* RootView.swift */,
 				45E4F7302B6C3B2F005C0E77 /* SettingsView.swift */,
@@ -208,6 +218,7 @@
 		45BBE23D2B68453F0076D062 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -216,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				45E1655F2B4EF96700F55A17 /* Event.swift */,
+				454328D72B763480007956A0 /* Moment.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -362,15 +374,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				454328E22B76D4F3007956A0 /* HighlightButtonStyle.swift in Sources */,
 				45E4F7312B6C3B2F005C0E77 /* SettingsView.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */,
 				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
 				454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */,
+				454328DA2B763527007956A0 /* MomentFormView.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */,
 				454014F82B71322B003A7E24 /* Database.swift in Sources */,
+				454328DC2B7635AC007956A0 /* FormView.swift in Sources */,
 				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
 				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
+				454328D82B763480007956A0 /* Moment.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Event.swift in Sources */,
 				45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */,
 				45E4F7332B6C3B7E005C0E77 /* HighlightsView.swift in Sources */,

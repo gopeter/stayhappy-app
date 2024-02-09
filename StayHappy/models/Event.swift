@@ -75,7 +75,7 @@ extension AppDatabase {
 
 // MARK: - Event Model
 
-struct Event: Identifiable, Equatable {
+struct Event: Identifiable, Equatable, Hashable {
     var id: Int64
     var title: String
     var isHighlight: Bool

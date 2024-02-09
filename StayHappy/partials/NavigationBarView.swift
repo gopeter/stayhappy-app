@@ -25,6 +25,7 @@ struct NavigationItem: Identifiable {
                 Spacer()
             }.frame(height: 54)
         }).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
+            .buttonStyle(HighlightButtonStyle())
     }
 }
 
@@ -37,7 +38,7 @@ struct NavigationBarView: View {
             RoundedRectangle(cornerRadius: 18).fill(Color("ToolbarBackgroundColor"))
                 .frame(height: 54)
                 .padding(.horizontal)
-                .shadow(color: Color.black.opacity(0.2), radius: 10)
+                .shadow(color: Color.black.opacity(0.35), radius: 15)
             
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", action: {
@@ -52,7 +53,7 @@ struct NavigationBarView: View {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
                     NavigationStack {
-                        EventFormView(event: nil)
+                        FormView()
                     }
                 }
                 

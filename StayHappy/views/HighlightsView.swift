@@ -18,6 +18,7 @@ struct HighlightsView: View {
             }.background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
                 .navigationTitle("Highlights")
+                .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
 }

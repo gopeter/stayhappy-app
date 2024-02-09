@@ -18,6 +18,7 @@ struct SettingsView: View {
             }.background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
                 .navigationTitle("Settings")
+                .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
 }

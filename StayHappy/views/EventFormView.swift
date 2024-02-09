@@ -73,18 +73,6 @@ struct EventFormView: View {
                 }.listRowBackground(Color("CardBackgroundColor"))
 
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                        HStack {
-                            Spacer()
-                            Text("Close")
-                            Spacer()
-                        }
-                    }).buttonStyle(.bordered).tint(Color("TextColor"))
-
-                    Spacer(minLength: 20)
-
                     Button(action: addEvent, label: {
                         HStack {
                             Spacer()

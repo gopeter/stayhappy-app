@@ -11,8 +11,8 @@ import SwiftUI
 enum Views: String {
     case events
     case moments
-    case search
-    case profile
+    case highlights
+    case settings
 }
 
 class GlobalData: ObservableObject {

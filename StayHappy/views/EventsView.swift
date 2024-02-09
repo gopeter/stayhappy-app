@@ -72,7 +72,7 @@ struct EventsView: View {
                     }
 
                 } label: {
-                    Image("settings-2-symbol")
+                    Image("filter-symbol")
                         .resizable()
                         .frame(width: 20.0, height: 20.0)
                 }

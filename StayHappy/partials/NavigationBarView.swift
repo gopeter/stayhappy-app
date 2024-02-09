@@ -56,13 +56,13 @@ struct NavigationBarView: View {
                     }
                 }
                 
-                NavigationItem(icon: "search-symbol", action: {
-                    globalData.activeView = Views.search
-                }, isActive: globalData.activeView == Views.search).button()
+                NavigationItem(icon: "heart-symbol", action: {
+                    globalData.activeView = Views.highlights
+                }, isActive: globalData.activeView == Views.highlights).button()
                 
-                NavigationItem(icon: "user-symbol", action: {
-                    globalData.activeView = Views.profile
-                }, isActive: globalData.activeView == Views.profile).button()
+                NavigationItem(icon: "cog-symbol", action: {
+                    globalData.activeView = Views.settings
+                }, isActive: globalData.activeView == Views.settings).button()
             }.padding(.horizontal)
         }
     }

@@ -1,5 +1,5 @@
 //
-//  SearchView.swift
+//  SettingsView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 01.02.24.
@@ -7,21 +7,21 @@
 
 import SwiftUI
 
-struct SearchView: View {
+struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
                 HStack {
-                    Text("List of search results")
+                    Text("Settings coming soon")
                     Spacer()
                 }.padding()
             }.background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Search")
+                .navigationTitle("Settings")
         }
     }
 }
 
 #Preview {
-    SearchView()
+    SettingsView()
 }

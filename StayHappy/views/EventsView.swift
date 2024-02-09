@@ -5,6 +5,7 @@
 //  Created by Peter Oesteritz on 25.01.24.
 //
 
+import Combine
 import GRDBQuery
 import SwiftUI
 import SwiftUIIntrospect
@@ -13,8 +14,9 @@ struct EventsView: View {
     @Environment(\.colorScheme) var colorScheme
     @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
     @State private var isSearching = false
-    @State private var toggledSearch = false // activate transform
-    
+    @State var searchText = ""
+    let searchTextPublisher = PassthroughSubject<String, Never>()
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -37,11 +39,20 @@ struct EventsView: View {
 
                 Spacer(minLength: 70)
             }
-            .searchable(text: $events.searchText, isPresented: $isSearching)
+            .searchable(text: $searchText, isPresented: $isSearching)
+            .onChange(of: searchText, { _, newSearchText in
+                searchTextPublisher.send(newSearchText)
+            })
+            .onReceive(
+                searchTextPublisher
+                    .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            ) { _ in
+                $events.searchText.wrappedValue = searchText
+            }
             .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
-            // .scrollContentBackground(.hidden)
             .navigationTitle("Events")
             .transaction { transaction in
+                // disable jumpy behaviour when search is active
                 transaction.animation = nil
             }
             .toolbar {

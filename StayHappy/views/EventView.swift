@@ -69,7 +69,7 @@ struct EventView: View {
         HStack(spacing: 20) {
             // Date
             VStack(spacing: 0) {
-                Text(event.startAt.formatted(.dateTime.month()))
+                Text("\(event.startAt.formatted(.dateTime.month())) \(event.startAt.formatted(.dateTime.year(.twoDigits)))")
                     .frame(alignment: .leading)
                     .font(.footnote)
                 
@@ -77,7 +77,7 @@ struct EventView: View {
                     .frame(alignment: .leading)
                     .font(.title2)
                     .fontWeight(.bold)
-            }.frame(minWidth: 40, maxWidth: 40)
+            }.frame(minWidth: 50, maxWidth: 50)
 
             // Heart
             ZStack {

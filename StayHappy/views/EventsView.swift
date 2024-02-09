@@ -38,8 +38,8 @@ struct EventsView: View {
                 Spacer(minLength: 70)
             }
             .searchable(text: $events.searchText, isPresented: $isSearching)
-            .background(Color("AppBackgroundColor"))
-            .scrollContentBackground(.hidden)
+            .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
+            // .scrollContentBackground(.hidden)
             .navigationTitle("Events")
             .transaction { transaction in
                 transaction.animation = nil

@@ -17,17 +17,15 @@ struct RootView: View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            VStack {
-                TabView(selection: $globalData.activeView) {
-                    EventsView().tag(Views.events).toolbar(.hidden, for: .tabBar)
-                    MomentsView().tag(Views.moments).toolbar(.hidden, for: .tabBar)
-                    SearchView().tag(Views.search).toolbar(.hidden, for: .tabBar)
-                    ProfileView().tag(Views.profile).toolbar(.hidden, for: .tabBar)
-                }
+            TabView(selection: $globalData.activeView) {
+                EventsView().tag(Views.events).toolbar(.hidden, for: .tabBar)
+                MomentsView().tag(Views.moments).toolbar(.hidden, for: .tabBar)
+                SearchView().tag(Views.search).toolbar(.hidden, for: .tabBar)
+                ProfileView().tag(Views.profile).toolbar(.hidden, for: .tabBar)
             }
 
             NavigationBarView()
-        }
+        }.ignoresSafeArea(.keyboard)
     }
 }
 

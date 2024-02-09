@@ -11,6 +11,7 @@
 		454014F82B71322B003A7E24 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014F72B71322B003A7E24 /* Database.swift */; };
 		454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = 454014FC2B722437003A7E24 /* GRDBQuery */; };
 		454014FF2B7278C0003A7E24 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014FE2B7278C0003A7E24 /* Log.swift */; };
+		454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D32B76148D007956A0 /* KeyboardVisibility.swift */; };
 		459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 459792C62B74FEBD0047A555 /* SwiftUIIntrospect */; };
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		454014F72B71322B003A7E24 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		454014FE2B7278C0003A7E24 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		454328D32B76148D007956A0 /* KeyboardVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardVisibility.swift; sourceTree = "<group>"; };
 		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
 		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,6 +111,14 @@
 			path = db;
 			sourceTree = "<group>";
 		};
+		454328D22B76147C007956A0 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				454328D32B76148D007956A0 /* KeyboardVisibility.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
 		45B6F6D52B4EF0B8003A42F8 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +149,7 @@
 				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
 				454014F62B7131FD003A7E24 /* db */,
+				454328D22B76147C007956A0 /* extensions */,
 				45E1655E2B4EF72900F55A17 /* models */,
 				45BBE23A2B67E8250076D062 /* partials */,
 				45BBE23D2B68453F0076D062 /* ui */,
@@ -354,6 +365,7 @@
 				45E4F7312B6C3B2F005C0E77 /* SearchView.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */,
 				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
+				454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */,
 				454014F82B71322B003A7E24 /* Database.swift in Sources */,

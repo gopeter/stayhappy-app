@@ -4,8 +4,7 @@
 //
 //  Created by Peter Oesteritz on 06.02.24.
 //
-// See
-// <https://github.com/groue/GRDB.swift/blob/master/Documentation/DemoApps/GRDBAsyncDemo/GRDBAsyncDemo/AppDatabase.swift>
+// See: https://github.com/groue/GRDB.swift/blob/master/Documentation/DemoApps/GRDBAsyncDemo/GRDBAsyncDemo/AppDatabase.swift
 
 import Foundation
 import GRDB

@@ -40,7 +40,7 @@ struct StayHappyApp: App {
 // Define a new environment key that grants access to an AppDatabase.
 //
 // The technique is documented at
-// <https://developer.apple.com/documentation/swiftui/environmentkey>.
+// https://developer.apple.com/documentation/swiftui/environmentkey
 
 private struct AppDatabaseKey: EnvironmentKey {
     static var defaultValue: AppDatabase { .init() }

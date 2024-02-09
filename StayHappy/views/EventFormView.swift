@@ -5,8 +5,8 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import SwiftUI
 import os.log
+import SwiftUI
 
 struct EventFormView: View {
     @Environment(\.appDatabase) private var appDatabase
@@ -34,9 +34,28 @@ struct EventFormView: View {
 
     func addEvent() {
         do {
-            var newEvent = EventMutation(title: title, isHighlight: isHighlight, startAt: startAt)
+            var newEvent = EventMutation(
+                id: event?.id,
+                title: title,
+                isHighlight: isHighlight,
+                startAt: startAt,
+                endAt: event?.endAt,
+                createdAt: event?.createdAt,
+                updatedAt: event?.updatedAt
+            )
+
             try appDatabase.saveEvent(&newEvent)
 
+            dismiss()
+        } catch {
+            // TODO: log something useful
+            Logger.debug.error("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteEvent() {
+        do {
+            try appDatabase.deleteEvents([event!.id])
             dismiss()
         } catch {
             // TODO: log something useful
@@ -48,19 +67,19 @@ struct EventFormView: View {
         VStack {
             Form {
                 HStack(spacing: 0) {
-                    Text("Add Event")
+                    Text(event != nil ? "Update Event" : "Add Event")
                         .font(.title)
                         .fontWeight(.bold)
-                    
+
                     Spacer()
-                    
+
                     Button(action: {
                         dismiss()
                     }, label: {
                         Image("x-symbol")
                             .resizable()
                             .frame(width: 18.0, height: 18.0)
-                         
+
                     })
                 }.listRowBackground(Color("AppBackgroundColor"))
                     .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -73,6 +92,18 @@ struct EventFormView: View {
                 }.listRowBackground(Color("CardBackgroundColor"))
 
                 HStack {
+                    if (event != nil) {
+                        Button(role: .destructive, action: deleteEvent, label: {
+                            HStack {
+                                Spacer()
+                                Text("Delete")
+                                Spacer()
+                            }
+                        }).buttonStyle(.bordered)
+                        
+                        Spacer(minLength: 20)
+                    }
+                    
                     Button(action: addEvent, label: {
                         HStack {
                             Spacer()

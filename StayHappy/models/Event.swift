@@ -142,9 +142,14 @@ struct EventListRequest: Queryable {
         } else {
             events = events.filterBySearchText(searchText)
         }
-
-        return try events
-            .order(ordering == Ordering.desc ? Event.Columns.startAt.desc : Event.Columns.startAt.asc)
-            .fetchAll(db)
+        
+        // we want to reverse the order when viewing past events
+        if period == Period.upcoming {
+            events = events.order(ordering == Ordering.desc ? Event.Columns.startAt.desc : Event.Columns.startAt.asc)
+        } else {
+            events = events.order(ordering == Ordering.asc ? Event.Columns.startAt.desc : Event.Columns.startAt.asc)
+        }
+            
+        return try events.fetchAll(db)
     }
 }

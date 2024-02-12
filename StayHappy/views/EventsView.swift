@@ -35,7 +35,7 @@ struct EventsView: View {
                                 Spacer()
                             }
                         }
-                    }
+                    }           
                 }
 
                 Spacer(minLength: 70)
@@ -61,7 +61,6 @@ struct EventsView: View {
             }
             // Disable jumpy behaviour when search is active
             .transaction { transaction in
-                
                 transaction.animation = nil
             }
             // Actions

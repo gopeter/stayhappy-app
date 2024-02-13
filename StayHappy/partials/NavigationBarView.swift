@@ -24,8 +24,11 @@ struct NavigationItem: Identifiable {
                     .foregroundStyle(isActive ? Color.accentColor : Color.gray)
                 Spacer()
             }.frame(height: 54)
+                .contentShape(Rectangle())
         }).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
             .buttonStyle(HighlightButtonStyle())
+            
+            
     }
 }
 

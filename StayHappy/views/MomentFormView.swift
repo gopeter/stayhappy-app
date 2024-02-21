@@ -60,10 +60,6 @@ struct MomentFormView: View {
         Form {
             Section {
                 TextField("Title", text: $title).focused($isFocused)
-                
-                Button(action: addMoment, label: {
-                    Text("Save")
-                }).disabled(disableForm)
             } header: {
                 if moment != nil {
                     Text("Update moment")
@@ -74,11 +70,17 @@ struct MomentFormView: View {
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
 
-            if moment != nil {
-                Button(role: .destructive, action: deleteMoment, label: {
-                    Text("Delete")
-                }).listRowBackground(Color("CardBackgroundColor"))
-            }
+            Section {
+                Button(action: addMoment, label: {
+                    Text("Save")
+                }).disabled(disableForm)
+                
+                if moment != nil {
+                    Button(role: .destructive, action: deleteMoment, label: {
+                        Text("Delete")
+                    })
+                }
+            }.listRowBackground(Color("CardBackgroundColor"))
         }.scrollContentBackground(.hidden)
             .onAppear {
                 isFocused = true

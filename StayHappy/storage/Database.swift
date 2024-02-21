@@ -71,6 +71,12 @@ extension AppDatabase {
             }
         }
         
+        migrator.registerMigration("addPhotoColumnToEvent") { db in
+            try db.alter(table: "event") { t in
+                t.add(column: "photo", .text)
+            }
+        }
+        
         return migrator
     }
 }

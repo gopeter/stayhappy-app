@@ -28,6 +28,8 @@
 		45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2412B68E5E10076D062 /* MomentsView.swift */; };
 		45BBE2462B69939D0076D062 /* EventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2452B69939D0076D062 /* EventFormView.swift */; };
 		45C99AB52B73984600F61E8D /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 45C99AB42B73984600F61E8D /* Pow */; };
+		45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E0180A2B8228F7009C594F /* ImageSaver.swift */; };
+		45E0180D2B822900009C594F /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E0180C2B822900009C594F /* FileManager.swift */; };
 		45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655A2B4EF68700F55A17 /* RootView.swift */; };
 		45E165602B4EF96700F55A17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655F2B4EF96700F55A17 /* Event.swift */; };
 		45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F72E2B6BC2CF005C0E77 /* EventView.swift */; };
@@ -75,6 +77,8 @@
 		45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		45BBE2412B68E5E10076D062 /* MomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsView.swift; sourceTree = "<group>"; };
 		45BBE2452B69939D0076D062 /* EventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormView.swift; sourceTree = "<group>"; };
+		45E0180A2B8228F7009C594F /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		45E0180C2B822900009C594F /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		45E1655A2B4EF68700F55A17 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		45E1655F2B4EF96700F55A17 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		45E4F72E2B6BC2CF005C0E77 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
@@ -111,12 +115,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		454014F62B7131FD003A7E24 /* db */ = {
+		454014F62B7131FD003A7E24 /* storage */ = {
 			isa = PBXGroup;
 			children = (
 				454014F72B71322B003A7E24 /* Database.swift */,
+				45E0180A2B8228F7009C594F /* ImageSaver.swift */,
+				45E0180C2B822900009C594F /* FileManager.swift */,
 			);
-			path = db;
+			path = storage;
 			sourceTree = "<group>";
 		};
 		454328D22B76147C007956A0 /* extensions */ = {
@@ -156,10 +162,10 @@
 				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
 				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
-				454014F62B7131FD003A7E24 /* db */,
 				454328D22B76147C007956A0 /* extensions */,
 				45E1655E2B4EF72900F55A17 /* models */,
 				45BBE23A2B67E8250076D062 /* partials */,
+				454014F62B7131FD003A7E24 /* storage */,
 				45BBE23D2B68453F0076D062 /* ui */,
 				45BBE2392B67E7E80076D062 /* views */,
 			);
@@ -377,6 +383,7 @@
 				454328E22B76D4F3007956A0 /* HighlightButtonStyle.swift in Sources */,
 				45E4F7312B6C3B2F005C0E77 /* SettingsView.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */,
+				45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */,
 				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
 				454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */,
 				454328DA2B763527007956A0 /* MomentFormView.swift in Sources */,
@@ -387,6 +394,7 @@
 				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
 				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
 				454328D82B763480007956A0 /* Moment.swift in Sources */,
+				45E0180D2B822900009C594F /* FileManager.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Event.swift in Sources */,
 				45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */,
 				45E4F7332B6C3B7E005C0E77 /* HighlightsView.swift in Sources */,

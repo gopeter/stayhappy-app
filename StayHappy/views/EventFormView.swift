@@ -6,6 +6,7 @@
 //
 
 import os.log
+import PhotosUI
 import SwiftUI
 
 struct EventFormView: View {
@@ -16,9 +17,12 @@ struct EventFormView: View {
     @State private var startAt: Date
     // @State private var endAt: Date
     @State private var isHighlight: Bool
+    @State private var photoItem: PhotosPickerItem?
+    @State private var photoImage: UIImage?
 
     @FocusState private var isFocused: Bool
 
+    let imageSaver = ImageSaver()
     let event: Event?
 
     var disableForm: Bool {
@@ -32,9 +36,36 @@ struct EventFormView: View {
         self._startAt = State(initialValue: event?.startAt ?? Date())
         // self._endAt = State(initialValue: event?.endAt ?? Date())
         self._isHighlight = State(initialValue: event?.isHighlight ?? false)
+
+        if event?.photo != nil {
+            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: event!.photo!)).jpg")
+            self._photoImage = State(initialValue: UIImage(contentsOfFile: photoUrl.path))
+        }
     }
 
-    func addEvent() {
+    func saveEvent() {
+        var photo: String? = nil
+
+        // remove image from file system if ...
+        if event?.photo != nil {
+            // ... photoItem is set, a new photo was chosen
+            // ... photoImage is nil, the present photo was deleted
+            if photoItem != nil || photoImage == nil {
+                imageSaver.deleteFromDisk(imageName: event!.photo!)
+            }
+        }
+
+        // save image to file system if ...
+        if
+            // ... no photo was given and a photo was selected
+            (event?.photo == nil && photoImage != nil) ||
+            // ... a photo was given and a new one was chosen
+            (event?.photo != nil && photoItem != nil && photoImage != nil)
+        {
+            photo = UUID().uuidString
+            imageSaver.writeToDisk(image: photoImage!, imageName: photo!)
+        }
+
         do {
             var newEvent = EventMutation(
                 id: event?.id,
@@ -42,6 +73,7 @@ struct EventFormView: View {
                 isHighlight: isHighlight,
                 startAt: startAt,
                 endAt: event?.endAt,
+                photo: photo,
                 createdAt: event?.createdAt,
                 updatedAt: event?.updatedAt
             )
@@ -65,6 +97,10 @@ struct EventFormView: View {
         }
     }
 
+    func removeImage() {
+        photoImage = nil
+    }
+
     var body: some View {
         Form {
             Section {
@@ -72,10 +108,6 @@ struct EventFormView: View {
                 DatePicker("Date", selection: $startAt, displayedComponents: [.date])
                 // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                 Toggle("Highlight", isOn: $isHighlight)
-                
-                Button(action: addEvent, label: {
-                    Text("Save")
-                }).disabled(disableForm)
             } header: {
                 if event != nil {
                     Text("Update event")
@@ -85,12 +117,49 @@ struct EventFormView: View {
                         .accessibilityHidden(true)
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
-            
-            if event != nil {
-                Button(role: .destructive, action: deleteEvent, label: {
-                    Text("Delete")
-                }).listRowBackground(Color("CardBackgroundColor"))
-            }
+
+            Section {
+                PhotosPicker(selection: $photoItem, matching: .images) {
+                    if photoImage != nil {
+                        Image(uiImage: photoImage!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 150)
+                            .padding(0)
+
+                    } else {
+                        Text("Select photo").padding(.horizontal, 20)
+                    }
+                }
+
+                if photoImage != nil {
+                    Button(role: .destructive, action: removeImage, label: {
+                        Text("Remove photo")
+                    }).padding(.horizontal, 20)
+                }
+            }.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowBackground(Color("CardBackgroundColor"))
+                .onChange(of: photoItem) {
+                    Task {
+                        if let loaded = try? await photoItem?.loadTransferable(type: Data.self) {
+                            photoImage = UIImage(data: loaded)
+                        } else {
+                            print("Failed")
+                        }
+                    }
+                }
+
+            Section {
+                Button(action: saveEvent, label: {
+                    Text("Save")
+                }).disabled(disableForm)
+
+                if event != nil {
+                    Button(role: .destructive, action: deleteEvent, label: {
+                        Text("Delete")
+                    })
+                }
+            }.listRowBackground(Color("CardBackgroundColor"))
         }.scrollContentBackground(.hidden)
             .onAppear {
                 isFocused = true

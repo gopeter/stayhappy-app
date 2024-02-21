@@ -29,6 +29,7 @@ struct EventView: View {
                 isHighlight: !event.isHighlight,
                 startAt: event.startAt,
                 endAt: event.endAt,
+                photo: event.photo,
                 createdAt: event.createdAt,
                 updatedAt: event.updatedAt
             )
@@ -134,7 +135,10 @@ struct EventView: View {
                         }.padding(.horizontal, 20).padding(.vertical, 10)
                         
                         Spacer()
-                        Image("chevron-right-symbol").foregroundStyle(Color(uiColor: .systemFill)).padding(.trailing, 12)
+                        
+                        Image("chevron-right-symbol")
+                            .foregroundStyle(Color(uiColor: .systemFill))
+                            .padding(.trailing, 12)
                     }.listRowBackground(Color("CardBackgroundColor"))
                     
                 

@@ -18,15 +18,17 @@ struct EventMutation {
     var isHighlight: Bool?
     var startAt: Date
     var endAt: Date?
+    var photo: String?
     var createdAt: Date?
     var updatedAt: Date?
 
-    init(id: Int64? = nil, title: String, isHighlight: Bool? = nil, startAt: Date, endAt: Date? = nil, createdAt: Date? = nil, updatedAt: Date? = nil) {
+    init(id: Int64? = nil, title: String, isHighlight: Bool? = nil, startAt: Date, endAt: Date? = nil, photo: String?, createdAt: Date? = nil, updatedAt: Date? = nil) {
         self.id = id
         self.title = title
         self.isHighlight = isHighlight ?? false
         self.startAt = startAt
         self.endAt = endAt ?? startAt
+        self.photo = photo
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
@@ -81,6 +83,7 @@ struct Event: Identifiable, Equatable, Hashable {
     var isHighlight: Bool
     var startAt: Date
     var endAt: Date
+    var photo: String?
     var createdAt: Date
     var updatedAt: Date
 }

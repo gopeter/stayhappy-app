@@ -17,7 +17,7 @@ struct EventFormView: View {
     @State private var startAt: Date
     // @State private var endAt: Date
     @State private var isHighlight: Bool
-    @State private var photoItem: PhotosPickerItem?
+    @State private var photoPickerItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
 
     @FocusState private var isFocused: Bool
@@ -48,9 +48,9 @@ struct EventFormView: View {
 
         // remove image from file system if ...
         if event?.photo != nil {
-            // ... photoItem is set, a new photo was chosen
+            // ... photoPickerItem is set, a new photo was chosen
             // ... photoImage is nil, the present photo was deleted
-            if photoItem != nil || photoImage == nil {
+            if photoPickerItem != nil || photoImage == nil {
                 imageSaver.deleteFromDisk(imageName: event!.photo!)
             }
         }
@@ -60,7 +60,7 @@ struct EventFormView: View {
             // ... no photo was given and a photo was selected
             (event?.photo == nil && photoImage != nil) ||
             // ... a photo was given and a new one was chosen
-            (event?.photo != nil && photoItem != nil && photoImage != nil)
+            (event?.photo != nil && photoPickerItem != nil && photoImage != nil)
         {
             photo = UUID().uuidString
             imageSaver.writeToDisk(image: photoImage!, imageName: photo!)
@@ -119,7 +119,7 @@ struct EventFormView: View {
             }.listRowBackground(Color("CardBackgroundColor"))
 
             Section {
-                PhotosPicker(selection: $photoItem, matching: .images) {
+                PhotosPicker(selection: $photoPickerItem, matching: .images) {
                     if photoImage != nil {
                         Image(uiImage: photoImage!)
                             .resizable()
@@ -139,9 +139,9 @@ struct EventFormView: View {
                 }
             }.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color("CardBackgroundColor"))
-                .onChange(of: photoItem) {
+                .onChange(of: photoPickerItem) {
                     Task {
-                        if let loaded = try? await photoItem?.loadTransferable(type: Data.self) {
+                        if let loaded = try? await photoPickerItem?.loadTransferable(type: Data.self) {
                             photoImage = UIImage(data: loaded)
                         } else {
                             print("Failed")

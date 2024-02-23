@@ -67,9 +67,6 @@ struct EventFormView: View {
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
 
-    @State private var selection = "Red"
-    let colors = ["Red", "Green", "Blue", "Black", "Tartan"]
-
     @FocusState private var isFocused: Bool
 
     let imageSaver = ImageSaver()

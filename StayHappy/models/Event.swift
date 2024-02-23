@@ -15,19 +15,31 @@ import GRDBQuery
 struct EventMutation {
     var id: Int64?
     var title: String
-    var isHighlight: Bool?
     var startAt: Date
     var endAt: Date?
+    var isHighlight: Bool?
+    var background: String
     var photo: String?
     var createdAt: Date?
     var updatedAt: Date?
 
-    init(id: Int64? = nil, title: String, isHighlight: Bool? = nil, startAt: Date, endAt: Date? = nil, photo: String?, createdAt: Date? = nil, updatedAt: Date? = nil) {
+    init(
+        id: Int64? = nil,
+        title: String,
+        startAt: Date,
+        endAt: Date? = nil,
+        isHighlight: Bool? = nil,
+        background: String,
+        photo: String?,
+        createdAt: Date? = nil,
+        updatedAt: Date? = nil
+    ) {
         self.id = id
         self.title = title
-        self.isHighlight = isHighlight ?? false
         self.startAt = startAt
         self.endAt = endAt ?? startAt
+        self.isHighlight = isHighlight ?? false
+        self.background = background
         self.photo = photo
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -80,9 +92,10 @@ extension AppDatabase {
 struct Event: Identifiable, Equatable, Hashable {
     var id: Int64
     var title: String
-    var isHighlight: Bool
     var startAt: Date
     var endAt: Date
+    var isHighlight: Bool
+    var background: String
     var photo: String?
     var createdAt: Date
     var updatedAt: Date
@@ -107,6 +120,10 @@ extension DerivableRequest<Event> {
         formatter.dateFormat = "yyyy-MM-dd"
 
         return filter(sql: "event.startAt \(dateCompareOperator) ?", arguments: [formatter.string(from: startOfToday)])
+    }
+    
+    func filterByHighlight() -> Self {
+        return filter(sql: "event.isHighlight = true")
     }
 }
 
@@ -153,6 +170,22 @@ struct EventListRequest: Queryable {
             events = events.order(ordering == Ordering.asc ? Event.Columns.startAt.desc : Event.Columns.startAt.asc)
         }
             
+        return try events.fetchAll(db)
+    }
+}
+
+struct HighlightListRequest: Queryable {
+    static var defaultValue: [Event] { [] }
+
+    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Event], Error> {
+        ValueObservation
+            .tracking(fetchValue(_:))
+            .publisher(in: appDatabase.db, scheduling: .immediate)
+            .eraseToAnyPublisher()
+    }
+
+    func fetchValue(_ db: Database) throws -> [Event] {
+        let events = Event.all().filterByHighlight().order(Event.Columns.startAt.desc)
         return try events.fetchAll(db)
     }
 }

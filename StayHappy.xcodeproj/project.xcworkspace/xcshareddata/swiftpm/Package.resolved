@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "gradients",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Gradients/Gradients.git",
+      "state" : {
+        "revision" : "0ec91855a90e8b376f7460457b1b5f3f204a1c3c",
+        "version" : "0.3.1"
+      }
+    },
+    {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
@@ -16,6 +25,15 @@
       "state" : {
         "revision" : "42fef11503d221229ec39201c08316b6930755b2",
         "version" : "0.8.0"
+      }
+    },
+    {
+      "identity" : "hue",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zenangst/Hue",
+      "state" : {
+        "revision" : "b9d920cee4ba795fefb828d130744eee1e3d2feb",
+        "version" : "5.0.1"
       }
     },
     {

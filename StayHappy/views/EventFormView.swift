@@ -5,20 +5,70 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
+import Gradients
 import os.log
 import PhotosUI
 import SwiftUI
+
+struct BackgroundOptionView: View {
+    var gradients: [String]
+    @Binding var selectedGradient: String
+    @Binding var path: NavigationPath
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 10) {
+                Button(action: {
+                    self.selectedGradient = self.gradients.randomElement()!
+                    // path.removeLast()
+                }, label: {
+                    HStack {
+                        Spacer()
+                        Text("Choose random color").padding(.vertical, 14)
+                        Spacer()
+                    }
+                })
+
+                ForEach(0 ..< gradients.count, id: \.self) { index in
+                    Button(action: {
+                        self.selectedGradient = self.gradients[index]
+                    }, label: {
+                        HStack {
+                            Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(.text)
+                                .padding(.trailing, 10)
+
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(HappyGradients(rawValue: self.gradients[index])!.gradient)
+                                .frame(height: 80)
+                        }
+                    }).padding(.horizontal, 20)
+                }
+            }
+        }.navigationTitle("Background")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color("AppBackgroundColor"))
+    }
+}
 
 struct EventFormView: View {
     @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
 
+    @State private var path = NavigationPath()
+
     @State private var title: String
     @State private var startAt: Date
     // @State private var endAt: Date
     @State private var isHighlight: Bool
+    @State private var background: String
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
+
+    @State private var selection = "Red"
+    let colors = ["Red", "Green", "Blue", "Black", "Tartan"]
 
     @FocusState private var isFocused: Bool
 
@@ -35,7 +85,8 @@ struct EventFormView: View {
         self._title = State(initialValue: event?.title ?? "")
         self._startAt = State(initialValue: event?.startAt ?? Date())
         // self._endAt = State(initialValue: event?.endAt ?? Date())
-        self._isHighlight = State(initialValue: event?.isHighlight ?? false)
+        self._background = State(initialValue: event?.background ?? HappyGradients.allCases.map { $0.rawValue }.randomElement()!)
+        self._isHighlight = State(initialValue: event?.isHighlight ?? true)
 
         if event?.photo != nil {
             let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: event!.photo!)).jpg")
@@ -44,7 +95,7 @@ struct EventFormView: View {
     }
 
     func saveEvent() {
-        var photo: String? = nil
+        var photo: String? = event?.photo
 
         // remove image from file system if ...
         if event?.photo != nil {
@@ -70,9 +121,10 @@ struct EventFormView: View {
             var newEvent = EventMutation(
                 id: event?.id,
                 title: title,
-                isHighlight: isHighlight,
                 startAt: startAt,
                 endAt: event?.endAt,
+                isHighlight: isHighlight,
+                background: background,
                 photo: photo,
                 createdAt: event?.createdAt,
                 updatedAt: event?.updatedAt
@@ -118,36 +170,63 @@ struct EventFormView: View {
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
 
-            Section {
-                PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                    if photoImage != nil {
-                        Image(uiImage: photoImage!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: 150)
-                            .padding(0)
+            if isHighlight {
+                Section {
+                    if photoImage == nil {
+                        ZStack {
+                            NavigationLink(destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background, path: $path)) {
+                                EmptyView()
+                            } .opacity(0.0)
+                                .buttonStyle(PlainButtonStyle())
 
-                    } else {
-                        Text("Select photo").padding(.horizontal, 20)
-                    }
-                }
+                            HStack {
+                                Text("Background")
+                                    .foregroundStyle(.text)
+                                    .padding(.leading, 20)
 
-                if photoImage != nil {
-                    Button(role: .destructive, action: removeImage, label: {
-                        Text("Remove photo")
-                    }).padding(.horizontal, 20)
-                }
-            }.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowBackground(Color("CardBackgroundColor"))
-                .onChange(of: photoPickerItem) {
-                    Task {
-                        if let loaded = try? await photoPickerItem?.loadTransferable(type: Data.self) {
-                            photoImage = UIImage(data: loaded)
-                        } else {
-                            print("Failed")
+                                Spacer()
+
+                                Circle()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundStyle(HappyGradients(rawValue: background)!.gradient)
+
+                                Image("chevron-right-symbol")
+                                    .foregroundStyle(Color(uiColor: .systemFill))
+                                    .padding(.trailing, 12)
+                            }
                         }
                     }
-                }
+
+                    PhotosPicker(selection: $photoPickerItem, matching: .images) {
+                        if photoImage != nil {
+                            Image(uiImage: photoImage!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 150)
+                                .padding(0)
+
+                        } else {
+                            Text("Select photo").padding(.horizontal, 20)
+                        }
+                    }
+
+                    if photoImage != nil {
+                        Button(role: .destructive, action: removeImage, label: {
+                            Text("Remove photo")
+                        }).padding(.horizontal, 20)
+                    }
+                }.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowBackground(Color("CardBackgroundColor"))
+                    .onChange(of: photoPickerItem) {
+                        Task {
+                            if let loaded = try? await photoPickerItem?.loadTransferable(type: Data.self) {
+                                photoImage = UIImage(data: loaded)
+                            } else {
+                                print("Failed")
+                            }
+                        }
+                    }
+            }
 
             Section {
                 Button(action: saveEvent, label: {
@@ -168,5 +247,7 @@ struct EventFormView: View {
 }
 
 #Preview {
-    EventFormView(event: nil)
+    NavigationStack {
+        EventFormView(event: nil)
+    }
 }

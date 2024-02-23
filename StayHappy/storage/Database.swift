@@ -77,6 +77,12 @@ extension AppDatabase {
             }
         }
         
+        migrator.registerMigration("addBackgroundColumnToEvent") { db in
+            try db.alter(table: "event") { t in
+                t.add(column: "background", .text)
+            }
+        }
+        
         return migrator
     }
 }

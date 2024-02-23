@@ -40,7 +40,7 @@ struct NavigationBarView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 18).fill(Color("ToolbarBackgroundColor"))
                 .frame(height: 54)
-                .padding(.horizontal)
+                .padding(.horizontal, 28)
                 .shadow(color: Color.black.opacity(0.35), radius: 15)
             
             HStack(spacing: 0) {
@@ -55,7 +55,7 @@ struct NavigationBarView: View {
                 NavigationItem(icon: "plus-circle-symbol", action: {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
-                    NavigationStack {
+                    NavigationView {
                         FormView()
                     }
                 }
@@ -67,7 +67,7 @@ struct NavigationBarView: View {
                 NavigationItem(icon: "cog-symbol", action: {
                     globalData.activeView = Views.settings
                 }, isActive: globalData.activeView == Views.settings).button()
-            }.padding(.horizontal)
+            }.padding(.horizontal, 35)
         }
     }
 }

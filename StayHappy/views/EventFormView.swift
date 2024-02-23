@@ -11,16 +11,17 @@ import PhotosUI
 import SwiftUI
 
 struct BackgroundOptionView: View {
+    @Environment(\.dismiss) var dismiss
+
     var gradients: [String]
     @Binding var selectedGradient: String
-    @Binding var path: NavigationPath
 
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 Button(action: {
                     self.selectedGradient = self.gradients.randomElement()!
-                    // path.removeLast()
+                    dismiss()
                 }, label: {
                     HStack {
                         Spacer()
@@ -36,8 +37,9 @@ struct BackgroundOptionView: View {
                         HStack {
                             Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 24, height: 24)
-                                .foregroundStyle(.text)
+                                .foregroundStyle(.text.opacity(self.selectedGradient == self.gradients[index] ? 1 : 0.3))
                                 .padding(.trailing, 10)
 
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -56,8 +58,6 @@ struct BackgroundOptionView: View {
 struct EventFormView: View {
     @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
-
-    @State private var path = NavigationPath()
 
     @State private var title: String
     @State private var startAt: Date
@@ -174,7 +174,7 @@ struct EventFormView: View {
                 Section {
                     if photoImage == nil {
                         ZStack {
-                            NavigationLink(destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background, path: $path)) {
+                            NavigationLink(destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background)) {
                                 EmptyView()
                             } .opacity(0.0)
                                 .buttonStyle(PlainButtonStyle())

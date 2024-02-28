@@ -38,7 +38,7 @@ struct EventsView: View {
                     }           
                 }
 
-                Spacer(minLength: 70)
+                Spacer(minLength: 80)
             }
             // Navigation
             .navigationTitle("Events")

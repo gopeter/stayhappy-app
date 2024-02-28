@@ -20,7 +20,7 @@ struct MomentsView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 0) {
                 List {
                     if moments.count > 0 {
                         ForEach(moments) { moment in
@@ -66,7 +66,7 @@ struct MomentsView: View {
                     transaction.animation = nil
                 }
 
-                Spacer(minLength: 70)
+                Spacer(minLength: 80)
             }.background(Color("AppBackgroundColor").ignoresSafeArea(.all))
 
         }.introspect(.searchField, on: .iOS(.v17)) { searchField in

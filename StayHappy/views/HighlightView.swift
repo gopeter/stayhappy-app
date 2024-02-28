@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Throttler
 
 struct HighlightView: View {
     var event: Event
@@ -57,12 +58,18 @@ struct HighlightView: View {
                         
                         if photoImage != nil {
                             Button(action: {
-                                setImage(photoImage!)
+                                debounce(.seconds(0.1), option: .runFirst) {
+                                    setImage(photoImage!)
+                                }
                             }, label: {
                                 Image("maximize-symbol")
                                     .foregroundStyle(.white)
                                     .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 1)
-                            })
+                                    .padding(10)
+                            }).buttonStyle(HighlightButtonStyle())
+                                .contentShape(Rectangle())
+                                .offset(x: 5, y: 5)
+
                         }
                     }.padding(.horizontal, 40)
                         .padding(.bottom, 20)

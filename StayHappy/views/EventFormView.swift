@@ -5,7 +5,6 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import Gradients
 import os.log
 import PhotosUI
 import SwiftUI

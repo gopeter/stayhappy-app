@@ -24,6 +24,7 @@
 		459BE7832B8E9C1000433B60 /* TitleCased.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459BE7822B8E9C1000433B60 /* TitleCased.swift */; };
 		459BE7862B8F20D900433B60 /* Agrume in Frameworks */ = {isa = PBXBuildFile; productRef = 459BE7852B8F20D900433B60 /* Agrume */; };
 		459BE7882B8F218800433B60 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459BE7872B8F218800433B60 /* ImageViewer.swift */; };
+		459BE78B2B8FC69500433B60 /* Throttler in Frameworks */ = {isa = PBXBuildFile; productRef = 459BE78A2B8FC69500433B60 /* Throttler */; };
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
 		45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */; };
@@ -103,6 +104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				457E5AD02B8E81D800F2E268 /* SmoothGradient in Frameworks */,
+				459BE78B2B8FC69500433B60 /* Throttler in Frameworks */,
 				45C99AB52B73984600F61E8D /* Pow in Frameworks */,
 				454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */,
 				4558FBA22B87B0D5009D506C /* Hue in Frameworks */,
@@ -280,6 +282,7 @@
 				4558FBA12B87B0D5009D506C /* Hue */,
 				457E5ACF2B8E81D800F2E268 /* SmoothGradient */,
 				459BE7852B8F20D900433B60 /* Agrume */,
+				459BE78A2B8FC69500433B60 /* Throttler */,
 			);
 			productName = StayHappy;
 			productReference = 45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */;
@@ -361,6 +364,7 @@
 				4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */,
 				457E5ACE2B8E81D800F2E268 /* XCRemoteSwiftPackageReference "SmoothGradient" */,
 				459BE7842B8F20D900433B60 /* XCRemoteSwiftPackageReference "Agrume" */,
+				459BE7892B8FC69500433B60 /* XCRemoteSwiftPackageReference "Throttler" */,
 			);
 			productRefGroup = 45B6F6DF2B4EF0B8003A42F8 /* Products */;
 			projectDirPath = "";
@@ -818,6 +822,14 @@
 				minimumVersion = 5.8.10;
 			};
 		};
+		459BE7892B8FC69500433B60 /* XCRemoteSwiftPackageReference "Throttler" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/boraseoksoon/Throttler";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.3;
+			};
+		};
 		45C99AB32B73984600F61E8D /* XCRemoteSwiftPackageReference "Pow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/EmergeTools/Pow";
@@ -858,6 +870,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459BE7842B8F20D900433B60 /* XCRemoteSwiftPackageReference "Agrume" */;
 			productName = Agrume;
+		};
+		459BE78A2B8FC69500433B60 /* Throttler */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459BE7892B8FC69500433B60 /* XCRemoteSwiftPackageReference "Throttler" */;
+			productName = Throttler;
 		};
 		45C99AB42B73984600F61E8D /* Pow */ = {
 			isa = XCSwiftPackageProductDependency;

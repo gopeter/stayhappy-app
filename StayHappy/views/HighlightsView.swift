@@ -12,13 +12,13 @@ struct HighlightsView: View {
     @Query(HighlightListRequest()) private var events: [Event]
     
     @State var fullscreenImage: UIImage? = nil
-    @State var showFullscreen = false
+    @State var isFullscreenActive = false
     
     func setImage(image: UIImage) {
         self.fullscreenImage = image
         
         withAnimation {
-            self.showFullscreen = true
+            self.isFullscreenActive = true
         }
     }
 
@@ -52,8 +52,8 @@ struct HighlightsView: View {
                     .toolbarTitleDisplayMode(.inlineLarge)
             }
             
-            if self.showFullscreen && self.fullscreenImage != nil {
-                ImageViewer(images: [self.fullscreenImage!], isPresenting: self.$showFullscreen)
+            if self.isFullscreenActive && self.fullscreenImage != nil {
+                ImageViewer(images: [self.fullscreenImage!], isPresenting: self.$isFullscreenActive)
             }
         }
     }

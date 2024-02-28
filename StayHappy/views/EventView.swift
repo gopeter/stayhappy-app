@@ -141,12 +141,12 @@ struct EventView: View {
                             .foregroundStyle(Color(uiColor: .systemFill))
                             .padding(.trailing, 12)
                     }.listRowBackground(Color("CardBackgroundColor"))
-                }.padding(.vertical, 10)
+                }.padding(.vertical, 8)
             }.buttonStyle(HighlightButtonStyle())
         }.padding(.horizontal)
     }
 }
 
 #Preview {
-    EventView(event: Event(id: 1, title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date(), isHighlight: true, background: HappyGradients.aboveTheSky.rawValue, createdAt: Date(), updatedAt: Date()))
+    EventView(event: Event(id: 1, title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date(), isHighlight: true, background: HappyGradients.loveKiss.rawValue, createdAt: Date(), updatedAt: Date()))
 }

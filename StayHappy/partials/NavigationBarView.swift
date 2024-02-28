@@ -55,7 +55,7 @@ struct NavigationBarView: View {
                 NavigationItem(icon: "plus-circle-symbol", action: {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
-                    NavigationView {
+                    NavigationStack {
                         FormView()
                     }
                 }

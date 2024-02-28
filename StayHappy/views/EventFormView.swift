@@ -43,8 +43,11 @@ struct BackgroundOptionView: View {
                                 .padding(.trailing, 10)
 
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(HappyGradients(rawValue: self.gradients[index])!.gradient)
+                                .fill(HappyGradients(rawValue: self.gradients[index])!.linear())
                                 .frame(height: 80)
+                                .overlay {
+                                    Text(self.gradients[index].titleCased()).foregroundStyle(.white) .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 1)
+                                }
                         }
                     }).padding(.horizontal, 20)
                 }
@@ -83,7 +86,7 @@ struct EventFormView: View {
         self._startAt = State(initialValue: event?.startAt ?? Date())
         // self._endAt = State(initialValue: event?.endAt ?? Date())
         self._background = State(initialValue: event?.background ?? HappyGradients.allCases.map { $0.rawValue }.randomElement()!)
-        self._isHighlight = State(initialValue: event?.isHighlight ?? true)
+        self._isHighlight = State(initialValue: event?.isHighlight ?? false)
 
         if event?.photo != nil {
             let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: event!.photo!)).jpg")
@@ -185,7 +188,7 @@ struct EventFormView: View {
 
                                 Circle()
                                     .frame(width: 30, height: 30)
-                                    .foregroundStyle(HappyGradients(rawValue: background)!.gradient)
+                                    .foregroundStyle(HappyGradients(rawValue: background)!.radial(startRadius: 0, endRadius: 50))
 
                                 Image("chevron-right-symbol")
                                     .foregroundStyle(Color(uiColor: .systemFill))

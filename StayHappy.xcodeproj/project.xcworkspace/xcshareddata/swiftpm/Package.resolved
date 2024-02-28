@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "gradients",
+      "identity" : "agrume",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Gradients/Gradients.git",
+      "location" : "https://github.com/JanGorman/Agrume",
       "state" : {
-        "revision" : "0ec91855a90e8b376f7460457b1b5f3f204a1c3c",
-        "version" : "0.3.1"
+        "revision" : "8e9f9735b67a714b67752b3ff0e5d5a97c29394a",
+        "version" : "5.8.10"
       }
     },
     {
@@ -46,12 +46,30 @@
       }
     },
     {
+      "identity" : "smoothgradient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/intitni/SmoothGradient",
+      "state" : {
+        "revision" : "74a39d429a86533eade2426d3a46b0b3812523fa",
+        "version" : "0.3.1"
+      }
+    },
+    {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/swiftui-introspect",
       "state" : {
         "revision" : "18e965f867e37a558ad13c12d330dbe047099180",
         "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "swiftygif",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kirualex/SwiftyGif",
+      "state" : {
+        "revision" : "d6d26061d6553a493781ad3df4a8e275c43fc373",
+        "version" : "5.4.4"
       }
     }
   ],

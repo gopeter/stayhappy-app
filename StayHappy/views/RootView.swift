@@ -20,8 +20,8 @@ struct RootView: View {
             TabView(selection: $globalData.activeView) {
                 EventsView().tag(Views.events).toolbar(.hidden, for: .tabBar)
                 MomentsView().tag(Views.moments).toolbar(.hidden, for: .tabBar)
-                SearchView().tag(Views.search).toolbar(.hidden, for: .tabBar)
-                ProfileView().tag(Views.profile).toolbar(.hidden, for: .tabBar)
+                HighlightsView().tag(Views.highlights).toolbar(.hidden, for: .tabBar)
+                SettingsView().tag(Views.settings).toolbar(.hidden, for: .tabBar)
             }
 
             NavigationBarView()
@@ -31,7 +31,6 @@ struct RootView: View {
 
 private func applyUIStyling() {
     UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
-    
     UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
 }
 

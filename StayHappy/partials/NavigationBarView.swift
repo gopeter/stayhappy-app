@@ -24,7 +24,11 @@ struct NavigationItem: Identifiable {
                     .foregroundStyle(isActive ? Color.accentColor : Color.gray)
                 Spacer()
             }.frame(height: 54)
+                .contentShape(Rectangle())
         }).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
+            .buttonStyle(HighlightButtonStyle())
+            
+            
     }
 }
 
@@ -34,10 +38,10 @@ struct NavigationBarView: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 16).fill(Color("ToolbarBackgroundColor"))
+            RoundedRectangle(cornerRadius: 18).fill(Color("ToolbarBackgroundColor"))
                 .frame(height: 54)
-                .padding(.horizontal)
-                .shadow(color: Color.black.opacity(0.2), radius: 10)
+                .padding(.horizontal, 28)
+                .shadow(color: Color.black.opacity(0.35), radius: 15)
             
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", action: {
@@ -51,19 +55,19 @@ struct NavigationBarView: View {
                 NavigationItem(icon: "plus-circle-symbol", action: {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
-                    NavigationStack {
-                        EventFormView(event: nil)
+                    NavigationView {
+                        FormView()
                     }
                 }
                 
-                NavigationItem(icon: "search-symbol", action: {
-                    globalData.activeView = Views.search
-                }, isActive: globalData.activeView == Views.search).button()
+                NavigationItem(icon: "heart-symbol", action: {
+                    globalData.activeView = Views.highlights
+                }, isActive: globalData.activeView == Views.highlights).button()
                 
-                NavigationItem(icon: "user-symbol", action: {
-                    globalData.activeView = Views.profile
-                }, isActive: globalData.activeView == Views.profile).button()
-            }.padding(.horizontal)
+                NavigationItem(icon: "cog-symbol", action: {
+                    globalData.activeView = Views.settings
+                }, isActive: globalData.activeView == Views.settings).button()
+            }.padding(.horizontal, 35)
         }
     }
 }

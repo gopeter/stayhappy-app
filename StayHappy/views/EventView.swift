@@ -9,12 +9,6 @@ import os.log
 import Pow
 import SwiftUI
 
-public struct HighlightButtonStyle: ButtonStyle {
-    public func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-    }
-}
-
 struct EventView: View {
     @Environment(\.appDatabase) private var appDatabase
     @State private var isEventDetailSheetVisible: Bool = false
@@ -32,9 +26,11 @@ struct EventView: View {
             var updatedEvent = EventMutation(
                 id: event.id,
                 title: event.title,
-                isHighlight: !event.isHighlight,
                 startAt: event.startAt,
                 endAt: event.endAt,
+                isHighlight: !event.isHighlight,
+                background: event.background,
+                photo: event.photo,
                 createdAt: event.createdAt,
                 updatedAt: event.updatedAt
             )
@@ -69,7 +65,7 @@ struct EventView: View {
         HStack(spacing: 20) {
             // Date
             VStack(spacing: 0) {
-                Text(event.startAt.formatted(.dateTime.month()))
+                Text("\(event.startAt.formatted(.dateTime.month())) \(event.startAt.formatted(.dateTime.year(.twoDigits)))")
                     .frame(alignment: .leading)
                     .font(.footnote)
                 
@@ -77,7 +73,7 @@ struct EventView: View {
                     .frame(alignment: .leading)
                     .font(.title2)
                     .fontWeight(.bold)
-            }.frame(minWidth: 40, maxWidth: 40)
+            }.frame(minWidth: 50, maxWidth: 50)
 
             // Heart
             ZStack {
@@ -123,36 +119,34 @@ struct EventView: View {
             }
             
             // Content Card
-            Button {
-                isEventDetailSheetVisible.toggle()
-            } label: {
+            NavigationLink(value: event) {
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(Color("CardBackgroundColor"))
                         .frame(alignment: Alignment.top)
                 
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(formatStartAtDate(startAt: event.startAt))
-                            .font(.footnote)
-                            .foregroundStyle(.gray)
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(formatStartAtDate(startAt: event.startAt))
+                                .font(.footnote)
+                                .foregroundStyle(.gray)
+                            
+                            Text(event.title)
+                            
+                        }.padding(.horizontal, 20).padding(.vertical, 10)
                         
-                        Text(event.title)
+                        Spacer()
                         
-                    }.padding(.horizontal, 15).padding(.vertical, 10)
-                
+                        Image("chevron-right-symbol")
+                            .foregroundStyle(Color(uiColor: .systemFill))
+                            .padding(.trailing, 12)
+                    }.listRowBackground(Color("CardBackgroundColor"))
                 }.padding(.vertical, 10)
-            }
-            .sheet(isPresented: $isEventDetailSheetVisible) {
-                NavigationStack {
-                    EventFormView(event: event)
-                }
-            }
-            .buttonStyle(.plain)
-            
+            }.buttonStyle(HighlightButtonStyle())
         }.padding(.horizontal)
     }
 }
 
 #Preview {
-    EventView(event: Event(id: 1, title: "Arctic Monkeys Concert", isHighlight: true, startAt: Date(), endAt: Date(), createdAt: Date(), updatedAt: Date()))
+    EventView(event: Event(id: 1, title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date(), isHighlight: true, background: HappyGradients.aboveTheSky.rawValue, createdAt: Date(), updatedAt: Date()))
 }

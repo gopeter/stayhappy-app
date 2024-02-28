@@ -12,6 +12,14 @@
 		454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = 454014FC2B722437003A7E24 /* GRDBQuery */; };
 		454014FF2B7278C0003A7E24 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014FE2B7278C0003A7E24 /* Log.swift */; };
 		454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D32B76148D007956A0 /* KeyboardVisibility.swift */; };
+		454328D82B763480007956A0 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D72B763480007956A0 /* Moment.swift */; };
+		454328DA2B763527007956A0 /* MomentFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D92B763527007956A0 /* MomentFormView.swift */; };
+		454328DC2B7635AC007956A0 /* FormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328DB2B7635AC007956A0 /* FormView.swift */; };
+		454328E22B76D4F3007956A0 /* HighlightButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */; };
+		4558FB862B874D6C009D506C /* HighlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB852B874D6C009D506C /* HighlightView.swift */; };
+		4558FB902B879750009D506C /* Gradients in Frameworks */ = {isa = PBXBuildFile; productRef = 4558FB8F2B879750009D506C /* Gradients */; };
+		4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB9E2B87A601009D506C /* HappyGradients.swift */; };
+		4558FBA22B87B0D5009D506C /* Hue in Frameworks */ = {isa = PBXBuildFile; productRef = 4558FBA12B87B0D5009D506C /* Hue */; };
 		459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 459792C62B74FEBD0047A555 /* SwiftUIIntrospect */; };
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
@@ -24,11 +32,13 @@
 		45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2412B68E5E10076D062 /* MomentsView.swift */; };
 		45BBE2462B69939D0076D062 /* EventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2452B69939D0076D062 /* EventFormView.swift */; };
 		45C99AB52B73984600F61E8D /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 45C99AB42B73984600F61E8D /* Pow */; };
+		45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E0180A2B8228F7009C594F /* ImageSaver.swift */; };
+		45E0180D2B822900009C594F /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E0180C2B822900009C594F /* FileManager.swift */; };
 		45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655A2B4EF68700F55A17 /* RootView.swift */; };
 		45E165602B4EF96700F55A17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655F2B4EF96700F55A17 /* Event.swift */; };
 		45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F72E2B6BC2CF005C0E77 /* EventView.swift */; };
-		45E4F7312B6C3B2F005C0E77 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7302B6C3B2F005C0E77 /* SearchView.swift */; };
-		45E4F7332B6C3B7E005C0E77 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7322B6C3B7E005C0E77 /* ProfileView.swift */; };
+		45E4F7312B6C3B2F005C0E77 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7302B6C3B2F005C0E77 /* SettingsView.swift */; };
+		45E4F7332B6C3B7E005C0E77 /* HighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +62,12 @@
 		454014F72B71322B003A7E24 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		454014FE2B7278C0003A7E24 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		454328D32B76148D007956A0 /* KeyboardVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardVisibility.swift; sourceTree = "<group>"; };
+		454328D72B763480007956A0 /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
+		454328D92B763527007956A0 /* MomentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentFormView.swift; sourceTree = "<group>"; };
+		454328DB2B7635AC007956A0 /* FormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormView.swift; sourceTree = "<group>"; };
+		454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightButtonStyle.swift; sourceTree = "<group>"; };
+		4558FB852B874D6C009D506C /* HighlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightView.swift; sourceTree = "<group>"; };
+		4558FB9E2B87A601009D506C /* HappyGradients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HappyGradients.swift; sourceTree = "<group>"; };
 		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
 		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -67,11 +83,13 @@
 		45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		45BBE2412B68E5E10076D062 /* MomentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsView.swift; sourceTree = "<group>"; };
 		45BBE2452B69939D0076D062 /* EventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormView.swift; sourceTree = "<group>"; };
+		45E0180A2B8228F7009C594F /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		45E0180C2B822900009C594F /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		45E1655A2B4EF68700F55A17 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		45E1655F2B4EF96700F55A17 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		45E4F72E2B6BC2CF005C0E77 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
-		45E4F7302B6C3B2F005C0E77 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		45E4F7322B6C3B7E005C0E77 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		45E4F7302B6C3B2F005C0E77 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +99,8 @@
 			files = (
 				45C99AB52B73984600F61E8D /* Pow in Frameworks */,
 				454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */,
+				4558FB902B879750009D506C /* Gradients in Frameworks */,
+				4558FBA22B87B0D5009D506C /* Hue in Frameworks */,
 				454014F52B712FDD003A7E24 /* GRDB in Frameworks */,
 				459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */,
 			);
@@ -103,12 +123,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		454014F62B7131FD003A7E24 /* db */ = {
+		454014F62B7131FD003A7E24 /* storage */ = {
 			isa = PBXGroup;
 			children = (
 				454014F72B71322B003A7E24 /* Database.swift */,
+				45E0180A2B8228F7009C594F /* ImageSaver.swift */,
+				45E0180C2B822900009C594F /* FileManager.swift */,
 			);
-			path = db;
+			path = storage;
 			sourceTree = "<group>";
 		};
 		454328D22B76147C007956A0 /* extensions */ = {
@@ -148,10 +170,10 @@
 				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
 				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
-				454014F62B7131FD003A7E24 /* db */,
 				454328D22B76147C007956A0 /* extensions */,
 				45E1655E2B4EF72900F55A17 /* models */,
 				45BBE23A2B67E8250076D062 /* partials */,
+				454014F62B7131FD003A7E24 /* storage */,
 				45BBE23D2B68453F0076D062 /* ui */,
 				45BBE2392B67E7E80076D062 /* views */,
 			);
@@ -189,10 +211,13 @@
 				45BBE2452B69939D0076D062 /* EventFormView.swift */,
 				45BBE2372B628E5B0076D062 /* EventsView.swift */,
 				45E4F72E2B6BC2CF005C0E77 /* EventView.swift */,
+				454328DB2B7635AC007956A0 /* FormView.swift */,
+				45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */,
+				4558FB852B874D6C009D506C /* HighlightView.swift */,
+				454328D92B763527007956A0 /* MomentFormView.swift */,
 				45BBE2412B68E5E10076D062 /* MomentsView.swift */,
-				45E4F7322B6C3B7E005C0E77 /* ProfileView.swift */,
 				45E1655A2B4EF68700F55A17 /* RootView.swift */,
-				45E4F7302B6C3B2F005C0E77 /* SearchView.swift */,
+				45E4F7302B6C3B2F005C0E77 /* SettingsView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -208,6 +233,8 @@
 		45BBE23D2B68453F0076D062 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */,
+				4558FB9E2B87A601009D506C /* HappyGradients.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -216,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				45E1655F2B4EF96700F55A17 /* Event.swift */,
+				454328D72B763480007956A0 /* Moment.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -241,6 +269,8 @@
 				454014FC2B722437003A7E24 /* GRDBQuery */,
 				45C99AB42B73984600F61E8D /* Pow */,
 				459792C62B74FEBD0047A555 /* SwiftUIIntrospect */,
+				4558FB8F2B879750009D506C /* Gradients */,
+				4558FBA12B87B0D5009D506C /* Hue */,
 			);
 			productName = StayHappy;
 			productReference = 45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */;
@@ -319,6 +349,8 @@
 				454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 				45C99AB32B73984600F61E8D /* XCRemoteSwiftPackageReference "Pow" */,
 				459792C52B74FEBD0047A555 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
+				4558FB8E2B879750009D506C /* XCRemoteSwiftPackageReference "Gradients" */,
+				4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */,
 			);
 			productRefGroup = 45B6F6DF2B4EF0B8003A42F8 /* Products */;
 			projectDirPath = "";
@@ -362,18 +394,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45E4F7312B6C3B2F005C0E77 /* SearchView.swift in Sources */,
+				454328E22B76D4F3007956A0 /* HighlightButtonStyle.swift in Sources */,
+				45E4F7312B6C3B2F005C0E77 /* SettingsView.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* EventsView.swift in Sources */,
+				4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */,
+				45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */,
 				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
 				454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */,
+				454328DA2B763527007956A0 /* MomentFormView.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45E4F72F2B6BC2CF005C0E77 /* EventView.swift in Sources */,
 				454014F82B71322B003A7E24 /* Database.swift in Sources */,
+				454328DC2B7635AC007956A0 /* FormView.swift in Sources */,
 				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
 				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
+				454328D82B763480007956A0 /* Moment.swift in Sources */,
+				45E0180D2B822900009C594F /* FileManager.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Event.swift in Sources */,
 				45BBE2422B68E5E10076D062 /* MomentsView.swift in Sources */,
-				45E4F7332B6C3B7E005C0E77 /* ProfileView.swift in Sources */,
+				4558FB862B874D6C009D506C /* HighlightView.swift in Sources */,
+				45E4F7332B6C3B7E005C0E77 /* HighlightsView.swift in Sources */,
 				45BBE2462B69939D0076D062 /* EventFormView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -734,6 +774,22 @@
 				minimumVersion = 0.8.0;
 			};
 		};
+		4558FB8E2B879750009D506C /* XCRemoteSwiftPackageReference "Gradients" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Gradients/Gradients.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.1;
+			};
+		};
+		4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zenangst/Hue";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 		459792C52B74FEBD0047A555 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/swiftui-introspect";
@@ -762,6 +818,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */;
 			productName = GRDBQuery;
+		};
+		4558FB8F2B879750009D506C /* Gradients */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4558FB8E2B879750009D506C /* XCRemoteSwiftPackageReference "Gradients" */;
+			productName = Gradients;
+		};
+		4558FBA12B87B0D5009D506C /* Hue */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */;
+			productName = Hue;
 		};
 		459792C62B74FEBD0047A555 /* SwiftUIIntrospect */ = {
 			isa = XCSwiftPackageProductDependency;

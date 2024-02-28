@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  SettingsView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 01.02.24.
@@ -7,21 +7,22 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
                 HStack {
-                    Text("Profile settings")
+                    Text("Settings coming soon")
                     Spacer()
                 }.padding()
             }.background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Profile")
+                .navigationTitle("Settings")
+                .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
 }
 
 #Preview {
-    ProfileView()
+    SettingsView()
 }

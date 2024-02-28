@@ -5,6 +5,7 @@
 //  Created by Peter Oesteritz on 25.01.24.
 //
 
+import Combine
 import GRDBQuery
 import SwiftUI
 import SwiftUIIntrospect
@@ -13,8 +14,10 @@ struct EventsView: View {
     @Environment(\.colorScheme) var colorScheme
     @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
     @State private var isSearching = false
-    @State private var toggledSearch = false // activate transform
-    
+    @State var searchText = ""
+
+    let searchTextPublisher = PassthroughSubject<String, Never>()
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -32,18 +35,35 @@ struct EventsView: View {
                                 Spacer()
                             }
                         }
-                    }
+                    }           
                 }
 
                 Spacer(minLength: 70)
             }
-            .searchable(text: $events.searchText, isPresented: $isSearching)
-            .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
-            // .scrollContentBackground(.hidden)
+            // Navigation
             .navigationTitle("Events")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .navigationDestination(for: Event.self) { event in
+                FormView(event: event)
+            }
+            // Style
+            .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
+            // Search
+            .searchable(text: $searchText, isPresented: $isSearching)
+            .onChange(of: searchText) { _, newSearchText in
+                searchTextPublisher.send(newSearchText)
+            }
+            .onReceive(
+                searchTextPublisher
+                    .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            ) { _ in
+                $events.searchText.wrappedValue = searchText
+            }
+            // Disable jumpy behaviour when search is active
             .transaction { transaction in
                 transaction.animation = nil
             }
+            // Actions
             .toolbar {
                 Menu {
                     Section("Period") {
@@ -61,11 +81,14 @@ struct EventsView: View {
                     }
 
                 } label: {
-                    Image("settings-2-symbol")
-                        .resizable()
-                        .frame(width: 20.0, height: 20.0)
+                    VStack(spacing: 0) {
+                        Spacer()
+                        Image("filter-symbol")
+                        
+                    }
                 }
             }
+            
         }.introspect(.searchField, on: .iOS(.v17)) { searchField in
             if colorScheme == .dark {
                 searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")

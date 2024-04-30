@@ -1,5 +1,5 @@
 //
-//  EventView.swift
+//  MomentView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 01.02.24.
@@ -9,33 +9,33 @@ import os.log
 import Pow
 import SwiftUI
 
-struct EventView: View {
+struct MomentView: View {
     @Environment(\.appDatabase) private var appDatabase
-    @State private var isEventDetailSheetVisible: Bool = false
+    @State private var isMomentDetailSheetVisible: Bool = false
     
     let formatter = DateComponentsFormatter()
-    var event: Event
+    var moment: Moment
     
-    init(event: Event) {
-        self.event = event
+    init(moment: Moment) {
+        self.moment = moment
     }
     
-    func toggleHighlight(for event: Event) {
+    func toggleHighlight(for moment: Moment) {
         do {
-            // TODO: is there really no simple way to destruct the event as params?
-            var updatedEvent = EventMutation(
-                id: event.id,
-                title: event.title,
-                startAt: event.startAt,
-                endAt: event.endAt,
-                isHighlight: !event.isHighlight,
-                background: event.background,
-                photo: event.photo,
-                createdAt: event.createdAt,
-                updatedAt: event.updatedAt
+            // TODO: is there really no simple way to destruct the moment as params?
+            var updatedMoment = MomentMutation(
+                id: moment.id,
+                title: moment.title,
+                startAt: moment.startAt,
+                endAt: moment.endAt,
+                isHighlight: !moment.isHighlight,
+                background: moment.background,
+                photo: moment.photo,
+                createdAt: moment.createdAt,
+                updatedAt: moment.updatedAt
             )
         
-            try appDatabase.saveEvent(&updatedEvent)
+            try appDatabase.saveMoment(&updatedMoment)
         } catch {
             // TODO: log something useful
             Logger.debug.error("Error: \(error.localizedDescription)")
@@ -65,11 +65,11 @@ struct EventView: View {
         HStack(spacing: 20) {
             // Date
             VStack(spacing: 0) {
-                Text("\(event.startAt.formatted(.dateTime.month())) \(event.startAt.formatted(.dateTime.year(.twoDigits)))")
+                Text("\(moment.startAt.formatted(.dateTime.month())) \(moment.startAt.formatted(.dateTime.year(.twoDigits)))")
                     .frame(alignment: .leading)
                     .font(.footnote)
                 
-                Text(event.startAt.formatted(.dateTime.day()))
+                Text(moment.startAt.formatted(.dateTime.day()))
                     .frame(alignment: .leading)
                     .font(.title2)
                     .fontWeight(.bold)
@@ -82,7 +82,7 @@ struct EventView: View {
                     .frame(width: 1, alignment: .center)
                 
                 Button {
-                    toggleHighlight(for: event)
+                    toggleHighlight(for: moment)
                 } label: {
                     ZStack {
                         Circle()
@@ -94,32 +94,32 @@ struct EventView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Color(uiColor: .systemGray4))
-                            .opacity(event.isHighlight ? 0 : 1)
-                            .scaleEffect(event.isHighlight ? CGSize(width: 0.3, height: 0.3) : CGSize(width: 1.0, height: 1.0))
-                            .animation(.easeInOut(duration: 0.2), value: event.isHighlight)
+                            .opacity(moment.isHighlight ? 0 : 1)
+                            .scaleEffect(moment.isHighlight ? CGSize(width: 0.3, height: 0.3) : CGSize(width: 1.0, height: 1.0))
+                            .animation(.easeInOut(duration: 0.2), value: moment.isHighlight)
                         
                         Image("heart-filled-symbol")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Color.red)
-                            .opacity(event.isHighlight ? 1 : 0)
-                            .scaleEffect(event.isHighlight ? CGSize(width: 1.0, height: 1.0) : CGSize(width: 0.3, height: 0.3))
-                            .animation(.easeInOut(duration: 0.2), value: event.isHighlight)
+                            .opacity(moment.isHighlight ? 1 : 0)
+                            .scaleEffect(moment.isHighlight ? CGSize(width: 1.0, height: 1.0) : CGSize(width: 0.3, height: 0.3))
+                            .animation(.easeInOut(duration: 0.2), value: moment.isHighlight)
                     }
                 }
                 .changeEffect(
                     .spray {
                         Image(systemName: "heart.fill")
                             .foregroundStyle(.red)
-                    }, value: event.isHighlight, isEnabled: !event.isHighlight
+                    }, value: moment.isHighlight, isEnabled: !moment.isHighlight
                 )
                 .buttonStyle(HighlightButtonStyle())
-                .tint(event.isHighlight ? .red : .gray)
+                .tint(moment.isHighlight ? .red : .gray)
             }
             
             // Content Card
-            NavigationLink(value: event) {
+            NavigationLink(value: moment) {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(Color("CardBackgroundColor"))
@@ -127,11 +127,11 @@ struct EventView: View {
                 
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(formatStartAtDate(startAt: event.startAt))
+                            Text(formatStartAtDate(startAt: moment.startAt))
                                 .font(.footnote)
                                 .foregroundStyle(.gray)
                             
-                            Text(event.title)
+                            Text(moment.title)
                             
                         }.padding(.horizontal, 20).padding(.vertical, 10)
                         
@@ -148,5 +148,5 @@ struct EventView: View {
 }
 
 #Preview {
-    EventView(event: Event(id: 1, title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date(), isHighlight: true, background: HappyGradients.loveKiss.rawValue, createdAt: Date(), updatedAt: Date()))
+    MomentView(moment: Moment(id: 1, title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date(), isHighlight: true, background: HappyGradients.loveKiss.rawValue, createdAt: Date(), updatedAt: Date()))
 }

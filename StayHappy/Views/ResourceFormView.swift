@@ -1,5 +1,5 @@
 //
-//  MomentFormView.swift
+//  ResourceFormView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 30.01.24.
@@ -8,7 +8,7 @@
 import os.log
 import SwiftUI
 
-struct MomentFormView: View {
+struct ResourceFormView: View {
     @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
 
@@ -16,42 +16,40 @@ struct MomentFormView: View {
 
     @FocusState private var isFocused: Bool
 
-    let moment: Moment?
+    let resource: Resource?
 
     var disableForm: Bool {
         title == ""
     }
 
-    init(moment: Moment?) {
-        self.moment = moment
+    init(resource: Resource?) {
+        self.resource = resource
 
-        self._title = State(initialValue: moment?.title ?? "")
+        self._title = State(initialValue: resource?.title ?? "")
     }
 
-    func addMoment() {
+    func addResource() {
         do {
-            var newMoment = MomentMutation(
-                id: moment?.id,
+            var newResource = ResourceMutation(
+                id: resource?.id,
                 title: title,
-                createdAt: moment?.createdAt,
-                updatedAt: moment?.updatedAt
+                createdAt: resource?.createdAt,
+                updatedAt: resource?.updatedAt
             )
 
-            try appDatabase.saveMoment(&newMoment)
+            try appDatabase.saveResource(&newResource)
 
             dismiss()
         } catch {
-            // TODO: log something useful
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
     }
 
-    func deleteMoment() {
+    func deleteResource() {
         do {
-            try appDatabase.deleteMoments([moment!.id])
+            try appDatabase.deleteResources([resource!.id])
             dismiss()
         } catch {
-            // TODO: log something useful
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
     }
@@ -61,8 +59,8 @@ struct MomentFormView: View {
             Section {
                 TextField("Title", text: $title).focused($isFocused)
             } header: {
-                if moment != nil {
-                    Text("Update moment")
+                if resource != nil {
+                    Text("Update resource")
                 } else {
                     Color.clear
                         .frame(width: 0, height: 0)
@@ -71,12 +69,12 @@ struct MomentFormView: View {
             }.listRowBackground(Color("CardBackgroundColor"))
 
             Section {
-                Button(action: addMoment, label: {
+                Button(action: addResource, label: {
                     Text("Save")
                 }).disabled(disableForm)
-                
-                if moment != nil {
-                    Button(role: .destructive, action: deleteMoment, label: {
+
+                if resource != nil {
+                    Button(role: .destructive, action: deleteResource, label: {
                         Text("Delete")
                     })
                 }
@@ -89,5 +87,5 @@ struct MomentFormView: View {
 }
 
 #Preview {
-    MomentFormView(moment: nil)
+    ResourceFormView(resource: nil)
 }

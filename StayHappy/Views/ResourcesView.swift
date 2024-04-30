@@ -1,5 +1,5 @@
 //
-//  MomentsView.swift
+//  ResourcesView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 30.01.24.
@@ -10,9 +10,9 @@ import GRDBQuery
 import SwiftUI
 import SwiftUIIntrospect
 
-struct MomentsView: View {
+struct ResourcesView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Query(MomentListRequest()) private var moments: [Moment]
+    @Query(ResourceListRequest()) private var resources: [Resource]
     @State private var isSearching = false
     @State var searchText = ""
 
@@ -22,11 +22,11 @@ struct MomentsView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 List {
-                    if moments.count > 0 {
-                        ForEach(moments) { moment in
+                    if resources.count > 0 {
+                        ForEach(resources) { resource in
                             HStack {
-                                Text(moment.title)
-                                    .background(NavigationLink(moment.title, value: moment).opacity(0))
+                                Text(resource.title)
+                                    .background(NavigationLink(resource.title, value: resource).opacity(0))
                                 Spacer()
                                 Image("chevron-right-symbol").foregroundStyle(Color(uiColor: .systemFill))
                             }.listRowBackground(Color("CardBackgroundColor")).listRowInsets(.init(top: 0, leading: 20, bottom: 0, trailing: 12))
@@ -36,17 +36,17 @@ struct MomentsView: View {
                             Spacer(minLength: 80)
                             HStack {
                                 Spacer()
-                                Text(isSearching ? "No moments found" : "No moments created").foregroundStyle(.gray)
+                                Text(isSearching ? "No resources found" : "No resources created").foregroundStyle(.gray)
                                 Spacer()
                             }
                         }.listRowBackground(Color("AppBackgroundColor"))
                     }
                 }
                 // Navigation
-                .navigationTitle("Moments")
+                .navigationTitle("Resources")
                 .toolbarTitleDisplayMode(.inlineLarge)
-                .navigationDestination(for: Moment.self) { moment in
-                    FormView(moment: moment)
+                .navigationDestination(for: Resource.self) { resource in
+                    FormView(resource: resource)
                 }
                 // Style
                 .scrollContentBackground(.hidden)
@@ -59,7 +59,7 @@ struct MomentsView: View {
                     searchTextPublisher
                         .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
                 ) { _ in
-                    $moments.searchText.wrappedValue = searchText
+                    $resources.searchText.wrappedValue = searchText
                 }
                 // disable jumpy behaviour when search is active
                 .transaction { transaction in
@@ -80,5 +80,5 @@ struct MomentsView: View {
 }
 
 #Preview {
-    MomentsView()
+    ResourcesView()
 }

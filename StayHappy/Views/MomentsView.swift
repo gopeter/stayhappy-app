@@ -1,5 +1,5 @@
 //
-//  EventsView.swift
+//  MomentsView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 25.01.24.
@@ -10,9 +10,9 @@ import GRDBQuery
 import SwiftUI
 import SwiftUIIntrospect
 
-struct EventsView: View {
+struct MomentsView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Query(EventListRequest(period: .upcoming, ordering: .asc)) private var events: [Event]
+    @Query(MomentListRequest(period: .upcoming, ordering: .asc)) private var moments: [Moment]
     @State private var isSearching = false
     @State var searchText = ""
 
@@ -22,16 +22,16 @@ struct EventsView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    if events.count > 0 {
-                        ForEach(events) { event in
-                            EventView(event: event)
+                    if moments.count > 0 {
+                        ForEach(moments) { moment in
+                            MomentView(moment: moment)
                         }
                     } else {
                         VStack {
                             Spacer(minLength: 80)
                             HStack {
                                 Spacer()
-                                Text(isSearching ? "No events found" : "No events created").foregroundStyle(.gray)
+                                Text(isSearching ? "No moments found" : "No moments created").foregroundStyle(.gray)
                                 Spacer()
                             }
                         }
@@ -41,10 +41,10 @@ struct EventsView: View {
                 Spacer(minLength: 80)
             }
             // Navigation
-            .navigationTitle("Events")
+            .navigationTitle("Moments")
             .toolbarTitleDisplayMode(.inlineLarge)
-            .navigationDestination(for: Event.self) { event in
-                FormView(event: event)
+            .navigationDestination(for: Moment.self) { moment in
+                FormView(moment: moment)
             }
             // Style
             .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
@@ -57,7 +57,7 @@ struct EventsView: View {
                 searchTextPublisher
                     .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             ) { _ in
-                $events.searchText.wrappedValue = searchText
+                $moments.searchText.wrappedValue = searchText
             }
             // Disable jumpy behaviour when search is active
             .transaction { transaction in
@@ -67,16 +67,16 @@ struct EventsView: View {
             .toolbar {
                 Menu {
                     Section("Period") {
-                        Picker("Period", selection: $events.period) {
-                            Text("Upcoming events").tag(EventListRequest.Period.upcoming)
-                            Text("Past events").tag(EventListRequest.Period.past)
+                        Picker("Period", selection: $moments.period) {
+                            Text("Upcoming moments").tag(MomentListRequest.Period.upcoming)
+                            Text("Past moments").tag(MomentListRequest.Period.past)
                         }
                     }
 
                     Section("Ordering") {
-                        Picker("Ordering", selection: $events.ordering) {
-                            Text("Ascending").tag(EventListRequest.Ordering.asc)
-                            Text("Descending").tag(EventListRequest.Ordering.desc)
+                        Picker("Ordering", selection: $moments.ordering) {
+                            Text("Ascending").tag(MomentListRequest.Ordering.asc)
+                            Text("Descending").tag(MomentListRequest.Ordering.desc)
                         }
                     }
 
@@ -100,5 +100,5 @@ struct EventsView: View {
 }
 
 #Preview {
-    EventsView()
+    MomentsView()
 }

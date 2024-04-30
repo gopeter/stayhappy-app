@@ -9,7 +9,7 @@ import GRDBQuery
 import SwiftUI
 
 struct HighlightsView: View {
-    @Query(HighlightListRequest()) private var events: [Event]
+    @Query(HighlightListRequest()) private var moments: [Moment]
     
     @State var fullscreenImage: UIImage? = nil
     @State var isFullscreenActive = false
@@ -27,11 +27,11 @@ struct HighlightsView: View {
             NavigationStack {
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        if self.events.count > 0 {
+                        if self.moments.count > 0 {
                             Spacer(minLength: 20)
                             
-                            ForEach(self.events) { event in
-                                HighlightView(event: event, setImage: self.setImage)
+                            ForEach(self.moments) { moment in
+                                HighlightView(moment: moment, setImage: self.setImage)
                             }
                         } else {
                             VStack {

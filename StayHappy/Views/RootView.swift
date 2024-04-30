@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var globalData: GlobalData
+    @State var visibility = Visibility.hidden
     
     // TODO: check if this is the right place to do this
     init() {
@@ -18,24 +19,25 @@ struct RootView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             TabView(selection: $globalData.activeView) {
-                EventsView().tag(Views.events).toolbar(.hidden, for: .tabBar)
-                MomentsView().tag(Views.moments).toolbar(.hidden, for: .tabBar)
-                HighlightsView().tag(Views.highlights).toolbar(.hidden, for: .tabBar)
-                SettingsView().tag(Views.settings).toolbar(.hidden, for: .tabBar)
+                MomentsView().tag(Views.moments)
+                ResourcesView().tag(Views.resources)
+                HighlightsView().tag(Views.highlights)
+                SettingsView().tag(Views.settings)
             }
-
+   
             NavigationBarView()
         }.ignoresSafeArea(.keyboard)
     }
 }
 
 private func applyUIStyling() {
+    UITabBar.appearance().isHidden = true
     UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
     UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
 }
 
 #Preview {
     RootView()
-        .environment(\.appDatabase, .init())
-        .environmentObject(GlobalData(activeView: .events))
+        .environment(\.appDatabase, .init(mode: .write))
+        .environmentObject(GlobalData(activeView: .moments))
 }

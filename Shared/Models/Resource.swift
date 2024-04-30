@@ -1,5 +1,5 @@
 //
-//  Moment.swift
+//  Resource.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 09.02.24.
@@ -10,9 +10,9 @@ import Foundation
 import GRDB
 import GRDBQuery
 
-// MARK: - Moment Mutation Model
+// MARK: - Resource Mutation Model
 
-struct MomentMutation {
+struct ResourceMutation {
     var id: Int64?
     var title: String
     var createdAt: Date?
@@ -26,8 +26,8 @@ struct MomentMutation {
     }
 }
 
-extension MomentMutation: Encodable, MutablePersistableRecord {
-    static var databaseTableName: String { "moment" }
+extension ResourceMutation: Encodable, MutablePersistableRecord {
+    static var databaseTableName: String { "resource" }
 
     /// Updates auto-incremented id upon successful insertion
     mutating func didInsert(_ inserted: InsertionSuccess) {
@@ -47,73 +47,80 @@ extension MomentMutation: Encodable, MutablePersistableRecord {
     }
 }
 
-// MARK: - Moment Mutation Operations
+// MARK: - Resource Mutation Operations
 
 extension AppDatabase {
-    func saveMoment(_ moment: inout MomentMutation) throws {
-        if moment.title.isEmpty {
+    func saveResource(_ resource: inout ResourceMutation) throws {
+        if resource.title.isEmpty {
+            throw ValidationError.missingName
+        }
+        
+        if db == nil {
             throw ValidationError.missingName
         }
 
-        try db.write { db in
-            try moment.save(db)
+        try db!.write { db in
+            try resource.save(db)
         }
     }
 
-    func deleteMoments(_ ids: [Int64]) throws {
-        try db.write { db in
-            _ = try Moment.deleteAll(db, ids: ids)
+    func deleteResources(_ ids: [Int64]) throws {
+        try db!.write { db in
+            _ = try Resource.deleteAll(db, ids: ids)
         }
     }
 }
 
-// MARK: - Moment Model
+// MARK: - Resource Model
 
-struct Moment: Identifiable, Equatable, Hashable {
+struct Resource: Identifiable, Equatable, Hashable {
     var id: Int64
     var title: String
     var createdAt: Date
     var updatedAt: Date
 }
 
-extension Moment: Codable, FetchableRecord, PersistableRecord {
+extension Resource: Codable, FetchableRecord, PersistableRecord {
     fileprivate enum Columns {
         static let title = Column(CodingKeys.title)
         static let createdAt = Column(CodingKeys.createdAt)
     }
 }
 
-extension DerivableRequest<Moment> {
+extension DerivableRequest<Resource> {
     func filterBySearchText(_ searchText: String) -> Self {
         let pattern = "%\(searchText)%"
-        return filter(sql: "moment.title LIKE ?", arguments: [pattern])
+        return filter(sql: "resource.title LIKE ?", arguments: [pattern])
     }
 }
 
-// MARK: - Moment Model Requests
+// MARK: - Resource Model Requests
 
-struct MomentListRequest: Queryable {
+struct ResourceListRequest: Queryable {
     var searchText: String = ""
 
-    static var defaultValue: [Moment] { [] }
+    static var defaultValue: [Resource] { [] }
 
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        ValueObservation
+    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Resource], Error> {  
+        if appDatabase.db == nil {
+            return Empty(completeImmediately: false).eraseToAnyPublisher()
+        }
+        
+        return ValueObservation
             .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.db, scheduling: .immediate)
+            .publisher(in: appDatabase.db!, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 
-    func fetchValue(_ db: Database) throws -> [Moment] {
-        var moments = Moment.all()
+    func fetchValue(_ db: Database) throws -> [Resource] {
+        var resources = Resource.all()
 
         if searchText != "" {
-            moments = moments.filterBySearchText(searchText)
+            resources = resources.filterBySearchText(searchText)
         }
 
-        return try moments
-            .order(Moment.Columns.createdAt.desc)
+        return try resources
+            .order(Resource.Columns.createdAt.desc)
             .fetchAll(db)
     }
 }
-

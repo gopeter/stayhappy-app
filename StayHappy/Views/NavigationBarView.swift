@@ -45,17 +45,17 @@ struct NavigationBarView: View {
             
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", action: {
-                    globalData.activeView = Views.events
-                }, isActive: globalData.activeView == Views.events).button()
-                
-                NavigationItem(icon: "coffee-symbol", action: {
                     globalData.activeView = Views.moments
                 }, isActive: globalData.activeView == Views.moments).button()
+                
+                NavigationItem(icon: "coffee-symbol", action: {
+                    globalData.activeView = Views.resources
+                }, isActive: globalData.activeView == Views.resources).button()
                 
                 NavigationItem(icon: "plus-circle-symbol", action: {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
-                    NavigationView {
+                    NavigationStack {
                         FormView()
                     }
                 }
@@ -73,5 +73,5 @@ struct NavigationBarView: View {
 }
 
 #Preview {
-    NavigationBarView().environmentObject(GlobalData(activeView: .events))
+    NavigationBarView().environmentObject(GlobalData(activeView: .moments))
 }

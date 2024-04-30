@@ -1,26 +1,26 @@
 //
-//  EventFormView.swift
+//  MomentFormView.swift
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import Gradients
 import os.log
 import PhotosUI
 import SwiftUI
 
 struct BackgroundOptionView: View {
+    @Environment(\.dismiss) var dismiss
+
     var gradients: [String]
     @Binding var selectedGradient: String
-    @Binding var path: NavigationPath
 
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
                 Button(action: {
                     self.selectedGradient = self.gradients.randomElement()!
-                    // path.removeLast()
+                    dismiss()
                 }, label: {
                     HStack {
                         Spacer()
@@ -36,13 +36,17 @@ struct BackgroundOptionView: View {
                         HStack {
                             Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 24, height: 24)
-                                .foregroundStyle(.text)
+                                .foregroundStyle(.text.opacity(self.selectedGradient == self.gradients[index] ? 1 : 0.3))
                                 .padding(.trailing, 10)
 
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(HappyGradients(rawValue: self.gradients[index])!.gradient)
+                                .fill(HappyGradients(rawValue: self.gradients[index])!.linear())
                                 .frame(height: 80)
+                                .overlay {
+                                    Text(self.gradients[index].titleCased()).foregroundStyle(.white) .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 1)
+                                }
                         }
                     }).padding(.horizontal, 20)
                 }
@@ -53,11 +57,9 @@ struct BackgroundOptionView: View {
     }
 }
 
-struct EventFormView: View {
+struct MomentFormView: View {
     @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
-
-    @State private var path = NavigationPath()
 
     @State private var title: String
     @State private var startAt: Date
@@ -67,70 +69,67 @@ struct EventFormView: View {
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
 
-    @State private var selection = "Red"
-    let colors = ["Red", "Green", "Blue", "Black", "Tartan"]
-
     @FocusState private var isFocused: Bool
 
     let imageSaver = ImageSaver()
-    let event: Event?
+    let moment: Moment?
 
     var disableForm: Bool {
         title == ""
     }
 
-    init(event: Event?) {
-        self.event = event
+    init(moment: Moment?) {
+        self.moment = moment
 
-        self._title = State(initialValue: event?.title ?? "")
-        self._startAt = State(initialValue: event?.startAt ?? Date())
-        // self._endAt = State(initialValue: event?.endAt ?? Date())
-        self._background = State(initialValue: event?.background ?? HappyGradients.allCases.map { $0.rawValue }.randomElement()!)
-        self._isHighlight = State(initialValue: event?.isHighlight ?? true)
+        self._title = State(initialValue: moment?.title ?? "")
+        self._startAt = State(initialValue: moment?.startAt ?? Date())
+        // self._endAt = State(initialValue: moment?.endAt ?? Date())
+        self._background = State(initialValue: moment?.background ?? HappyGradients.allCases.map { $0.rawValue }.randomElement()!)
+        self._isHighlight = State(initialValue: moment?.isHighlight ?? false)
 
-        if event?.photo != nil {
-            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: event!.photo!)).jpg")
+        if moment?.photo != nil {
+            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: moment!.photo!)).jpg")
             self._photoImage = State(initialValue: UIImage(contentsOfFile: photoUrl.path))
         }
     }
 
-    func saveEvent() {
-        var photo: String? = event?.photo
+    func saveMoment() {
+        var photo: String? = moment?.photo
 
         // remove image from file system if ...
-        if event?.photo != nil {
+        if moment?.photo != nil {
             // ... photoPickerItem is set, a new photo was chosen
             // ... photoImage is nil, the present photo was deleted
             if photoPickerItem != nil || photoImage == nil {
-                imageSaver.deleteFromDisk(imageName: event!.photo!)
+                imageSaver.deleteFromDisk(imageName: moment!.photo!)
             }
         }
 
         // save image to file system if ...
         if
             // ... no photo was given and a photo was selected
-            (event?.photo == nil && photoImage != nil) ||
+            (moment?.photo == nil && photoImage != nil) ||
             // ... a photo was given and a new one was chosen
-            (event?.photo != nil && photoPickerItem != nil && photoImage != nil)
+            (moment?.photo != nil && photoPickerItem != nil && photoImage != nil)
         {
             photo = UUID().uuidString
             imageSaver.writeToDisk(image: photoImage!, imageName: photo!)
         }
 
         do {
-            var newEvent = EventMutation(
-                id: event?.id,
+            var newMoment = MomentMutation(
+                id: moment?.id,
                 title: title,
                 startAt: startAt,
-                endAt: event?.endAt,
+                endAt: moment?.endAt,
                 isHighlight: isHighlight,
                 background: background,
                 photo: photo,
-                createdAt: event?.createdAt,
-                updatedAt: event?.updatedAt
+                createdAt: moment?.createdAt,
+                updatedAt: moment?.updatedAt
             )
 
-            try appDatabase.saveEvent(&newEvent)
+            try appDatabase.saveMoment(&newMoment)
 
             dismiss()
         } catch {
@@ -139,9 +138,9 @@ struct EventFormView: View {
         }
     }
 
-    func deleteEvent() {
+    func deleteMoment() {
         do {
-            try appDatabase.deleteEvents([event!.id])
+            try appDatabase.deleteMoments([moment!.id])
             dismiss()
         } catch {
             // TODO: log something useful
@@ -161,8 +160,8 @@ struct EventFormView: View {
                 // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                 Toggle("Highlight", isOn: $isHighlight)
             } header: {
-                if event != nil {
-                    Text("Update event")
+                if moment != nil {
+                    Text("Update moment")
                 } else {
                     Color.clear
                         .frame(width: 0, height: 0)
@@ -174,7 +173,7 @@ struct EventFormView: View {
                 Section {
                     if photoImage == nil {
                         ZStack {
-                            NavigationLink(destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background, path: $path)) {
+                            NavigationLink(destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background)) {
                                 EmptyView()
                             } .opacity(0.0)
                                 .buttonStyle(PlainButtonStyle())
@@ -188,7 +187,7 @@ struct EventFormView: View {
 
                                 Circle()
                                     .frame(width: 30, height: 30)
-                                    .foregroundStyle(HappyGradients(rawValue: background)!.gradient)
+                                    .foregroundStyle(HappyGradients(rawValue: background)!.radial(startRadius: 0, endRadius: 50))
 
                                 Image("chevron-right-symbol")
                                     .foregroundStyle(Color(uiColor: .systemFill))
@@ -229,12 +228,12 @@ struct EventFormView: View {
             }
 
             Section {
-                Button(action: saveEvent, label: {
+                Button(action: saveMoment, label: {
                     Text("Save")
                 }).disabled(disableForm)
 
-                if event != nil {
-                    Button(role: .destructive, action: deleteEvent, label: {
+                if moment != nil {
+                    Button(role: .destructive, action: deleteMoment, label: {
                         Text("Delete")
                     })
                 }
@@ -248,6 +247,6 @@ struct EventFormView: View {
 
 #Preview {
     NavigationStack {
-        EventFormView(event: nil)
+        MomentFormView(moment: nil)
     }
 }

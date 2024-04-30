@@ -9,8 +9,8 @@ import GRDBQuery
 import SwiftUI
 
 enum Views: String {
-    case events
     case moments
+    case resources
     case highlights
     case settings
 }
@@ -28,8 +28,8 @@ struct StayHappyApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(\.appDatabase, .init())
-                .environmentObject(GlobalData(activeView: .events))
+                .environment(\.appDatabase, .init(mode: .write))
+                .environmentObject(GlobalData(activeView: .moments))
         }
     }
 }
@@ -43,7 +43,7 @@ struct StayHappyApp: App {
 // https://developer.apple.com/documentation/swiftui/environmentkey
 
 private struct AppDatabaseKey: EnvironmentKey {
-    static var defaultValue: AppDatabase { .init() }
+    static var defaultValue: AppDatabase { .init(mode: .write) }
 }
 
 extension EnvironmentValues {

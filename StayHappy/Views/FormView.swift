@@ -10,22 +10,22 @@ import SwiftUI
 struct FormView: View {
     @Environment(\.dismiss) var dismiss
     
-    var event: Event?
     var moment: Moment?
+    var resource: Resource?
     var isInSheet: Bool
     
-    init(event: Event? = nil, moment: Moment? = nil, isInSheet: Bool = false) {
-        self.event = event
+    init(moment: Moment? = nil, resource: Resource? = nil, isInSheet: Bool = false) {
         self.moment = moment
-        self.isInSheet = event == nil && moment == nil
+        self.resource = resource
+        self.isInSheet = moment == nil && resource == nil
     }
     
     enum Selection {
-        case event
         case moment
+        case resource
     }
     
-    @State var selection: Selection = .event
+    @State var selection: Selection = .moment
     
     var body: some View {
         VStack(spacing: 0) {
@@ -34,12 +34,12 @@ struct FormView: View {
                     Text("Add").font(.title).fontWeight(.bold)
                     Menu {
                         Picker("Select entry type", selection: $selection) {
-                            Text("Event").tag(Selection.event)
                             Text("Moment").tag(Selection.moment)
+                            Text("Resource").tag(Selection.resource)
                         }
                     } label: {
                         HStack {
-                            Text(selection == Selection.moment ? "Moment" : "Event").font(.title).fontWeight(.bold)
+                            Text(selection == Selection.resource ? "Resource" : "Moment").font(.title).fontWeight(.bold)
                             Image("chevron-down-symbol").padding(.top, 5)
                         }
                     }
@@ -57,21 +57,21 @@ struct FormView: View {
                         })
                     }
                 }.padding(.horizontal, 20)
-                    .padding(.top, event == nil && moment == nil ? 40 : 20)
+                    .padding(.top, moment == nil && resource == nil ? 40 : 20)
             }
             
-            if event != nil {
-                EventFormView(event: event)
-                    .navigationTitle("Event")
-                    .navigationBarTitleDisplayMode(.inline)
-            } else if moment != nil {
+            if moment != nil {
                 MomentFormView(moment: moment)
                     .navigationTitle("Moment")
                     .navigationBarTitleDisplayMode(.inline)
-            } else if selection == Selection.event {
-                EventFormView(event: nil)
+            } else if resource != nil {
+                ResourceFormView(resource: resource)
+                    .navigationTitle("Resource")
+                    .navigationBarTitleDisplayMode(.inline)
             } else if selection == Selection.moment {
                 MomentFormView(moment: nil)
+            } else if selection == Selection.resource {
+                ResourceFormView(resource: nil)
             }
                 
         }.background(Color("AppBackgroundColor"))

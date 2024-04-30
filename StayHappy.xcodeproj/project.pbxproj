@@ -128,6 +128,7 @@
 		45AFCB912BE03A3D009D1FD4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45AFCB932BE03A3D009D1FD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45AFCBAB2BE0E629009D1FD4 /* WidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetsExtension.entitlements; sourceTree = "<group>"; };
+		45AFCBAC2BE12873009D1FD4 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		45B6F6DE2B4EF0B8003A42F8 /* StayHappy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StayHappy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyApp.swift; sourceTree = "<group>"; };
 		45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -258,6 +259,7 @@
 			children = (
 				45AFCBAB2BE0E629009D1FD4 /* WidgetsExtension.entitlements */,
 				455FECA62B90FAFF006A2592 /* README.md */,
+				45AFCBAC2BE12873009D1FD4 /* LICENSE.md */,
 				459BE7912B8FC93B00433B60 /* Frameworks */,
 				45B6F6DF2B4EF0B8003A42F8 /* Products */,
 				455FEC9D2B90E7C6006A2592 /* Shared */,

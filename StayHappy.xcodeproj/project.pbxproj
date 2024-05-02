@@ -38,7 +38,6 @@
 		45AFCB9B2BE03A81009D1FD4 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AF8E782BB0D247006AF22E /* Error.swift */; };
 		45AFCB9C2BE03A83009D1FD4 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1655F2B4EF96700F55A17 /* Moment.swift */; };
 		45AFCB9D2BE03A85009D1FD4 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D72B763480007956A0 /* Resource.swift */; };
-		45AFCB9E2BE03A88009D1FD4 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014F72B71322B003A7E24 /* Database.swift */; };
 		45AFCB9F2BE03A8A009D1FD4 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E0180C2B822900009C594F /* FileManager.swift */; };
 		45AFCBA02BE03A92009D1FD4 /* HappyGradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB9E2B87A601009D506C /* HappyGradients.swift */; };
 		45AFCBA22BE03AA8009D1FD4 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 45AFCBA12BE03AA8009D1FD4 /* GRDB */; };
@@ -47,6 +46,7 @@
 		45AFCBA82BE03AA8009D1FD4 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = 45AFCBA72BE03AA8009D1FD4 /* SmoothGradient */; };
 		45AFCBA92BE03D2F009D1FD4 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BBB2172BE036B20096E137 /* Combine.framework */; };
 		45AFCBAA2BE0444C009D1FD4 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014FE2B7278C0003A7E24 /* Log.swift */; };
+		45AFCBB02BE37E5B009D1FD4 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014F72B71322B003A7E24 /* Database.swift */; };
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
 		45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */; };
@@ -94,14 +94,14 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		455949F92B97593400227B32 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
 				45AFCB962BE03A3D009D1FD4 /* WidgetsExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -546,6 +546,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45AFCB8C2BE03A3B009D1FD4 /* WidgetsBundle.swift in Sources */,
+				45AFCBB02BE37E5B009D1FD4 /* Database.swift in Sources */,
 				45AFCB9A2BE03A7E009D1FD4 /* TitleCased.swift in Sources */,
 				45AFCBAA2BE0444C009D1FD4 /* Log.swift in Sources */,
 				45AFCB8E2BE03A3B009D1FD4 /* MomentsWidget.swift in Sources */,
@@ -553,7 +554,6 @@
 				45AFCB902BE03A3B009D1FD4 /* AppIntent.swift in Sources */,
 				45AFCB9C2BE03A83009D1FD4 /* Moment.swift in Sources */,
 				45AFCB9F2BE03A8A009D1FD4 /* FileManager.swift in Sources */,
-				45AFCB9E2BE03A88009D1FD4 /* Database.swift in Sources */,
 				45AFCBA02BE03A92009D1FD4 /* HappyGradients.swift in Sources */,
 				45AFCB9D2BE03A85009D1FD4 /* Resource.swift in Sources */,
 			);

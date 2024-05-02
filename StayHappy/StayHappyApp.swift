@@ -28,7 +28,7 @@ struct StayHappyApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(\.appDatabase, .init(mode: .write))
+                .environment(\.appDatabase, .shared)
                 .environmentObject(GlobalData(activeView: .moments))
         }
     }
@@ -43,7 +43,7 @@ struct StayHappyApp: App {
 // https://developer.apple.com/documentation/swiftui/environmentkey
 
 private struct AppDatabaseKey: EnvironmentKey {
-    static var defaultValue: AppDatabase { .init(mode: .write) }
+    static var defaultValue: AppDatabase { .empty() }
 }
 
 extension EnvironmentValues {

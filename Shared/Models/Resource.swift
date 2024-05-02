@@ -54,18 +54,14 @@ extension AppDatabase {
         if resource.title.isEmpty {
             throw ValidationError.missingName
         }
-        
-        if db == nil {
-            throw ValidationError.missingName
-        }
 
-        try db!.write { db in
+        try dbWriter.write { db in
             try resource.save(db)
         }
     }
 
     func deleteResources(_ ids: [Int64]) throws {
-        try db!.write { db in
+        try dbWriter.write { db in
             _ = try Resource.deleteAll(db, ids: ids)
         }
     }
@@ -101,14 +97,10 @@ struct ResourceListRequest: Queryable {
 
     static var defaultValue: [Resource] { [] }
 
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Resource], Error> {  
-        if appDatabase.db == nil {
-            return Empty(completeImmediately: false).eraseToAnyPublisher()
-        }
-        
-        return ValueObservation
+    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Resource], Error> {
+        ValueObservation
             .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.db!, scheduling: .immediate)
+            .publisher(in: appDatabase.reader, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 

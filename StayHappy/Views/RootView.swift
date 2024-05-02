@@ -38,6 +38,6 @@ private func applyUIStyling() {
 
 #Preview {
     RootView()
-        .environment(\.appDatabase, .init(mode: .write))
+        .environment(\.appDatabase, .empty())
         .environmentObject(GlobalData(activeView: .moments))
 }

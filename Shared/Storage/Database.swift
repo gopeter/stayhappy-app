@@ -10,148 +10,153 @@ import Foundation
 import GRDB
 import os.log
 
-enum DatabaseMode: String, CaseIterable {
-    case read
-    case write
-}
-
+/// A database of players.
+///
+/// You create an `AppDatabase` with a connection to an SQLite database
+/// (see <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseconnections>).
+///
+/// Create those connections with a configuration returned from
+/// `AppDatabase/makeConfiguration(_:)`.
+///
+/// For example:
+///
+/// ```swift
+/// // Create an in-memory AppDatabase
+/// let config = AppDatabase.makeConfiguration()
+/// let dbQueue = try DatabaseQueue(configuration: config)
+/// let appDatabase = try AppDatabase(dbQueue)
+/// ```
 struct AppDatabase {
-    /// Provides access to the database
-    var db: DatabasePool?
-    
-    /// Creates an `Database`, and make sure the database schema is ready
-    init(mode: DatabaseMode) {
-        let fileManager = FileManager()
-        
-        do {
-            // Locate Application Support directory
-            let folderURL = FileManager.documentsDirectory.appendingPathComponent("database", isDirectory: true)
-            
-            // Create database folder
-            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
-            
-            // Connect to the database
-            let databaseURL = folderURL.appendingPathComponent("db.sqlite")
-        
-            if mode == .read {
-                if let readOnlyDb = try openReadOnlyDatabase(at: databaseURL) {
-                    self.db = readOnlyDb
-                }
-            } else {
-                self.db = try self.openSharedDatabase(at: databaseURL)
-            }
-        } catch {
-            Logger.debug.error("Error: \(error.localizedDescription)")
-        }
+    /// Creates an `AppDatabase`, and makes sure the database schema
+    /// is ready.
+    ///
+    /// - important: Create the `DatabaseWriter` with a configuration
+    ///   returned by ``makeConfiguration(_:)``.
+    init(_ dbWriter: any DatabaseWriter) throws {
+        self.dbWriter = dbWriter
+        try migrator.migrate(dbWriter)
     }
     
-    func openSharedDatabase(at databaseURL: URL) throws -> DatabasePool {
-        let coordinator = NSFileCoordinator(filePresenter: nil)
-        var coordinatorError: NSError?
-        var dbPool: DatabasePool?
-        var dbError: Error?
-        
-        coordinator.coordinate(writingItemAt: databaseURL, options: .forMerging, error: &coordinatorError) { url in
-            do {
-                dbPool = try self.openDatabase(at: url)
-            } catch {
-                dbError = error
-            }
-        }
-        
-        if let error = dbError ?? coordinatorError {
-            throw error
-        }
-        
-        return dbPool!
-    }
-    
-    private func openDatabase(at databaseURL: URL) throws -> DatabasePool {
-        var configuration = Configuration()
-        configuration.prepareDatabase { db in
-            // Activate the persistent WAL mode so that
-            // read-only processes can access the database.
-            //
-            // See https://www.sqlite.org/walformat.html#operations_that_require_locks_and_which_locks_those_operations_use
-            // and https://www.sqlite.org/c3ref/c_fcntl_begin_atomic_write.html#sqlitefcntlpersistwal
-            if db.configuration.readonly == false {
-                var flag: CInt = 1
-                let code = withUnsafeMutablePointer(to: &flag) { flagP in
-                    sqlite3_file_control(db.sqliteConnection, nil, SQLITE_FCNTL_PERSIST_WAL, flagP)
-                }
-                
-                guard code == SQLITE_OK else {
-                    throw DatabaseError(resultCode: ResultCode(rawValue: code))
-                }
-            }
-        }
-        
-        let dbPool = try DatabasePool(path: databaseURL.path, configuration: configuration)
-        
-        // Perform here other database setups, such as defining
-        // the database schema with a DatabaseMigrator, and
-        // checking if the application can open the file:
-        try migrator.migrate(dbPool)
-        
-        if try dbPool.read(migrator.hasBeenSuperseded) {
-            // Database is too recent
-            // throw /* some error */
-            // TODO: return something useful to the user
-            Logger.debug.error("Error: Migrator has been superseded")
-        }
-        
-        return dbPool
-    }
-    
-    private func openSharedReadOnlyDatabase(at databaseURL: URL) throws -> DatabasePool? {
-        let coordinator = NSFileCoordinator(filePresenter: nil)
-        var coordinatorError: NSError?
-        var dbPool: DatabasePool?
-        var dbError: Error?
-        
-        coordinator.coordinate(readingItemAt: databaseURL, options: .withoutChanges, error: &coordinatorError) { url in
-            do {
-                dbPool = try self.openReadOnlyDatabase(at: url)
-            } catch {
-                dbError = error
-            }
-        }
-        
-        if let error = dbError ?? coordinatorError {
-            throw error
-        }
-        
-        return dbPool
-    }
+    /// Provides access to the database.
+    ///
+    /// Application can use a `DatabasePool`, while SwiftUI previews and tests
+    /// can use a fast in-memory `DatabaseQueue`.
+    ///
+    /// See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseconnections>
+    internal let dbWriter: any DatabaseWriter
+}
 
-    private func openReadOnlyDatabase(at databaseURL: URL) throws -> DatabasePool? {
-        do {
-            var configuration = Configuration()
-            configuration.readonly = true
-            let dbPool = try DatabasePool(path: databaseURL.path, configuration: configuration)
-            
-            // Check here if the database schema is the expected one,
-            // for example with a DatabaseMigrator:
-            return try dbPool.read { db in
-                if try migrator.hasBeenSuperseded(db) {
-                    // Database is too recent
-                    return nil
-                } else if try migrator.hasCompletedMigrations(db) == false {
-                    // Database is too old
-                    return nil
+// MARK: - Database Configuration
+
+extension AppDatabase {
+    private static let sqlLogger = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SQL")
+    
+    /// Returns a database configuration suited for `PlayerRepository`.
+    ///
+    /// SQL statements are logged if the `SQL_TRACE` environment variable
+    /// is set.
+    ///
+    /// - parameter base: A base configuration.
+    public static func makeConfiguration(_ base: Configuration = Configuration()) -> Configuration {
+        var config = base
+        
+        // An opportunity to add required custom SQL functions or
+        // collations, if needed:
+        // config.prepareDatabase { db in
+        //     db.add(function: ...)
+        // }
+        
+        // Log SQL statements if the `SQL_TRACE` environment variable is set.
+        // See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/database/trace(options:_:)>
+        if ProcessInfo.processInfo.environment["SQL_TRACE"] != nil {
+            config.prepareDatabase { db in
+                db.trace {
+                    // It's ok to log statements publicly. Sensitive
+                    // information (statement arguments) are not logged
+                    // unless config.publicStatementArguments is set
+                    // (see below).
+                    os_log("%{public}@", log: sqlLogger, type: .debug, String(describing: $0))
                 }
-                
-                return dbPool
-            }
-        } catch {
-            if FileManager.default.fileExists(atPath: databaseURL.path) {
-                throw error
-            } else {
-                return nil
             }
         }
+        
+#if DEBUG
+        // Protect sensitive information by enabling verbose debugging in
+        // DEBUG builds only.
+        // See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/configuration/publicstatementarguments>
+        config.publicStatementArguments = true
+#endif
+        
+        return config
     }
 }
+
+// MARK: - Database Persistence
+
+extension AppDatabase {
+    /// The database for the application
+    static let shared = makeShared()
+    
+    private static func makeShared() -> AppDatabase {
+        do {
+            // Apply recommendations from
+            // <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseconnections>
+            //
+            // Create the "Database" directory if needed
+            let fileManager = FileManager.default
+            let directoryURL = FileManager.documentsDirectory.appendingPathComponent("database", isDirectory: true)
+            
+            // Support for tests: delete the database if requested
+            if CommandLine.arguments.contains("-reset") {
+                try? fileManager.removeItem(at: directoryURL)
+            }
+            
+            // Create the database folder if needed
+            try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+            
+            // Open or create the database
+            let databaseURL = directoryURL.appendingPathComponent("db.sqlite")
+            NSLog("Database stored at \(databaseURL.path)")
+            let dbPool = try DatabasePool(
+                path: databaseURL.path,
+                // Use default AppDatabase configuration
+                configuration: AppDatabase.makeConfiguration())
+            
+            // Create the AppDatabase
+            let appDatabase = try AppDatabase(dbPool)
+            
+            return appDatabase
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate.
+            //
+            // Typical reasons for an error here include:
+            // * The parent directory cannot be created, or disallows writing.
+            // * The database is not accessible, due to permissions or data protection when the device is locked.
+            // * The device is out of space.
+            // * The database could not be migrated to its latest schema version.
+            // Check the error message to determine what the actual problem was.
+            fatalError("Unresolved error \(error)")
+        }
+    }
+    
+    /// Creates an empty database for SwiftUI previews
+    static func empty() -> AppDatabase {
+        // Connect to an in-memory database
+        // See https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseconnections
+        let dbQueue = try! DatabaseQueue(configuration: AppDatabase.makeConfiguration())
+        return try! AppDatabase(dbQueue)
+    }
+    
+    /// Creates a database full of random players for SwiftUI previews
+    static func random() -> AppDatabase {
+        let appDatabase = empty()
+        // try! appDatabase.createRandomPlayersIfEmpty()
+        return appDatabase
+    }
+}
+
+// MARK: - Database Migrations
 
 extension AppDatabase {
     private var migrator: DatabaseMigrator {
@@ -203,6 +208,8 @@ extension AppDatabase {
     }
 }
 
+// MARK: - Database Validations
+
 extension AppDatabase {
     enum ValidationError: LocalizedError {
         case missingName
@@ -213,5 +220,18 @@ extension AppDatabase {
                 return "Please provide a name"
             }
         }
+    }
+}
+
+// MARK: - Database Access: Reads
+
+// This demo app does not provide any specific reading method, and instead
+// gives an unrestricted read-only access to the rest of the application.
+// In your app, you are free to choose another path, and define focused
+// reading methods.
+extension AppDatabase {
+    /// Provides a read-only access to the database
+    var reader: DatabaseReader {
+        dbWriter
     }
 }

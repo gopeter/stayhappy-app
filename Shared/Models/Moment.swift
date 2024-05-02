@@ -75,13 +75,13 @@ extension AppDatabase {
             throw ValidationError.missingName
         }
 
-        try db!.write { db in
+        try dbWriter.write { db in
             try moment.save(db)
         }
     }
 
     func deleteMoments(_ ids: [Int64]) throws {
-        try db!.write { db in
+        try dbWriter.write { db in
             _ = try Moment.deleteAll(db, ids: ids)
         }
     }
@@ -147,13 +147,9 @@ struct MomentListRequest: Queryable {
     static var defaultValue: [Moment] { [] }
 
     func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        if appDatabase.db == nil {
-            return Empty(completeImmediately: false).eraseToAnyPublisher()
-        }
-        
-        return ValueObservation
+        ValueObservation
             .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.db!, scheduling: .immediate)
+            .publisher(in: appDatabase.dbWriter, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 
@@ -182,13 +178,9 @@ struct HighlightListRequest: Queryable {
     static var defaultValue: [Moment] { [] }
 
     func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        if appDatabase.db == nil {
-            return Empty(completeImmediately: false).eraseToAnyPublisher()
-        }
-        
-        return ValueObservation
+        ValueObservation
             .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.db!, scheduling: .immediate)
+            .publisher(in: appDatabase.reader, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 
@@ -202,13 +194,9 @@ struct MomentsWidgetRequest: Queryable {
     static var defaultValue: [Moment] { [] }
 
     func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        if appDatabase.db == nil {
-            return Empty(completeImmediately: false).eraseToAnyPublisher()
-        }
-        
-        return ValueObservation
+        ValueObservation
             .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.db!, scheduling: .immediate)
+            .publisher(in: appDatabase.reader, scheduling: .immediate)
             .eraseToAnyPublisher()
     }
 

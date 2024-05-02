@@ -61,7 +61,7 @@ struct MomentsWidget: Widget {
             provider: Provider()
         ) { entry in
             MomentsWidgetEntryView(entry: entry)
-                .environment(\.appDatabase, .init(mode: .write))
+                .environment(\.appDatabase, .empty())
                 .containerBackground(.fill.tertiary, for: .widget)
         }
     }
@@ -76,7 +76,7 @@ struct MomentsWidget: Widget {
 // https://developer.apple.com/documentation/swiftui/environmentkey
 
 private struct AppDatabaseKey: EnvironmentKey {
-    static var defaultValue: AppDatabase { .init(mode: .read) }
+    static var defaultValue: AppDatabase { .empty() }
 }
 
 extension EnvironmentValues {

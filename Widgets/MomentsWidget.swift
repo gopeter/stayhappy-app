@@ -19,17 +19,10 @@ struct Provider: AppIntentTimelineProvider {
     }
 
     func timeline(for configuration: MomentsWidgetConfigurationIntent, in context: Context) async -> Timeline<MomentsWidgtEntry> {
-        var entries: [MomentsWidgtEntry] = []
-
-        // Our timeline consists of one update per day – or once the data has changed, which will be handled in the app itself
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = MomentsWidgtEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
+        let nextDate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
 
-        return Timeline(entries: entries, policy: .atEnd)
+        return Timeline(entries: [MomentsWidgtEntry(date: currentDate, configuration: configuration)], policy: .after(nextDate))
     }
 }
 
@@ -38,21 +31,233 @@ struct MomentsWidgtEntry: TimelineEntry {
     let configuration: MomentsWidgetConfigurationIntent
 }
 
-struct MomentsWidgetEntryView: View {
-    @Query(MomentsWidgetRequest()) private var moments: [Moment]
+struct MomentDetail: View {
+    var moment: Moment
 
-    var entry: MomentsWidgtEntry
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            WidgetDate(date: moment.startAt, size: .small)
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundStyle(.white)
+                .opacity(0.5)
+
+            Text(moment.title)
+                .font(.system(size: 12, weight: .regular))
+                .minimumScaleFactor(0.92)
+                .lineLimit(1)
+                .foregroundStyle(.white)
+        }
+    }
+}
+
+struct PlaceholderResourcesSmall: View {
+    var resources: [Resource]
 
     var body: some View {
         VStack {
-            Text("Moments")
-            Text(entry.configuration.limit.rawValue)
+            Text(resources.map { resource in
+                "\(resource.title)."
+            }.joined(separator: " "))
+                .font(.system(size: 14, weight: .regular))
+                .minimumScaleFactor(0.8)
+                .foregroundStyle(.white)
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Spacer()
+        }
+    }
+}
+
+struct PlaceholderHighlightsSmall: View {
+    var highlight: Moment
+    var photoImage: UIImage?
+
+    init(highlights: [Moment]) {
+        self.highlight = highlights[0]
+
+        if highlight.photo != nil {
+            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: highlight.photo!)).jpg")
+            self.photoImage = UIImage(contentsOfFile: photoUrl.path)
+        }
+    }
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 0, style: .continuous)
+            .fill(photoImage == nil ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: .infinity) : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0))
+            .frame(height: .infinity)
+            .background {
+                if photoImage != nil {
+                    Image(uiImage: photoImage!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: .infinity, alignment: .center)
+                        .clipped()
+                }
+            }
+            .overlay {
+                VStack {
+                    Spacer()
+                    HStack(alignment: .bottom) {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Spacer()
+                            Text(highlight.startAt.formatted(.dateTime.day().month().year())).foregroundStyle(.white)
+                                .font(.caption)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                .padding(0)
+
+                            Text(highlight.title)
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
+                                .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                .padding(0)
+                        }
+
+                        Spacer()
+                    }
+                }.padding(16)
+            }
+    }
+}
+
+struct PlaceholderSmall: View {
+    @Environment(\.appDatabase) var appDatabase
+
+    var entry: MomentsWidgtEntry
+    var resources: [Resource] = []
+    var highlights: [Moment] = []
+
+    init(entry: MomentsWidgtEntry) {
+        self.entry = entry
+
+        do {
+            try appDatabase.reader.read { db in
+                if entry.configuration.placeholder == .all || entry.configuration.placeholder == .resources {
+                    self.resources = try Resource
+                        .all()
+                        .randomRows()
+                        .limit(3)
+                        .fetchAll(db)
+                }
+
+                if entry.configuration.placeholder == .all || entry.configuration.placeholder == .highlights {
+                    self.highlights = try Moment
+                        .all()
+                        .filterByPeriod("<")
+                        .randomHighlights()
+                        .limit(1)
+                        .fetchAll(db)
+                }
+            }
+        } catch {
+            // TODO: log something useful
+            print("error: \(error.localizedDescription)")
+        }
+    }
+
+    var body: some View {
+        if (entry.configuration.placeholder == .all && resources.count == 0 && highlights.count == 0) ||
+            (entry.configuration.placeholder == .resources && resources.count == 0) ||
+            (entry.configuration.placeholder == .highlights && highlights.count == 0)
+        {
+            Text("Start adding your first moments")
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.white)
+                .padding(24)
+                .frame(maxWidth: .infinity)
+                .frame(maxHeight: .infinity)
+        }
+
+        // TODO: this looks ugly, there must be a way to achieve this ... smarter?
+        if entry.configuration.placeholder == .all {
+            if resources.count > 0 && highlights.count > 0 {
+                if Bool.random() == true {
+                    PlaceholderResourcesSmall(resources: resources)
+                } else {
+                    PlaceholderHighlightsSmall(highlights: highlights)
+                }
+            } else if resources.count > 0 && highlights.count == 0 {
+                PlaceholderResourcesSmall(resources: resources)
+            } else if resources.count == 0 && highlights.count > 0 {
+                PlaceholderHighlightsSmall(highlights: highlights)
+            }
+        } else if entry.configuration.placeholder == .resources && resources.count > 0 {
+            PlaceholderResourcesSmall(resources: resources)
+        } else if entry.configuration.placeholder == .highlights && highlights.count > 0 {
+            PlaceholderHighlightsSmall(highlights: highlights)
+        }
+    }
+}
+
+struct MomentSmall: View {
+    @Environment(\.appDatabase) var appDatabase
+
+    var entry: MomentsWidgtEntry
+    var moments: [Moment] = []
+
+    init(entry: MomentsWidgtEntry) {
+        self.entry = entry
+
+        do {
+            try appDatabase.reader.read { _ in
+//                self.moments = try Moment
+//                    .all()
+//                    .filterByPeriod(">=")
+//                    .filterByPeriod("<=", period: entry.configuration.limit)
+//                    .order(Moment.Columns.startAt.asc)
+//                    .limit(4)
+//                    .fetchAll(db)
+            }
+        } catch {
+            // TODO: log something useful
+            print("error: \(error.localizedDescription)")
+        }
+    }
+
+    var body: some View {
+        if moments.count == 0 {
+            PlaceholderSmall(entry: entry)
+        } else {
+            HStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    if moments.count == 4 {
+                        Spacer()
+                    }
+
+                    ForEach(moments) { moment in
+                        MomentDetail(moment: moment)
+                    }
+
+                    Spacer()
+                }
+
+                Spacer()
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 16)
+        }
+    }
+}
+
+struct MomentsWidgetEntryView: View {
+    @Environment(\.widgetFamily) var widgetFamily
+    var entry: MomentsWidgtEntry
+
+    @ViewBuilder
+    var body: some View {
+        switch widgetFamily {
+        case .systemSmall:
+            MomentSmall(entry: entry)
+                .background(HappyGradients.stayHappy.linear())
+        default:
+            Text("Not available")
         }
     }
 }
 
 struct MomentsWidget: Widget {
-    let kind: String = "Moments Widget"
+    let kind: String = "app.stayhappy.StayHappy.MomentsWidget"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(
@@ -61,9 +266,11 @@ struct MomentsWidget: Widget {
             provider: Provider()
         ) { entry in
             MomentsWidgetEntryView(entry: entry)
-                .environment(\.appDatabase, .empty())
+                .unredacted()
                 .containerBackground(.fill.tertiary, for: .widget)
         }
+        .contentMarginsDisabled()
+        .supportedFamilies([.systemSmall])
     }
 }
 
@@ -76,7 +283,7 @@ struct MomentsWidget: Widget {
 // https://developer.apple.com/documentation/swiftui/environmentkey
 
 private struct AppDatabaseKey: EnvironmentKey {
-    static var defaultValue: AppDatabase { .empty() }
+    static var defaultValue: AppDatabase { ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" ? .random() : .shared }
 }
 
 extension EnvironmentValues {

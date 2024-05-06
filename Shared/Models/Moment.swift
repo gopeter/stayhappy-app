@@ -9,6 +9,7 @@ import Combine
 import Foundation
 import GRDB
 import GRDBQuery
+import WidgetKit
 
 // MARK: - Moment Mutation Model
 
@@ -52,6 +53,14 @@ extension MomentMutation: Encodable, MutablePersistableRecord {
     /// Updates auto-incremented id upon successful insertion
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
+    }
+    
+    func didSave(_ saved: PersistenceSuccess) {
+        WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
+    }
+    
+    func didDelete(deleted: Bool) {
+        WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
     }
 
     /// Sets both `creationDate` and `modificationDate` to the
@@ -102,7 +111,7 @@ struct Moment: Identifiable, Equatable, Hashable {
 }
 
 extension Moment: Codable, FetchableRecord, PersistableRecord {
-    fileprivate enum Columns {
+    public enum Columns {
         static let title = Column(CodingKeys.title)
         static let startAt = Column(CodingKeys.startAt)
     }
@@ -114,16 +123,81 @@ extension DerivableRequest<Moment> {
         return filter(sql: "moment.title LIKE ?", arguments: [pattern])
     }
 
-    func filterByPeriod(_ dateCompareOperator: String) -> Self {
+    func filterByPeriod(_ dateCompareOperator: String, period: MomentsWidgetLimitType? = nil) -> Self {
+        var arguments: [String] = []
+
         let startOfToday = Calendar.current.startOfDay(for: Date())
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
 
-        return filter(sql: "moment.startAt \(dateCompareOperator) ?", arguments: [formatter.string(from: startOfToday)])
+        if period != nil {
+            var periodDate = startOfToday
+
+            switch period {
+                case .month:
+                    if dateCompareOperator.contains("<") {
+                        periodDate = startOfToday.withAddedDays(days: 31)
+                    } else {
+                        periodDate = startOfToday.withSubtractedDays(days: 30)
+                    }
+
+                case .quarter:
+                    if dateCompareOperator.contains("<") {
+                        periodDate = startOfToday.withAddedDays(days: 90)
+                    } else {
+                        periodDate = startOfToday.withSubtractedDays(days: 90)
+                    }
+
+                case .year:
+                    if dateCompareOperator.contains("<") {
+                        periodDate = startOfToday.withAddedDays(days: 365)
+                    } else {
+                        periodDate = startOfToday.withSubtractedDays(days: 365)
+                    }
+
+                case .all:
+                    return self
+
+                default: break
+            }
+
+            arguments.append(formatter.string(from: periodDate))
+        } else {
+            arguments.append(formatter.string(from: startOfToday))
+        }
+
+        return filter(sql: "moment.startAt \(dateCompareOperator) ?", arguments: StatementArguments(arguments))
     }
-    
+
     func filterByHighlight() -> Self {
         return filter(sql: "moment.isHighlight = true")
+    }
+    
+    func randomHighlights() -> Self {
+        return filterByHighlight().order(sql: "RANDOM()")
+    }
+}
+
+// MARK: - Moment Test Data
+
+extension Moment {
+    static func makeRandom(index: Int) -> MomentMutation {
+        MomentMutation(
+            title: "A really long test moment \(index)",
+            startAt: Date().withAddedHours(hours: 24 * Double(index) * 15),
+            background: HappyGradients.allCases.map { $0.rawValue }.randomElement()!,
+            photo: nil
+        )
+    }
+    
+    static func makeRandomPastHighlight(index: Int) -> MomentMutation {
+        MomentMutation(
+            title: "A really long test moment \(index)",
+            startAt: Date().withSubtractedHours(hours: 24 * Double(index + 1)),
+            isHighlight: true,
+            background: HappyGradients.allCases.map { $0.rawValue }.randomElement()!,
+            photo: nil
+        )
     }
 }
 
@@ -162,14 +236,14 @@ struct MomentListRequest: Queryable {
         } else {
             moments = moments.filterBySearchText(searchText)
         }
-        
+
         // we want to reverse the order when viewing past moments
         if period == Period.upcoming {
             moments = moments.order(ordering == Ordering.desc ? Moment.Columns.startAt.desc : Moment.Columns.startAt.asc)
         } else {
             moments = moments.order(ordering == Ordering.asc ? Moment.Columns.startAt.desc : Moment.Columns.startAt.asc)
         }
-            
+
         return try moments.fetchAll(db)
     }
 }
@@ -185,23 +259,11 @@ struct HighlightListRequest: Queryable {
     }
 
     func fetchValue(_ db: Database) throws -> [Moment] {
-        let moments = Moment.all().filterByHighlight().order(Moment.Columns.startAt.desc)
-        return try moments.fetchAll(db)
-    }
-}
+        let moments = Moment
+            .all()
+            .filterByHighlight()
+            .order(Moment.Columns.startAt.desc)
 
-struct MomentsWidgetRequest: Queryable {
-    static var defaultValue: [Moment] { [] }
-
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        ValueObservation
-            .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.reader, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-
-    func fetchValue(_ db: Database) throws -> [Moment] {
-        let moments = Moment.all().filterByPeriod(">=").order(Moment.Columns.startAt.asc).limit(5)
         return try moments.fetchAll(db)
     }
 }

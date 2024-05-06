@@ -43,7 +43,7 @@ struct AppDatabase {
     /// can use a fast in-memory `DatabaseQueue`.
     ///
     /// See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseconnections>
-    internal let dbWriter: any DatabaseWriter
+    let dbWriter: any DatabaseWriter
 }
 
 // MARK: - Database Configuration
@@ -151,8 +151,56 @@ extension AppDatabase {
     /// Creates a database full of random players for SwiftUI previews
     static func random() -> AppDatabase {
         let appDatabase = empty()
-        // try! appDatabase.createRandomPlayersIfEmpty()
+        try! appDatabase.createRandomMomentsIfEmpty()
+        try! appDatabase.createRandomPastHighlightsIfEmpty()
+        try! appDatabase.createRandomResourcesIfEmpty()
         return appDatabase
+    }
+}
+
+// MARK: - Database Test Writers
+
+extension AppDatabase {
+    func createRandomMomentsIfEmpty() throws {
+        try dbWriter.write { db in
+            if try Moment.all().isEmpty(db) {
+                try createRandomMoments(db)
+            }
+        }
+    }
+    
+    private func createRandomMoments(_ db: Database) throws {
+        for i in 0 ..< 10 {
+            _ = try Moment.makeRandom(index: i).inserted(db)
+        }
+    }
+    
+    func createRandomResourcesIfEmpty() throws {
+        try dbWriter.write { db in
+            if try Resource.all().isEmpty(db) {
+                try createRandomResources(db)
+            }
+        }
+    }
+    
+    private func createRandomResources(_ db: Database) throws {
+        for i in 0 ..< 10 {
+            _ = try Resource.makeRandom(index: i).inserted(db)
+        }
+    }
+    
+    func createRandomPastHighlightsIfEmpty() throws {
+        try dbWriter.write { db in
+            if try Moment.all().filterByHighlight().filterByPeriod("<").isEmpty(db) {
+                try createRandomPastHighlights(db)
+            }
+        }
+    }
+    
+    private func createRandomPastHighlights(_ db: Database) throws {
+        for i in 0 ..< 10 {
+            _ = try Moment.makeRandomPastHighlight(index: i).inserted(db)
+        }
     }
 }
 

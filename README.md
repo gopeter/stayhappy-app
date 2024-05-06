@@ -4,7 +4,6 @@
 - Crop image thumbnails with Saliency
 - Onboarding
 - Resources: tags, filter for tags, Emoji picker
-- Switch to Swift Data
 - Share options when viewing highlight in fullscreen
 - Deeplink to highlight from Widget
 - Widgets

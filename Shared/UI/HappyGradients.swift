@@ -126,6 +126,7 @@ enum HappyGradients: String, CaseIterable {
     case frozenHeat
     case gagarinView
     case fabledSunset
+    case stayHappy
 }
 
 extension HappyGradients {
@@ -363,7 +364,10 @@ extension HappyGradients {
             ["69EACB", "6654F1"]
         case .fabledSunset:
             ["231557", "FFF800"]
+        case .stayHappy:
+            ["642B73", "C6426E"]
         }
+        
     }
 
     func radial(startRadius: CGFloat, endRadius: CGFloat) -> RadialGradient {

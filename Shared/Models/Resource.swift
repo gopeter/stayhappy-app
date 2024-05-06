@@ -9,6 +9,7 @@ import Combine
 import Foundation
 import GRDB
 import GRDBQuery
+import WidgetKit
 
 // MARK: - Resource Mutation Model
 
@@ -32,6 +33,14 @@ extension ResourceMutation: Encodable, MutablePersistableRecord {
     /// Updates auto-incremented id upon successful insertion
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
+    }
+    
+    func didSave(_ saved: PersistenceSuccess) {
+        WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
+    }
+    
+    func didDelete(deleted: Bool) {
+        WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
     }
 
     /// Sets both `creationDate` and `modificationDate` to the
@@ -88,7 +97,22 @@ extension DerivableRequest<Resource> {
         let pattern = "%\(searchText)%"
         return filter(sql: "resource.title LIKE ?", arguments: [pattern])
     }
+    
+    func randomRows() -> Self {
+        return order(sql: "RANDOM()")
+    }
 }
+
+// MARK: - Resource Test Data
+
+extension Resource {
+    static func makeRandom(index: Int) -> ResourceMutation {
+        ResourceMutation(
+            title: "A really long test resource \(index)"
+        )
+    }
+}
+
 
 // MARK: - Resource Model Requests
 

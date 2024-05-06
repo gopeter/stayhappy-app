@@ -40,9 +40,9 @@ struct MomentsWidgetConfigurationIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "Configuration"
     static var description = IntentDescription("Configure the widget")
 
-    @Parameter(title: "Limit", default: .month)
+    @Parameter(title: "Limit", default: .all)
     var limit: MomentsWidgetLimitType
 
-    @Parameter(title: "Placeholder", default: .resources)
+    @Parameter(title: "Placeholder", default: .highlights)
     var placeholder: MomentsWidgetPlaceholderType
 }

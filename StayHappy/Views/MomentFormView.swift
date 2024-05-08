@@ -71,7 +71,6 @@ struct MomentFormView: View {
 
     @FocusState private var isFocused: Bool
 
-    let imageSaver = ImageSaver()
     let moment: Moment?
 
     var disableForm: Bool {
@@ -101,7 +100,8 @@ struct MomentFormView: View {
             // ... photoPickerItem is set, a new photo was chosen
             // ... photoImage is nil, the present photo was deleted
             if photoPickerItem != nil || photoImage == nil {
-                imageSaver.deleteFromDisk(imageName: moment!.photo!)
+                let imageSaver = ImageSaver(fileName: moment!.photo!)
+                imageSaver.deleteFromDisk()
             }
         }
 
@@ -113,7 +113,15 @@ struct MomentFormView: View {
             (moment?.photo != nil && photoPickerItem != nil && photoImage != nil)
         {
             photo = UUID().uuidString
-            imageSaver.writeToDisk(image: photoImage!, imageName: photo!)
+            let imageSaver = ImageSaver(image: photoImage!, fileName: photo!)
+            
+            do {
+                try imageSaver.writeToDisk()    
+                try imageSaver.generateWidgetThumbnails()
+            } catch {
+                // TODO: log something useful
+                Logger.debug.error("Error: \(error.localizedDescription)")
+            }
         }
 
         do {

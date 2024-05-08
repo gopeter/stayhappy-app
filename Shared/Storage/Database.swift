@@ -4,28 +4,13 @@
 //
 //  Created by Peter Oesteritz on 06.02.24.
 //
-// See: https://github.com/groue/GRDB.swift/blob/master/Documentation/DemoApps/GRDBAsyncDemo/GRDBAsyncDemo/AppDatabase.swift
+// See: https://github.com/groue/GRDB.swift/blob/4b934fda754b1cab34394ea89c2dd5acd170d50e/Documentation/DemoApps/GRDBCombineDemo/GRDBCombineDemo/AppDatabase.swift
+// and https://github.com/groue/GRDB.swift/blob/4b934fda754b1cab34394ea89c2dd5acd170d50e/Documentation/DemoApps/GRDBCombineDemo/GRDBCombineDemo/Persistence.swift
 
 import Foundation
 import GRDB
 import os.log
 
-/// A database of players.
-///
-/// You create an `AppDatabase` with a connection to an SQLite database
-/// (see <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/databaseconnections>).
-///
-/// Create those connections with a configuration returned from
-/// `AppDatabase/makeConfiguration(_:)`.
-///
-/// For example:
-///
-/// ```swift
-/// // Create an in-memory AppDatabase
-/// let config = AppDatabase.makeConfiguration()
-/// let dbQueue = try DatabaseQueue(configuration: config)
-/// let appDatabase = try AppDatabase(dbQueue)
-/// ```
 struct AppDatabase {
     /// Creates an `AppDatabase`, and makes sure the database schema
     /// is ready.
@@ -51,12 +36,6 @@ struct AppDatabase {
 extension AppDatabase {
     private static let sqlLogger = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SQL")
     
-    /// Returns a database configuration suited for `PlayerRepository`.
-    ///
-    /// SQL statements are logged if the `SQL_TRACE` environment variable
-    /// is set.
-    ///
-    /// - parameter base: A base configuration.
     public static func makeConfiguration(_ base: Configuration = Configuration()) -> Configuration {
         var config = base
         
@@ -148,7 +127,7 @@ extension AppDatabase {
         return try! AppDatabase(dbQueue)
     }
     
-    /// Creates a database full of random players for SwiftUI previews
+    /// Creates a database full of random data for SwiftUI previews
     static func random() -> AppDatabase {
         let appDatabase = empty()
         try! appDatabase.createRandomMomentsIfEmpty()

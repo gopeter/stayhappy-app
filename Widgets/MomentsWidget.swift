@@ -51,9 +51,13 @@ struct MomentDetail: View {
 }
 
 struct PlaceholderResourcesSmall: View {
+    @Environment(\.widgetFamily) var widgetFamily
+    
     var resources: [Resource]
 
     var body: some View {
+        let widgetSize = getWidgetSize(for: widgetFamily)
+        
         VStack {
             Text(resources.map { resource in
                 "\(resource.title)."
@@ -62,7 +66,7 @@ struct PlaceholderResourcesSmall: View {
                 .minimumScaleFactor(0.8)
                 .foregroundStyle(.white)
                 .padding(16)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: widgetSize.width, alignment: .leading)
 
             Spacer()
         }
@@ -77,22 +81,23 @@ struct PlaceholderHighlightsSmall: View {
         self.highlight = highlights[0]
 
         if highlight.photo != nil {
-            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: highlight.photo!)).jpg")
+            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: highlight.photo!))-systemSmall.jpg")
             self.photoImage = UIImage(contentsOfFile: photoUrl.path)
         }
     }
 
     var body: some View {
+        let widgetSize = getWidgetSize(for: .systemSmall)
+        
         RoundedRectangle(cornerRadius: 0, style: .continuous)
-            .fill(photoImage == nil ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: .infinity) : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0))
-            .frame(height: .infinity)
+            .fill(photoImage == nil ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: widgetSize.width) : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0))
+            .frame(height: widgetSize.height)
             .background {
                 if photoImage != nil {
                     Image(uiImage: photoImage!)
                         .resizable()
-                        .scaledToFill()
-                        .frame(height: .infinity, alignment: .center)
-                        .clipped()
+                        .scaledToFit()
+                        .frame(height: widgetSize.height, alignment: .center)
                 }
             }
             .overlay {
@@ -123,6 +128,7 @@ struct PlaceholderHighlightsSmall: View {
 
 struct PlaceholderSmall: View {
     @Environment(\.appDatabase) var appDatabase
+    @Environment(\.widgetFamily) var widgetFamily
 
     var entry: MomentsWidgtEntry
     var resources: [Resource] = []
@@ -145,7 +151,8 @@ struct PlaceholderSmall: View {
                     self.highlights = try Moment
                         .all()
                         .filterByPeriod("<")
-                        .randomHighlights()
+                        .filterByHighlight()
+                        .order(sql: "RANDOM()")
                         .limit(1)
                         .fetchAll(db)
                 }
@@ -157,6 +164,8 @@ struct PlaceholderSmall: View {
     }
 
     var body: some View {
+        let widgetSize = getWidgetSize(for: widgetFamily)
+        
         if (entry.configuration.placeholder == .all && resources.count == 0 && highlights.count == 0) ||
             (entry.configuration.placeholder == .resources && resources.count == 0) ||
             (entry.configuration.placeholder == .highlights && highlights.count == 0)
@@ -165,8 +174,8 @@ struct PlaceholderSmall: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
                 .padding(24)
-                .frame(maxWidth: .infinity)
-                .frame(maxHeight: .infinity)
+                .frame(maxWidth: widgetSize.width)
+                .frame(maxHeight: widgetSize.height)
         }
 
         // TODO: this looks ugly, there must be a way to achieve this ... smarter?

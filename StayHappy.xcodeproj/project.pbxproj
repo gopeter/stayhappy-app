@@ -71,6 +71,12 @@
 		45E4F72F2B6BC2CF005C0E77 /* MomentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F72E2B6BC2CF005C0E77 /* MomentView.swift */; };
 		45E4F7312B6C3B2F005C0E77 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7302B6C3B2F005C0E77 /* SettingsView.swift */; };
 		45E4F7332B6C3B7E005C0E77 /* HighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */; };
+		45F8C8F12BE96F0B004D8718 /* ImageSaliencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */; };
+		45F8C8F32BE96F9F004D8718 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8F22BE96F9F004D8718 /* Image.swift */; };
+		45F8C8F42BE97C17004D8718 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8F22BE96F9F004D8718 /* Image.swift */; };
+		45F8C8FF2BEB96E7004D8718 /* QuickLookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */; };
+		45F8C9012BEBF0EF004D8718 /* WidgetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */; };
+		45F8C9022BEBFA46004D8718 /* WidgetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +167,10 @@
 		45E4F72E2B6BC2CF005C0E77 /* MomentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentView.swift; sourceTree = "<group>"; };
 		45E4F7302B6C3B2F005C0E77 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsView.swift; sourceTree = "<group>"; };
+		45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaliencyService.swift; sourceTree = "<group>"; };
+		45F8C8F22BE96F9F004D8718 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookService.swift; sourceTree = "<group>"; };
+		45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSize.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +226,7 @@
 				45AFCBB32BE4CFFF009D1FD4 /* Calendar.swift */,
 				45AFCBB62BE4E5C0009D1FD4 /* Date.swift */,
 				45AF8E782BB0D247006AF22E /* Error.swift */,
+				45F8C8F22BE96F9F004D8718 /* Image.swift */,
 				454328D32B76148D007956A0 /* KeyboardVisibility.swift */,
 				459BE7822B8E9C1000433B60 /* TitleCased.swift */,
 			);
@@ -227,8 +238,10 @@
 			children = (
 				454328D22B76147C007956A0 /* Extensions */,
 				45E1655E2B4EF72900F55A17 /* Models */,
+				45F8C8FD2BEB96D3004D8718 /* Services */,
 				455FEC9E2B90E7D4006A2592 /* Storage */,
 				45BBE23D2B68453F0076D062 /* UI */,
+				45F8C8F52BE97C23004D8718 /* Utils */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -298,7 +311,6 @@
 				45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */,
 				45B6F6ED2B4EF0BA003A42F8 /* Info.plist */,
 				45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */,
-				454014FE2B7278C0003A7E24 /* Log.swift */,
 				45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */,
 				45B6F6E92B4EF0BA003A42F8 /* Preview Content */,
 				45BBE2392B67E7E80076D062 /* Views */,
@@ -367,6 +379,24 @@
 				454328D72B763480007956A0 /* Resource.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		45F8C8F52BE97C23004D8718 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				454014FE2B7278C0003A7E24 /* Log.swift */,
+				45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		45F8C8FD2BEB96D3004D8718 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */,
+				45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -561,11 +591,13 @@
 				45AFCBB22BE4181D009D1FD4 /* WidgetDate.swift in Sources */,
 				45AFCBB02BE37E5B009D1FD4 /* Database.swift in Sources */,
 				45AFCB9A2BE03A7E009D1FD4 /* TitleCased.swift in Sources */,
+				45F8C8F42BE97C17004D8718 /* Image.swift in Sources */,
 				45AFCBAA2BE0444C009D1FD4 /* Log.swift in Sources */,
 				45AFCB8E2BE03A3B009D1FD4 /* MomentsWidget.swift in Sources */,
 				45AFCB9B2BE03A81009D1FD4 /* Error.swift in Sources */,
 				45AFCB902BE03A3B009D1FD4 /* AppIntent.swift in Sources */,
 				45AFCB9C2BE03A83009D1FD4 /* Moment.swift in Sources */,
+				45F8C9022BEBFA46004D8718 /* WidgetSize.swift in Sources */,
 				45AFCBB82BE4E5C0009D1FD4 /* Date.swift in Sources */,
 				45AFCBB52BE4CFFF009D1FD4 /* Calendar.swift in Sources */,
 				45AFCB9F2BE03A8A009D1FD4 /* FileManager.swift in Sources */,
@@ -582,6 +614,8 @@
 				45E4F7312B6C3B2F005C0E77 /* SettingsView.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */,
 				4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */,
+				45F8C9012BEBF0EF004D8718 /* WidgetSize.swift in Sources */,
+				45F8C8F32BE96F9F004D8718 /* Image.swift in Sources */,
 				45AFCBB42BE4CFFF009D1FD4 /* Calendar.swift in Sources */,
 				45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */,
 				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
@@ -600,6 +634,8 @@
 				45AF8E792BB0D247006AF22E /* Error.swift in Sources */,
 				454328D82B763480007956A0 /* Resource.swift in Sources */,
 				45E0180D2B822900009C594F /* FileManager.swift in Sources */,
+				45F8C8F12BE96F0B004D8718 /* ImageSaliencyService.swift in Sources */,
+				45F8C8FF2BEB96E7004D8718 /* QuickLookService.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Moment.swift in Sources */,
 				45BBE2422B68E5E10076D062 /* ResourcesView.swift in Sources */,
 				4558FB862B874D6C009D506C /* HighlightView.swift in Sources */,

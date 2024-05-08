@@ -11,6 +11,7 @@ import Throttler
 struct HighlightView: View {
     var moment: Moment
     var setImage: (UIImage) -> Void
+    var thumbnailImage: UIImage?
     var photoImage: UIImage?
     
     init(moment: Moment, setImage: @escaping (UIImage) -> Void) {
@@ -18,22 +19,28 @@ struct HighlightView: View {
         self.setImage = setImage
 
         if moment.photo != nil {
+            let thumbnailUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: moment.photo!))-systemMedium.jpg")
+            self.thumbnailImage = UIImage(contentsOfFile: thumbnailUrl.path)
+            
             let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: moment.photo!)).jpg")
             self.photoImage = UIImage(contentsOfFile: photoUrl.path)
         }
     }
 
     var body: some View {
+        let deviceSize = UIScreen.main.bounds.size
+        let widgetSize = getWidgetSize(for: .systemMedium)
+        
         RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .fill(photoImage == nil ? HappyGradients(rawValue: moment.background)!.radial(startRadius: -50, endRadius: 350) : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0))
-            .frame(height: 175)
+            .fill(thumbnailImage == nil ? HappyGradients(rawValue: moment.background)!.radial(startRadius: -50, endRadius: deviceSize.width) : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0))
+            .frame(height: widgetSize.height)
             .padding(.horizontal, 20)
             .background {
-                if photoImage != nil {
-                    Image(uiImage: photoImage!)
+                if thumbnailImage != nil {
+                    Image(uiImage: thumbnailImage!)
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 175, alignment: .center)
+                        .frame(height: widgetSize.height, alignment: .center)
                         .cornerRadius(10)
                         .padding(.horizontal, 20)
                         .clipped()

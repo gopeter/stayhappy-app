@@ -43,8 +43,6 @@ extension ResourceMutation: Encodable, MutablePersistableRecord {
         WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
     }
 
-    /// Sets both `creationDate` and `modificationDate` to the
-    /// transaction date, if they are not set yet.
     mutating func willInsert(_ db: Database) throws {
         if createdAt == nil {
             createdAt = try db.transactionDate
@@ -53,6 +51,10 @@ extension ResourceMutation: Encodable, MutablePersistableRecord {
         if updatedAt == nil {
             updatedAt = try db.transactionDate
         }
+    }
+    
+    mutating func willUpdate(_ db: Database) throws {
+        updatedAt = try db.transactionDate
     }
 }
 

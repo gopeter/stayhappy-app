@@ -63,8 +63,6 @@ extension MomentMutation: Encodable, MutablePersistableRecord {
         WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
     }
 
-    /// Sets both `creationDate` and `modificationDate` to the
-    /// transaction date, if they are not set yet.
     mutating func willInsert(_ db: Database) throws {
         if createdAt == nil {
             createdAt = try db.transactionDate
@@ -73,6 +71,10 @@ extension MomentMutation: Encodable, MutablePersistableRecord {
         if updatedAt == nil {
             updatedAt = try db.transactionDate
         }
+    }
+    
+    mutating func willUpdate(_ db: Database) throws {
+        updatedAt = try db.transactionDate
     }
 }
 
@@ -136,7 +138,7 @@ extension DerivableRequest<Moment> {
             switch period {
                 case .month:
                     if dateCompareOperator.contains("<") {
-                        periodDate = startOfToday.withAddedDays(days: 31)
+                        periodDate = startOfToday.withAddedDays(days: 30)
                     } else {
                         periodDate = startOfToday.withSubtractedDays(days: 30)
                     }
@@ -171,10 +173,6 @@ extension DerivableRequest<Moment> {
 
     func filterByHighlight() -> Self {
         return filter(sql: "moment.isHighlight = true")
-    }
-    
-    func randomHighlights() -> Self {
-        return filterByHighlight().order(sql: "RANDOM()")
     }
 }
 

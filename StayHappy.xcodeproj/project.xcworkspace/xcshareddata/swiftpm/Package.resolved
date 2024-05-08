@@ -1,4 +1,5 @@
 {
+  "originHash" : "42c61cf0f13a2a3a8d43e81fdac7cb6003cca7be0665a0b9d8b14a511dbcc746",
   "pins" : [
     {
       "identity" : "agrume",
@@ -82,5 +83,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

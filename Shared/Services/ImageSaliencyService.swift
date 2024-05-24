@@ -2,7 +2,7 @@
 //
 // This class is responsible for analyzing an input UIImage using the Vision framework's VNGenerateAttentionBasedSaliencyImageRequest to generate a saliency map and extract salient object's bounding box points. The resulting points (topLeft, topRight, bottomLeft, bottomRight) are then used to draw a rectangle around the salient object on the original image.
 //
-// Created by Sarim Khan on 28/07/2023.
+// Created by Peter Oesteritz on 11.05.24.
 // See: https://medium.com/@sarimk80/enhancing-visual-focus-exploring-vngenerateattentionbasedsaliencyimagerequest-in-swiftui-f7f925f519c3
 
 import Combine

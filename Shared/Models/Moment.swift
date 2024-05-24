@@ -125,7 +125,7 @@ extension DerivableRequest<Moment> {
         return filter(sql: "moment.title LIKE ?", arguments: [pattern])
     }
 
-    func filterByPeriod(_ dateCompareOperator: String, period: MomentsWidgetLimitType? = nil) -> Self {
+    func filterByPeriod(_ dateCompareOperator: String, period: WidgetPeriodType? = nil) -> Self {
         var arguments: [String] = []
 
         let startOfToday = Calendar.current.startOfDay(for: Date())

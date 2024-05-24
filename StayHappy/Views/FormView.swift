@@ -9,23 +9,26 @@ import SwiftUI
 
 struct FormView: View {
     @Environment(\.dismiss) var dismiss
-    
-    var moment: Moment?
-    var resource: Resource?
-    var isInSheet: Bool
-    
-    init(moment: Moment? = nil, resource: Resource? = nil, isInSheet: Bool = false) {
-        self.moment = moment
-        self.resource = resource
-        self.isInSheet = moment == nil && resource == nil
-    }
+    @State var selection: Selection = .moment
     
     enum Selection {
         case moment
         case resource
     }
     
-    @State var selection: Selection = .moment
+    var moment: Moment?
+    var resource: Resource?
+    var isInSheet: Bool
+    
+    init(for selection: Selection? = nil, moment: Moment? = nil, resource: Resource? = nil, isInSheet: Bool = false) {
+        self.moment = moment
+        self.resource = resource
+        self.isInSheet = moment == nil && resource == nil
+        
+        if (selection != nil) {
+            _selection = State(initialValue: selection!)
+        }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -79,5 +82,5 @@ struct FormView: View {
 }
 
 #Preview {
-    FormView(isInSheet: false)
+    FormView(for: .moment, isInSheet: false)
 }

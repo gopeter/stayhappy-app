@@ -56,7 +56,7 @@ struct NavigationBarView: View {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
                     NavigationStack {
-                        FormView()
+                        FormView(for: globalData.activeView == Views.resources ? .resource : .moment)
                     }
                 }
                 

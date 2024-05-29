@@ -1,5 +1,5 @@
 //
-//  PlaceholderSmall.swift
+//  MotivationSmall.swift
 //  Widgets
 //
 //  Created by Peter Oesteritz on 23.05.24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlaceholderSmall: View {
+struct MotivationSmall: View {
     @Environment(\.appDatabase) var appDatabase
     @Environment(\.widgetFamily) var widgetFamily
 
@@ -63,19 +63,19 @@ struct PlaceholderSmall: View {
         if placeholder == .all {
             if resources.count > 0 && highlights.count > 0 {
                 if Bool.random() == true {
-                    PlaceholderResourcesSmall(resources: resources)
+                    ResourcesTile(resources: resources)
                 } else {
-                    PlaceholderHighlightsSmall(highlights: highlights)
+                    HighlightsTile(highlights: highlights, size: .systemSmall)
                 }
             } else if resources.count > 0 && highlights.count == 0 {
-                PlaceholderResourcesSmall(resources: resources)
+                ResourcesTile(resources: resources)
             } else if resources.count == 0 && highlights.count > 0 {
-                PlaceholderHighlightsSmall(highlights: highlights)
+                HighlightsTile(highlights: highlights, size: .systemSmall)
             }
         } else if placeholder == .resources && resources.count > 0 {
-            PlaceholderResourcesSmall(resources: resources)
+            ResourcesTile(resources: resources)
         } else if placeholder == .highlights && highlights.count > 0 {
-            PlaceholderHighlightsSmall(highlights: highlights)
+            HighlightsTile(highlights: highlights, size: .systemSmall)
         }
     }
 }

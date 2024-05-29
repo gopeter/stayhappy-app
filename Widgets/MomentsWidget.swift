@@ -78,7 +78,7 @@ struct MomentSmall: View {
 
     var body: some View {
         if moments.count == 0 {
-            PlaceholderSmall(placeholder: entry.configuration.placeholder)
+            MotivationSmall(placeholder: entry.configuration.placeholder)
         } else {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {

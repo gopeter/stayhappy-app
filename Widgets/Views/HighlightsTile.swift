@@ -1,5 +1,5 @@
 //
-//  PlaceholderHighlightsSmall.swift
+//  HighlightsTile.swift
 //  Widgets
 //
 //  Created by Peter Oesteritz on 23.05.24.
@@ -7,15 +7,20 @@
 
 import SwiftUI
 
-struct PlaceholderHighlightsSmall: View {
+enum ImageSize: String, CaseIterable {
+    case systemSmall
+    case systemMedium
+}
+
+struct HighlightsTile: View {
     var highlight: Moment
     var photoImage: UIImage?
 
-    init(highlights: [Moment]) {
+    init(highlights: [Moment], size: ImageSize) {
         self.highlight = highlights[0]
 
         if highlight.photo != nil {
-            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: highlight.photo!))-systemSmall.jpg")
+            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: highlight.photo!))-\(size).jpg")
             self.photoImage = UIImage(contentsOfFile: photoUrl.path)
         }
     }
@@ -46,7 +51,6 @@ struct PlaceholderHighlightsSmall: View {
                                 .padding(0)
 
                             Text(highlight.title)
-                                .font(.system(size: 14))
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
                                 .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)

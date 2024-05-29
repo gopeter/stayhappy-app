@@ -1,5 +1,5 @@
 //
-//  PlaceholderResourcesSmall.swift
+//  ResourcesTile.swift
 //  Widgets
 //
 //  Created by Peter Oesteritz on 23.05.24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlaceholderResourcesSmall: View {
+struct ResourcesTile: View {
     @Environment(\.widgetFamily) var widgetFamily
 
     var resources: [Resource]
@@ -19,7 +19,6 @@ struct PlaceholderResourcesSmall: View {
             Text(resources.map { resource in
                 "\(resource.title)."
             }.joined(separator: " "))
-                .font(.system(size: 14, weight: .regular))
                 .minimumScaleFactor(0.8)
                 .foregroundStyle(.white)
                 .padding(.all)
@@ -29,4 +28,3 @@ struct PlaceholderResourcesSmall: View {
         }
     }
 }
-

@@ -31,18 +31,6 @@ struct MotivationWidgtEntry: TimelineEntry {
     let configuration: MotivationWidgetConfigurationIntent
 }
 
-struct MotivationSmall: View {
-    var entry: MotivationWidgtEntry
-    
-    init(entry: MotivationWidgtEntry) {
-        self.entry = entry
-    }
-    
-    var body: some View {
-        PlaceholderSmall(placeholder: entry.configuration.content)
-    }
-}
-
 struct MotivationWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: MotivationWidgtEntry
@@ -51,7 +39,10 @@ struct MotivationWidgetEntryView: View {
     var body: some View {
         switch widgetFamily {
         case .systemSmall:
-            MotivationSmall(entry: entry)
+            MotivationSmall(placeholder: entry.configuration.content)
+                .background(HappyGradients.stayHappy.linear())
+        case .systemMedium:
+            MotivationMedium(placeholder: entry.configuration.content)
                 .background(HappyGradients.stayHappy.linear())
         default:
             Text("Not available")
@@ -73,13 +64,13 @@ struct MotivationWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .contentMarginsDisabled()
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies([.systemSmall, .systemMedium])
         .configurationDisplayName("Motivation Widget")
         .description("Keep an eye on the things that are important to you, that help you get through the day and that bring a smile to your face.")
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     MotivationWidget()
 } timeline: {
     MotivationWidgtEntry(date: .now, configuration: MotivationWidgetConfigurationIntent())

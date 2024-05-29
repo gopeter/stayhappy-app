@@ -42,7 +42,7 @@ struct MomentDetail: View {
                 .opacity(0.5)
 
             Text(moment.title)
-                .font(.system(size: 12, weight: .regular))
+                .font(.system(size: 14, weight: .regular))
                 .minimumScaleFactor(0.92)
                 .lineLimit(1)
                 .foregroundStyle(.white)
@@ -51,7 +51,7 @@ struct MomentDetail: View {
 }
 
 
-struct MomentSmall: View {
+struct MomentsSmall: View {
     @Environment(\.appDatabase) var appDatabase
 
     var entry: MomentsWidgtEntry
@@ -100,6 +100,76 @@ struct MomentSmall: View {
     }
 }
 
+struct MomentsMedium: View {
+    @Environment(\.appDatabase) var appDatabase
+
+    var entry: MomentsWidgtEntry
+    var moments: [Moment] = []
+
+    init(entry: MomentsWidgtEntry) {
+        self.entry = entry
+
+        do {
+            try appDatabase.reader.read { db in
+                self.moments = try Moment
+                    .all()
+                    .filterByPeriod(">=")
+                    .filterByPeriod("<=", period: entry.configuration.period)
+                    .order(Moment.Columns.startAt.asc)
+                    .limit(8)
+                    .fetchAll(db)
+            }
+        } catch {
+            // TODO: log something useful
+            print("error: \(error.localizedDescription)")
+        }
+    }
+
+    var body: some View {
+        if moments.count == 0 {
+            MotivationMedium(placeholder: entry.configuration.placeholder)
+        } else {
+            HStack(spacing: moments.count > 4 ? 4 : 0) {
+                VStack(alignment: .leading, spacing: 10) {
+                    if moments.count >= 4 {
+                        Spacer()
+                    }
+
+                    ForEach(moments.prefix(4)) { moment in
+                        MomentDetail(moment: moment)
+                    }
+
+                    Spacer()
+                }
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
+
+                if (moments.count > 4) {
+                    Spacer()
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        if moments.count >= 4 {
+                            Spacer()
+                        }
+                        
+                        ForEach(moments.dropFirst(4).prefix(4)) { moment in
+                            MomentDetail(moment: moment)
+                        }
+                        
+                        Spacer()
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .padding(EdgeInsets(top: 16, leading: moments.count > 4 ? 0 : 16, bottom: 16, trailing: 16))
+                } else {
+                    MotivationSmall(placeholder: entry.configuration.placeholder)
+                }
+            }
+        }
+    }
+}
+
+
+
 struct MomentsWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: MomentsWidgtEntry
@@ -108,7 +178,10 @@ struct MomentsWidgetEntryView: View {
     var body: some View {
         switch widgetFamily {
         case .systemSmall:
-            MomentSmall(entry: entry)
+            MomentsSmall(entry: entry)
+                .background(HappyGradients.stayHappy.linear())
+        case .systemMedium:
+            MomentsMedium(entry: entry)
                 .background(HappyGradients.stayHappy.linear())
         default:
             Text("Not available")
@@ -130,13 +203,13 @@ struct MomentsWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .contentMarginsDisabled()
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies([.systemSmall, .systemMedium])
         .configurationDisplayName("Moments Widget")
         .description("Decide whether you want to see all moments or only for a certain period of time. If there are no moments in view, select a placeholder.")
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     MomentsWidget()
 } timeline: {
     MomentsWidgtEntry(date: .now, configuration: MomentsWidgetConfigurationIntent())

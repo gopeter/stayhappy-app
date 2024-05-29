@@ -64,16 +64,20 @@ struct MomentView: View {
     var body: some View {
         HStack(spacing: 20) {
             // Date
-            VStack(spacing: 0) {
-                Text("\(moment.startAt.formatted(.dateTime.month())) \(moment.startAt.formatted(.dateTime.year(.twoDigits)))")
+            VStack(spacing: 1) {
+                Text(moment.startAt.formatted(.dateTime.weekday(.wide)))
                     .frame(alignment: .leading)
                     .font(.footnote)
                 
-                Text(moment.startAt.formatted(.dateTime.day()))
+                Text(moment.startAt.formatted(.dateTime.month().day()))
                     .frame(alignment: .leading)
-                    .font(.title2)
+                    .font(.headline)
                     .fontWeight(.bold)
-            }.frame(minWidth: 50, maxWidth: 50)
+                
+                Text(moment.startAt.formatted(.dateTime.year()))
+                    .frame(alignment: .leading)
+                    .font(.footnote)
+            }.frame(minWidth: 50, maxWidth: 75)
 
             // Heart
             ZStack {
@@ -132,8 +136,7 @@ struct MomentView: View {
                                 .foregroundStyle(.gray)
                             
                             Text(moment.title)
-                            
-                        }.padding(.horizontal, 20).padding(.vertical, 10)
+                        }.padding(12)
                         
                         Spacer()
                         

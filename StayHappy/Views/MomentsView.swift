@@ -35,7 +35,7 @@ struct MomentsView: View {
                                 Spacer()
                             }
                         }
-                    }           
+                    }
                 }
 
                 Spacer(minLength: 80)
@@ -84,11 +84,10 @@ struct MomentsView: View {
                     VStack(spacing: 0) {
                         Spacer()
                         Image("filter-symbol")
-                        
                     }
                 }
             }
-            
+
         }.introspect(.searchField, on: .iOS(.v17)) { searchField in
             if colorScheme == .dark {
                 searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")

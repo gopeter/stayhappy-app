@@ -163,7 +163,7 @@ extension AppDatabase {
     }
     
     private func createRandomResources(_ db: Database) throws {
-        for i in 0 ..< 10 {
+        for i in 0 ..< 30 {
             _ = try Resource.makeRandom(index: i).inserted(db)
         }
     }

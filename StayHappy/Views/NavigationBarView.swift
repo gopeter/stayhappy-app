@@ -41,7 +41,7 @@ struct NavigationBarView: View {
             RoundedRectangle(cornerRadius: 18).fill(Color("ToolbarBackgroundColor"))
                 .frame(height: 54)
                 .padding(.horizontal, 28)
-                .shadow(color: Color.black.opacity(0.35), radius: 15)
+                .shadow(color: Color.black.opacity(0.35), radius: 5, y: 2)
             
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", action: {
@@ -56,7 +56,7 @@ struct NavigationBarView: View {
                     isPresented.toggle()
                 }, isActive: false).button().sheet(isPresented: $isPresented) {
                     NavigationStack {
-                        FormView()
+                        FormView(for: globalData.activeView == Views.resources ? .resource : .moment)
                     }
                 }
                 

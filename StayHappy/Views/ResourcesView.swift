@@ -20,55 +20,53 @@ struct ResourcesView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                List {
-                    if resources.count > 0 {
-                        ForEach(resources) { resource in
-                            HStack {
-                                Text(resource.title)
-                                    .background(NavigationLink(resource.title, value: resource).opacity(0))
-                                Spacer()
-                                Image("chevron-right-symbol").foregroundStyle(Color(uiColor: .systemFill))
-                            }.listRowBackground(Color("CardBackgroundColor")).listRowInsets(.init(top: 0, leading: 20, bottom: 0, trailing: 12))
-                        }
-                    } else {
-                        VStack {
-                            Spacer(minLength: 80)
-                            HStack {
-                                Spacer()
-                                Text(isSearching ? "No resources found" : "No resources created").foregroundStyle(.gray)
-                                Spacer()
-                            }
-                        }.listRowBackground(Color("AppBackgroundColor"))
+            List {
+                if resources.count > 0 {
+                    ForEach(resources) { resource in
+                        HStack {
+                            Text(resource.title)
+                                .background(NavigationLink(resource.title, value: resource).opacity(0))
+                            Spacer()
+                            Image("chevron-right-symbol").foregroundStyle(Color(uiColor: .systemFill))
+                        }.listRowBackground(Color("CardBackgroundColor")).listRowInsets(.init(top: 0, leading: 20, bottom: 0, trailing: 12))
                     }
-                }
-                // Navigation
-                .navigationTitle("Resources")
-                .toolbarTitleDisplayMode(.inlineLarge)
-                .navigationDestination(for: Resource.self) { resource in
-                    FormView(resource: resource)
-                }
-                // Style
-                .scrollContentBackground(.hidden)
-                // Search
-                .searchable(text: $searchText, isPresented: $isSearching)
-                .onChange(of: searchText) { _, newSearchText in
-                    searchTextPublisher.send(newSearchText)
-                }
-                .onReceive(
-                    searchTextPublisher
-                        .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-                ) { _ in
-                    $resources.searchText.wrappedValue = searchText
-                }
-                // disable jumpy behaviour when search is active
-                .transaction { transaction in
-                    transaction.animation = nil
-                }
 
-                Spacer(minLength: 80)
-            }.background(Color("AppBackgroundColor").ignoresSafeArea(.all))
-
+                } else {
+                    VStack {
+                        Spacer(minLength: 80)
+                        HStack {
+                            Spacer()
+                            Text(isSearching ? "No resources found" : "No resources created").foregroundStyle(.gray)
+                            Spacer()
+                        }
+                    }.listRowBackground(Color("AppBackgroundColor"))
+                }
+            }
+            // Navigation
+            .navigationTitle("Resources")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .navigationDestination(for: Resource.self) { resource in
+                FormView(resource: resource)
+            }
+            // Style
+            .scrollContentBackground(.hidden)
+            .safeAreaPadding(EdgeInsets(top: 0, leading: 0, bottom: 60, trailing: 0))
+            // Search
+            .searchable(text: $searchText, isPresented: $isSearching)
+            .onChange(of: searchText) { _, newSearchText in
+                searchTextPublisher.send(newSearchText)
+            }
+            .onReceive(
+                searchTextPublisher
+                    .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            ) { _ in
+                $resources.searchText.wrappedValue = searchText
+            }
+            // disable jumpy behaviour when search is active
+            .transaction { transaction in
+                transaction.animation = nil
+            }
+            .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
         }.introspect(.searchField, on: .iOS(.v17)) { searchField in
             if colorScheme == .dark {
                 searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")

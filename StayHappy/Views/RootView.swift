@@ -10,12 +10,12 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject var globalData: GlobalData
     @State var visibility = Visibility.hidden
-    
+
     // TODO: check if this is the right place to do this
     init() {
-       applyUIStyling()
+        applyUIStyling()
     }
-    
+
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             TabView(selection: $globalData.activeView) {
@@ -24,7 +24,7 @@ struct RootView: View {
                 HighlightsView().tag(Views.highlights)
                 SettingsView().tag(Views.settings)
             }
-   
+
             NavigationBarView()
         }.ignoresSafeArea(.keyboard)
     }
@@ -38,6 +38,6 @@ private func applyUIStyling() {
 
 #Preview {
     RootView()
-        .environment(\.appDatabase, .empty())
+        .environment(\.appDatabase, .random())
         .environmentObject(GlobalData(activeView: .moments))
 }

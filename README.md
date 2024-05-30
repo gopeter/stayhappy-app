@@ -1,14 +1,13 @@
 # StayHappy
 
 ## Todos
-- Crop image thumbnails with Saliency
 - Onboarding
-- Resources: tags, filter for tags, Emoji picker
 - Share options when viewing highlight in fullscreen
 - Deeplink to highlight from Widget
-- Widgets
+- Sort resource list
 
 ## Roadmap & Wishlist
+- Resources: tags, filter for tags, Emoji picker
 - App Intents
 - iPad app
 - Apple Watch?

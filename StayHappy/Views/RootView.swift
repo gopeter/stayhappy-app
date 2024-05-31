@@ -22,7 +22,7 @@ struct RootView: View {
                 MomentsView().tag(Views.moments)
                 ResourcesView().tag(Views.resources)
                 HighlightsView().tag(Views.highlights)
-                SettingsView().tag(Views.settings)
+                HelpView().tag(Views.help)
             }
 
             NavigationBarView()
@@ -39,5 +39,5 @@ private func applyUIStyling() {
 #Preview {
     RootView()
         .environment(\.appDatabase, .random())
-        .environmentObject(GlobalData(activeView: .moments))
+        .environmentObject(GlobalData(activeView: .help))
 }

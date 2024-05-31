@@ -42,7 +42,7 @@ struct MomentsView: View {
             }
             // Navigation
             .navigationTitle("Moments")
-            .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbarTitleDisplayMode(.large)
             .navigationDestination(for: Moment.self) { moment in
                 FormView(moment: moment)
             }

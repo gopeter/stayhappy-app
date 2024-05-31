@@ -44,7 +44,7 @@ struct ResourcesView: View {
             }
             // Navigation
             .navigationTitle("Resources")
-            .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbarTitleDisplayMode(.large)
             .navigationDestination(for: Resource.self) { resource in
                 FormView(resource: resource)
             }

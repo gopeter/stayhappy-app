@@ -64,9 +64,9 @@ struct NavigationBarView: View {
                     globalData.activeView = Views.highlights
                 }, isActive: globalData.activeView == Views.highlights).button()
                 
-                NavigationItem(icon: "cog-symbol", action: {
-                    globalData.activeView = Views.settings
-                }, isActive: globalData.activeView == Views.settings).button()
+                NavigationItem(icon: "badge-help-symbol", action: {
+                    globalData.activeView = Views.help
+                }, isActive: globalData.activeView == Views.help).button()
             }.padding(.horizontal, 35)
         }
     }

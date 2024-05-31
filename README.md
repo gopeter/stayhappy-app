@@ -16,7 +16,3 @@
 - Recurring moments
 - Share highlight: maybe create a combined image with a real layout like Reddit does when sharing images
 - Configurable Widget background color 
-
-Internal resources are anything internal that provides relaxation, pleasure, support, strength, and safety.
-
-Eine kleine Anleitung, wie StayHappy funktioniert und wie es gedacht ist. 

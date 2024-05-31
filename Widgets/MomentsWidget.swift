@@ -42,7 +42,7 @@ struct MomentDetail: View {
                 .opacity(0.5)
 
             Text(moment.title)
-                .font(.system(size: 14, weight: .regular))
+                .font(.system(size: 12, weight: .regular))
                 .minimumScaleFactor(0.92)
                 .lineLimit(1)
                 .foregroundStyle(.white)
@@ -129,12 +129,8 @@ struct MomentsMedium: View {
         if moments.count == 0 {
             MotivationMedium(placeholder: entry.configuration.placeholder)
         } else {
-            HStack(spacing: moments.count > 4 ? 4 : 0) {
-                VStack(alignment: .leading, spacing: 10) {
-                    if moments.count >= 4 {
-                        Spacer()
-                    }
-
+            HStack(alignment: .center, spacing: moments.count > 4 ? 8 : 0) {
+                VStack(spacing: 10) {
                     ForEach(moments.prefix(4)) { moment in
                         MomentDetail(moment: moment)
                     }
@@ -145,13 +141,7 @@ struct MomentsMedium: View {
                 .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
 
                 if (moments.count > 4) {
-                    Spacer()
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        if moments.count >= 4 {
-                            Spacer()
-                        }
-                        
+                    VStack(spacing: 10) {
                         ForEach(moments.dropFirst(4).prefix(4)) { moment in
                             MomentDetail(moment: moment)
                         }
@@ -163,7 +153,7 @@ struct MomentsMedium: View {
                 } else {
                     MotivationSmall(placeholder: entry.configuration.placeholder)
                 }
-            }
+            }.padding(.top, 16)
         }
     }
 }

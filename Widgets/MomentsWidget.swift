@@ -130,7 +130,7 @@ struct MomentsMedium: View {
             MotivationMedium(placeholder: entry.configuration.placeholder)
         } else {
             HStack(alignment: .center, spacing: moments.count > 4 ? 8 : 0) {
-                VStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 10) {
                     ForEach(moments.prefix(4)) { moment in
                         MomentDetail(moment: moment)
                     }
@@ -141,7 +141,7 @@ struct MomentsMedium: View {
                 .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
 
                 if (moments.count > 4) {
-                    VStack(spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
                         ForEach(moments.dropFirst(4).prefix(4)) { moment in
                             MomentDetail(moment: moment)
                         }

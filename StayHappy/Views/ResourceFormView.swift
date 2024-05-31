@@ -57,7 +57,7 @@ struct ResourceFormView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Title", text: $title).focused($isFocused)
+                TextField("Description", text: $title).focused($isFocused)
             } header: {
                 if resource != nil {
                     Text("Update resource")

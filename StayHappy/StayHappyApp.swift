@@ -12,7 +12,7 @@ enum Views: String {
     case moments
     case resources
     case highlights
-    case settings
+    case help
 }
 
 class GlobalData: ObservableObject {

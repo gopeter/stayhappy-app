@@ -28,7 +28,7 @@ struct HighlightsView: View {
                 ScrollView {
                     LazyVStack(spacing: 16) {
                         if self.moments.count > 0 {
-                            Spacer(minLength: 20)
+                            Spacer(minLength: 4)
                             
                             ForEach(self.moments) { moment in
                                 HighlightView(moment: moment, setImage: self.setImage)
@@ -49,7 +49,7 @@ struct HighlightsView: View {
                 }.background(Color("AppBackgroundColor"))
                     .scrollContentBackground(.hidden)
                     .navigationTitle("Highlights")
-                    .toolbarTitleDisplayMode(.inlineLarge)
+                    .toolbarTitleDisplayMode(.large)
             }
             
             if self.isFullscreenActive && self.fullscreenImage != nil {

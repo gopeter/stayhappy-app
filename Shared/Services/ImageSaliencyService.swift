@@ -4,6 +4,7 @@
 //
 // Created by Peter Oesteritz on 11.05.24.
 // See: https://medium.com/@sarimk80/enhancing-visual-focus-exploring-vngenerateattentionbasedsaliencyimagerequest-in-swiftui-f7f925f519c3
+// See: https://medium.com/@kamil.tustanowski/saliency-detection-using-the-vision-framework-d53a38e4ccaa
 
 import Combine
 import Foundation
@@ -12,19 +13,13 @@ import VisionKit
 
 class ImageSaliencyService {
     var uiImage: UIImage
-    
-    // MARK: - Public Properties
-    
-    // The four corner points of the salient object's bounding box
-    public var topLeft: CGPoint = .init(x: 0.0, y: 0.0)
-    public var topRight: CGPoint = .init(x: 0.0, y: 0.0)
-    public var bottomLeft: CGPoint = .init(x: 0.0, y: 0.0)
-    public var bottomRight: CGPoint = .init(x: 0.0, y: 0.0)
+    var salientRect: CGRect
     
     // MARK: - Init
     
     init(uiImage: UIImage) {
         self.uiImage = uiImage
+        self.salientRect = CGRect(x: 0, y: 0, width: 0, height: 0)
     }
     
     // MARK: - Image Analysis
@@ -32,19 +27,9 @@ class ImageSaliencyService {
     /// Analyzes the given UIImage to generate the saliency map and extract the salient object's bounding box points.
     /// - Parameter uiImage: The input UIImage to be analyzed.
     func analyzeImage() {
-        // Resize the image to a fixed size for better processing
-        let resizeImage = self.uiImage.resize(withSize: CGSize(width: 250, height: 250), contentMode: .contentFill)
-        
-        // Convert the UIImage to a CIImage
-        guard let ciImage = CIImage(image: resizeImage!) else { return }
-        
-        // Create a VNImageRequestHandler with the CIImage
-        let requestHandler = VNImageRequestHandler(ciImage: ciImage, orientation: .up)
-        
-        // Create a VNGenerateAttentionBasedSaliencyImageRequest
+        guard let cgImage = self.uiImage.cgImage else { return }
+        let requestHandler = VNImageRequestHandler(cgImage: cgImage, orientation: .up)
         let request = VNGenerateAttentionBasedSaliencyImageRequest()
-        request.revision = VNGenerateAttentionBasedSaliencyImageRequestRevision1
-        request.preferBackgroundProcessing = true
         
         // Use CPU-only mode for simulator to improve performance
         #if targetEnvironment(simulator)
@@ -55,37 +40,51 @@ class ImageSaliencyService {
             // Perform the request to generate the saliency map
             try requestHandler.perform([request])
             
-            // Retrieve the saliency image observation
+            // There is just on result when using AttentionBasedSaliency
             guard let observation = request.results?.first as? VNSaliencyImageObservation else { return }
+            guard let observationBoundingBox = observation.salientObjects?.first?.boundingBox.rectangle(in: self.uiImage) else { return }
             
-            // Extract and update the bounding box points of the salient object
-            observation.salientObjects?.first.map { rectangle in
-                self.topLeft = rectangle.topLeft
-                self.topRight = rectangle.topRight
-                self.bottomRight = rectangle.bottomRight
-                self.bottomLeft = rectangle.bottomLeft
-            }
-            
+            self.salientRect = CGRect(origin: observationBoundingBox.origin.translateFromCoreImageToUIKitCoordinateSpace(using: self.uiImage.size.height - observationBoundingBox.size.height),
+                                      size: observationBoundingBox.size)
         } catch {
             print(error.localizedDescription)
         }
     }
     
+    // returns the focal point as percentage
     func focalPoint() -> CGPoint {
         self.analyzeImage()
         
-        // It seems that the points are sometimes turned up, so collect the values and take the min/max of it
-        let xCoords = [self.topLeft.x, self.topRight.x, self.bottomLeft.x, self.bottomRight.x]
-        let yCoords = [self.topLeft.y, self.topRight.y, self.bottomLeft.y, self.bottomRight.y]
+        // return center
+        if self.salientRect.width == 0 {
+            return CGPoint(x: 0.5, y: 0.5)
+        }
         
-        let xMin = xCoords.min()!
-        let xMax = xCoords.max()!
-        let yMin = yCoords.min()!
-        let yMax = yCoords.max()!
+        return CGPoint(
+            x: (self.salientRect.origin.x + self.salientRect.width / 2) / self.uiImage.size.width,
+            y: (self.salientRect.origin.y + self.salientRect.height / 2) / self.uiImage.size.height
+        )
+    }
+}
+
+extension CGRect {
+    func rectangle(in image: UIImage) -> CGRect {
+        VNImageRectForNormalizedRect(self,
+                                     Int(image.size.width),
+                                     Int(image.size.height))
+    }
+    
+    var points: [CGPoint] {
+        return [origin, CGPoint(x: origin.x + width, y: origin.y),
+                CGPoint(x: origin.x + width, y: origin.y + height), CGPoint(x: origin.x, y: origin.y + height)]
+    }
+}
+
+extension CGPoint {
+    func translateFromCoreImageToUIKitCoordinateSpace(using height: CGFloat) -> CGPoint {
+        let transform = CGAffineTransform(scaleX: 1, y: -1)
+            .translatedBy(x: 0, y: -height)
         
-        let focalX = xMin + ((xMax - xMin) / 2)
-        let focalY = yMin + ((yMax - yMin) / 2)
-        
-        return CGPoint(x: focalX, y: focalY)
+        return self.applying(transform)
     }
 }

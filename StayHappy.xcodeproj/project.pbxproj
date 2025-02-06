@@ -525,7 +525,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					45AFCB862BE03A3B009D1FD4 = {
 						CreatedOnToolsVersion = 15.3;
@@ -553,7 +553,7 @@
 			);
 			mainGroup = 45B6F6D52B4EF0B8003A42F8;
 			packageReferences = (
-				454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB" */,
 				454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 				45C99AB32B73984600F61E8D /* XCRemoteSwiftPackageReference "Pow" */,
 				459792C52B74FEBD0047A555 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
@@ -901,7 +901,6 @@
 		45B6F7072B4EF0BA003A42F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = YES;
@@ -942,7 +941,6 @@
 		45B6F7082B4EF0BA003A42F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = StayHappy/StayHappy.entitlements;
@@ -982,7 +980,6 @@
 		45B6F70A2B4EF0BA003A42F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1003,7 +1000,6 @@
 		45B6F70B2B4EF0BA003A42F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1024,7 +1020,6 @@
 		45B6F70D2B4EF0BA003A42F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1043,7 +1038,6 @@
 		45B6F70E2B4EF0BA003A42F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1110,20 +1104,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+		454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			repositoryURL = "https://github.com/groue/GRDB.swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 6.24.2;
+				minimumVersion = 6.29.3;
 			};
 		};
 		454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRDBQuery";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.8.0;
+				kind = exactVersion;
+				version = 0.8.0;
 			};
 		};
 		4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */ = {
@@ -1147,7 +1141,7 @@
 			repositoryURL = "https://github.com/siteline/swiftui-introspect";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.2;
+				minimumVersion = 1.3.0;
 			};
 		};
 		459BE7842B8F20D900433B60 /* XCRemoteSwiftPackageReference "Agrume" */ = {
@@ -1179,7 +1173,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		454014F42B712FDD003A7E24 /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			package = 454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB" */;
 			productName = GRDB;
 		};
 		454014FC2B722437003A7E24 /* GRDBQuery */ = {
@@ -1214,7 +1208,7 @@
 		};
 		45AFCBA12BE03AA8009D1FD4 /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			package = 454014F32B712FDC003A7E24 /* XCRemoteSwiftPackageReference "GRDB" */;
 			productName = GRDB;
 		};
 		45AFCBA32BE03AA8009D1FD4 /* GRDBQuery */ = {

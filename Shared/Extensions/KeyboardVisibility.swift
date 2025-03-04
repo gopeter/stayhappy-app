@@ -3,7 +3,7 @@
 //  StayHappy
 //
 //  Created by Peter Oesteritz on 09.02.24.
-//  Source: https://stackoverflow.com/a/76027034/1184904
+//  See: https://stackoverflow.com/a/76027034/1184904
 //
 
 import Combine

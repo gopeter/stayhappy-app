@@ -38,13 +38,15 @@ struct HighlightsTile: View {
                     ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: widgetSize.width)
                     : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0)
             )
-            .frame(width: widgetSize.width, height: widgetSize.height)
+            .frame(maxWidth: .infinity)
+            .frame(height: widgetSize.height)
             .background {
                 if photoImage != nil {
                     Image(uiImage: photoImage!)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: widgetSize.width, height: widgetSize.height)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: widgetSize.height)
                         .clipped()
                 }
             }

@@ -12,11 +12,12 @@ struct HighlightView: View {
     var moment: Moment
     var deviceSize: CGSize
     var widgetSize: CGSize
-    
+
     var thumbnailImage: UIImage?
     var photoImage: UIImage?
 
     @State private var isImagePresented = false
+    @State private var showShareSheet = false
 
     init(moment: Moment, deviceSize: CGSize, widgetSize: CGSize) {
         self.moment = moment
@@ -123,6 +124,107 @@ struct HighlightView: View {
                         .padding(.bottom, 20)
                 }
             }
+            .fadeInFullScreenCover(isPresented: $isImagePresented) {
+                Group {
+                    if let image = photoImage {
+                        ZStack {
+                            ImageViewer(image: image)
+                                .ignoresSafeArea(.all)
+
+                            VStack {
+                                Spacer()
+
+                                HStack {
+                                    Spacer()
+                                    ImageViewerNavigationBarView(
+                                        onShare: { showShareSheet = true },
+                                        onClose: {
+                                            isImagePresented = false
+                                        }
+                                    )
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .ignoresSafeArea(.all)
+
+                        .sheet(isPresented: $showShareSheet) {
+                            if let image = photoImage {
+                                ShareSheet(activityItems: [image])
+                            }
+                        }
+                    }
+                    else {
+                        EmptyView()
+                    }
+                }
+            }
+    }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+struct ImageViewerNavigationBarView: View {
+    let onShare: () -> Void
+    let onClose: () -> Void
+
+    var body: some View {
+        HStack(spacing: 0) {
+            Spacer()
+
+            ImageNavigationItem(
+                icon: "share-symbol",
+                action: onShare,
+                isActive: false
+            )
+
+            Spacer()
+
+            ImageNavigationItem(
+                icon: "minimize-symbol",
+                action: onClose,
+                isActive: false
+            )
+
+            Spacer()
+        }
+        .frame(width: 120, height: 54)
+        .background(
+            RoundedRectangle(cornerRadius: 18)
+                .fill(Color("ToolbarBackgroundColor"))
+                .shadow(color: Color.black.opacity(0.35), radius: 5, y: 2)
+        )
+        .padding(.bottom, 34)
+    }
+}
+
+struct ImageNavigationItem: View {
+    let id: String = UUID().uuidString
+    let icon: String
+    let action: () -> Void
+    let isActive: Bool
+
+    var body: some View {
+        Button(
+            action: action,
+            label: {
+                Image(icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20.0, height: 20.0)
+                    .foregroundStyle(isActive ? Color.accentColor : Color.white)
+            }
+        ).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
+            .buttonStyle(HighlightButtonStyle())
     }
 }
 

@@ -54,14 +54,14 @@ struct HighlightView: View {
                         endRadius: 0
                     )
             )
-            .frame(height: 120)
+            .frame(width: deviceSize.width - 40, height: 120)
             .padding(.horizontal, 20)
             .background {
                 if thumbnailImage != nil {
                     Image(uiImage: thumbnailImage!)
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 120, alignment: .center)
+                        .frame(width: deviceSize.width - 40, height: 120, alignment: .center)
                         .cornerRadius(10)
                         .padding(.horizontal, 20)
                         .clipped()

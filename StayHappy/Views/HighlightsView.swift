@@ -10,7 +10,7 @@ import SwiftUI
 
 struct HighlightsView: View {
     @Query(HighlightListRequest()) private var moments: [Moment]
-    
+
     let deviceSize = UIScreen.main.bounds.size
     let widgetSize = getWidgetSize(for: .systemMedium)
 
@@ -18,15 +18,16 @@ struct HighlightsView: View {
         ZStack(alignment: .topLeading) {
             NavigationStack {
                 ScrollView {
-                    LazyVStack(spacing: 16) {
+                    VStack(spacing: 16) {
                         if self.moments.count > 0 {
                             Spacer(minLength: 4)
-                            
-                            ForEach(self.moments) { moment in
+
+                            ForEach(self.moments, id: \.id) { moment in
                                 HighlightView(moment: moment, deviceSize: deviceSize, widgetSize: widgetSize)
 
                             }
-                        } else {
+                        }
+                        else {
                             VStack {
                                 Spacer(minLength: 80)
                                 HStack {
@@ -37,7 +38,7 @@ struct HighlightsView: View {
                             }
                         }
                     }
-                    
+
                     Spacer(minLength: 80)
                 }.background(Color("AppBackgroundColor"))
                     .scrollContentBackground(.hidden)

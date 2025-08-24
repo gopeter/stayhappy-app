@@ -116,7 +116,7 @@ struct MomentsMedium: View {
                     .filterByPeriod(">=")
                     .filterByPeriod("<=", period: entry.configuration.period)
                     .order(Moment.Columns.startAt.asc)
-                    .limit(8)
+                    .limit(3)
                     .fetchAll(db)
             }
         } catch {

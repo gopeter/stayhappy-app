@@ -29,9 +29,9 @@ struct MotivationMedium: View {
                         .limit(1)
                         .fetchAll(db)
                 }
-                
+
                 let limit = placeholder == .all && self.highlights.count > 0 ? 3 : 6
-                
+
                 if placeholder == .all || placeholder == .resources {
                     self.resources = try Resource
                         .all()
@@ -64,7 +64,7 @@ struct MotivationMedium: View {
         // TODO: this looks ugly, there must be a way to achieve this ... smarter?
         if placeholder == .all {
             if resources.count > 0 && highlights.count > 0 {
-                HStack {
+                HStack(spacing: 0) {
                     HighlightsTile(highlights: highlights, size: .systemSmall)
                     ResourcesTile(resources: resources)
                 }

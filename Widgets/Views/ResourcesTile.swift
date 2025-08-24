@@ -16,13 +16,15 @@ struct ResourcesTile: View {
         let widgetSize = getWidgetSize(for: widgetFamily)
 
         VStack {
-            Text(resources.map { resource in
-                "\(resource.title)."
-            }.joined(separator: " "))
-                .minimumScaleFactor(0.8)
-                .foregroundStyle(.white)
-                .padding(.all)
-                .frame(maxWidth: widgetSize.width, alignment: .leading)
+            Text(
+                resources.map { resource in
+                    "\(resource.title)."
+                }.joined(separator: " ")
+            )
+            .minimumScaleFactor(0.8)
+            .foregroundStyle(.white)
+            .padding(.all)
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             Spacer()
         }

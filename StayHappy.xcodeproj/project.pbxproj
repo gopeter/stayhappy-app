@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		453F617D2D7752400075A3F9 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453F617C2D7752400075A3F9 /* ImageViewer.swift */; };
+		453F617F2D7765BE0075A3F9 /* FadeInFullScreenCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453F617E2D7765BE0075A3F9 /* FadeInFullScreenCover.swift */; };
 		454014F52B712FDD003A7E24 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 454014F42B712FDD003A7E24 /* GRDB */; };
 		454014F82B71322B003A7E24 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454014F72B71322B003A7E24 /* Database.swift */; };
 		454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = 454014FC2B722437003A7E24 /* GRDBQuery */; };
@@ -20,11 +22,10 @@
 		4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB9E2B87A601009D506C /* HappyGradients.swift */; };
 		4558FBA22B87B0D5009D506C /* Hue in Frameworks */ = {isa = PBXBuildFile; productRef = 4558FBA12B87B0D5009D506C /* Hue */; };
 		455FECA72B90FAFF006A2592 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 455FECA62B90FAFF006A2592 /* README.md */; };
+		457DED642D80569900BE5F24 /* .swift-format in Resources */ = {isa = PBXBuildFile; fileRef = 457DED632D80569600BE5F24 /* .swift-format */; };
 		457E5AD02B8E81D800F2E268 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = 457E5ACF2B8E81D800F2E268 /* SmoothGradient */; };
 		459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 459792C62B74FEBD0047A555 /* SwiftUIIntrospect */; };
 		459BE7832B8E9C1000433B60 /* TitleCased.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459BE7822B8E9C1000433B60 /* TitleCased.swift */; };
-		459BE7862B8F20D900433B60 /* Agrume in Frameworks */ = {isa = PBXBuildFile; productRef = 459BE7852B8F20D900433B60 /* Agrume */; };
-		459BE7882B8F218800433B60 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459BE7872B8F218800433B60 /* ImageViewer.swift */; };
 		459BE78B2B8FC69500433B60 /* Throttler in Frameworks */ = {isa = PBXBuildFile; productRef = 459BE78A2B8FC69500433B60 /* Throttler */; };
 		45ADE78D2BFFC6C800303B4B /* MotivationSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ADE7892BFFC65700303B4B /* MotivationSmall.swift */; };
 		45ADE78E2BFFC6CD00303B4B /* HighlightsTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ADE78B2BFFC6AD00303B4B /* HighlightsTile.swift */; };
@@ -125,6 +126,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		453F617C2D7752400075A3F9 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
+		453F617E2D7765BE0075A3F9 /* FadeInFullScreenCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeInFullScreenCover.swift; sourceTree = "<group>"; };
 		454014F72B71322B003A7E24 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		454014FE2B7278C0003A7E24 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		454328D32B76148D007956A0 /* KeyboardVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardVisibility.swift; sourceTree = "<group>"; };
@@ -135,8 +138,8 @@
 		4558FB852B874D6C009D506C /* HighlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightView.swift; sourceTree = "<group>"; };
 		4558FB9E2B87A601009D506C /* HappyGradients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HappyGradients.swift; sourceTree = "<group>"; };
 		455FECA62B90FAFF006A2592 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		457DED632D80569600BE5F24 /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
 		459BE7822B8E9C1000433B60 /* TitleCased.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCased.swift; sourceTree = "<group>"; };
-		459BE7872B8F218800433B60 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		459BE7922B8FC93B00433B60 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		459BE7942B8FC93B00433B60 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		45ADE7892BFFC65700303B4B /* MotivationSmall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationSmall.swift; sourceTree = "<group>"; };
@@ -210,7 +213,6 @@
 				45C99AB52B73984600F61E8D /* Pow in Frameworks */,
 				454014FD2B722437003A7E24 /* GRDBQuery in Frameworks */,
 				4558FBA22B87B0D5009D506C /* Hue in Frameworks */,
-				459BE7862B8F20D900433B60 /* Agrume in Frameworks */,
 				454014F52B712FDD003A7E24 /* GRDB in Frameworks */,
 				459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */,
 			);
@@ -308,6 +310,7 @@
 		45B6F6D52B4EF0B8003A42F8 = {
 			isa = PBXGroup;
 			children = (
+				457DED632D80569600BE5F24 /* .swift-format */,
 				455FECA62B90FAFF006A2592 /* README.md */,
 				45AFCBAC2BE12873009D1FD4 /* LICENSE.md */,
 				45AFCBAB2BE0E629009D1FD4 /* WidgetsExtension.entitlements */,
@@ -391,9 +394,10 @@
 		45BBE23D2B68453F0076D062 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				453F617E2D7765BE0075A3F9 /* FadeInFullScreenCover.swift */,
 				4558FB9E2B87A601009D506C /* HappyGradients.swift */,
 				454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */,
-				459BE7872B8F218800433B60 /* ImageViewer.swift */,
+				453F617C2D7752400075A3F9 /* ImageViewer.swift */,
 				45AFCBB12BE4181D009D1FD4 /* WidgetDate.swift */,
 			);
 			path = UI;
@@ -474,7 +478,6 @@
 				459792C62B74FEBD0047A555 /* SwiftUIIntrospect */,
 				4558FBA12B87B0D5009D506C /* Hue */,
 				457E5ACF2B8E81D800F2E268 /* SmoothGradient */,
-				459BE7852B8F20D900433B60 /* Agrume */,
 				459BE78A2B8FC69500433B60 /* Throttler */,
 			);
 			productName = StayHappy;
@@ -544,7 +547,6 @@
 				};
 			};
 			buildConfigurationList = 45B6F6D92B4EF0B8003A42F8 /* Build configuration list for PBXProject "StayHappy" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -559,9 +561,9 @@
 				459792C52B74FEBD0047A555 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 				4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */,
 				457E5ACE2B8E81D800F2E268 /* XCRemoteSwiftPackageReference "SmoothGradient" */,
-				459BE7842B8F20D900433B60 /* XCRemoteSwiftPackageReference "Agrume" */,
 				459BE7892B8FC69500433B60 /* XCRemoteSwiftPackageReference "Throttler" */,
 			);
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 45B6F6DF2B4EF0B8003A42F8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -589,6 +591,7 @@
 			files = (
 				455FECA72B90FAFF006A2592 /* README.md in Resources */,
 				45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */,
+				457DED642D80569900BE5F24 /* .swift-format in Resources */,
 				45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -652,12 +655,12 @@
 				45AFCBB42BE4CFFF009D1FD4 /* Calendar.swift in Sources */,
 				45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */,
 				454014FF2B7278C0003A7E24 /* Log.swift in Sources */,
-				459BE7882B8F218800433B60 /* ImageViewer.swift in Sources */,
 				45ADE7922BFFC92700303B4B /* WidgetIntent.swift in Sources */,
 				454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */,
 				454328DA2B763527007956A0 /* ResourceFormView.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45AFCBB72BE4E5C0009D1FD4 /* Date.swift in Sources */,
+				453F617D2D7752400075A3F9 /* ImageViewer.swift in Sources */,
 				45E4F72F2B6BC2CF005C0E77 /* MomentView.swift in Sources */,
 				454014F82B71322B003A7E24 /* Database.swift in Sources */,
 				459BE7832B8E9C1000433B60 /* TitleCased.swift in Sources */,
@@ -666,6 +669,7 @@
 				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
 				45AF8E792BB0D247006AF22E /* Error.swift in Sources */,
 				454328D82B763480007956A0 /* Resource.swift in Sources */,
+				453F617F2D7765BE0075A3F9 /* FadeInFullScreenCover.swift in Sources */,
 				45E0180D2B822900009C594F /* FileManager.swift in Sources */,
 				45F8C8F12BE96F0B004D8718 /* ImageSaliencyService.swift in Sources */,
 				45ADE7962BFFCD1E00303B4B /* Environment.swift in Sources */,
@@ -1144,14 +1148,6 @@
 				minimumVersion = 1.3.0;
 			};
 		};
-		459BE7842B8F20D900433B60 /* XCRemoteSwiftPackageReference "Agrume" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/JanGorman/Agrume";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.8.10;
-			};
-		};
 		459BE7892B8FC69500433B60 /* XCRemoteSwiftPackageReference "Throttler" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/boraseoksoon/Throttler";
@@ -1195,11 +1191,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459792C52B74FEBD0047A555 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
 			productName = SwiftUIIntrospect;
-		};
-		459BE7852B8F20D900433B60 /* Agrume */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 459BE7842B8F20D900433B60 /* XCRemoteSwiftPackageReference "Agrume" */;
-			productName = Agrume;
 		};
 		459BE78A2B8FC69500433B60 /* Throttler */ = {
 			isa = XCSwiftPackageProductDependency;

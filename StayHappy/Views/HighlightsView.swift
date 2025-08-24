@@ -11,16 +11,8 @@ import SwiftUI
 struct HighlightsView: View {
     @Query(HighlightListRequest()) private var moments: [Moment]
     
-    @State var fullscreenImage: UIImage? = nil
-    @State var isFullscreenActive = false
-    
-    func setImage(image: UIImage) {
-        self.fullscreenImage = image
-        
-        withAnimation {
-            self.isFullscreenActive = true
-        }
-    }
+    let deviceSize = UIScreen.main.bounds.size
+    let widgetSize = getWidgetSize(for: .systemMedium)
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -31,7 +23,8 @@ struct HighlightsView: View {
                             Spacer(minLength: 4)
                             
                             ForEach(self.moments) { moment in
-                                HighlightView(moment: moment, setImage: self.setImage)
+                                HighlightView(moment: moment, deviceSize: deviceSize, widgetSize: widgetSize)
+
                             }
                         } else {
                             VStack {
@@ -50,10 +43,6 @@ struct HighlightsView: View {
                     .scrollContentBackground(.hidden)
                     .navigationTitle("Highlights")
                     .toolbarTitleDisplayMode(.large)
-            }
-            
-            if self.isFullscreenActive && self.fullscreenImage != nil {
-                ImageViewer(images: [self.fullscreenImage!], isPresenting: self.$isFullscreenActive)
             }
         }
     }

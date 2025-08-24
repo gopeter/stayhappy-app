@@ -1,61 +1,113 @@
 //
-//  HighlightsView.swift
+//  ImageView.swift
 //  StayHappy
 //
-//  Created by Peter Oesteritz on 28.02.24.
+//  Created by Peter Oesteritz on 04.03.25.
+//  See: https://github.com/fuzzzlove/swiftui-image-viewer
 //
 
-import Agrume
 import SwiftUI
-import UIKit
 
-@available(iOS 14.0, *)
-public struct ImageViewer: View {
-    private let images: [UIImage]
-    @Binding private var binding: Bool
-    @Namespace var namespace
+struct ImageViewer: View {
+    let image: UIImage
 
-    public init(image: UIImage, isPresenting: Binding<Bool>) {
-        self.init(images: [image], isPresenting: isPresenting)
-    }
+    @State private var scale: CGFloat = 1
+    @State private var lastScale: CGFloat = 1
 
-    public init(images: [UIImage], isPresenting: Binding<Bool>) {
-        self.images = images
-        self._binding = isPresenting
+    @State private var offset: CGPoint = .zero
+    @State private var lastTranslation: CGSize = .zero
+
+    public init(image: UIImage) {
+        self.image = image
     }
 
     public var body: some View {
-        WrapperImageViewer(images: images, isPresenting: $binding)
-            .matchedGeometryEffect(id: "ImageViewer", in: namespace, properties: .frame, isSource: binding)
-            .ignoresSafeArea()
+        GeometryReader { proxy in
+            ZStack {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .scaleEffect(scale)
+                    .offset(x: offset.x, y: offset.y)
+                    .gesture(makeDragGesture(size: proxy.size))
+                    .gesture(makeMagnificationGesture(size: proxy.size))
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .edgesIgnoringSafeArea(.all)
+        }.background(BackgroundBlurView())
+    }
+
+    private func makeMagnificationGesture(size: CGSize) -> some Gesture {
+        MagnificationGesture()
+            .onChanged { value in
+                let delta = value / lastScale
+                lastScale = value
+
+                // To minimize jittering
+                if abs(1 - delta) > 0.01 {
+                    scale *= delta
+                }
+            }
+            .onEnded { _ in
+                lastScale = 1
+                if scale < 1 {
+                    withAnimation {
+                        scale = 1
+                    }
+                }
+                adjustMaxOffset(size: size)
+            }
+    }
+
+    private func makeDragGesture(size: CGSize) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                let diff = CGPoint(
+                    x: value.translation.width - lastTranslation.width,
+                    y: value.translation.height - lastTranslation.height
+                )
+                offset = .init(x: offset.x + diff.x, y: offset.y + diff.y)
+                lastTranslation = value.translation
+            }
+            .onEnded { _ in
+                adjustMaxOffset(size: size)
+            }
+    }
+
+    private func adjustMaxOffset(size: CGSize) {
+        let maxOffsetX = (size.width * (scale - 1)) / 2
+        let maxOffsetY = (size.height * (scale - 1)) / 2
+
+        var newOffsetX = offset.x
+        var newOffsetY = offset.y
+
+        if abs(newOffsetX) > maxOffsetX {
+            newOffsetX = maxOffsetX * (abs(newOffsetX) / newOffsetX)
+        }
+        
+        if abs(newOffsetY) > maxOffsetY {
+            newOffsetY = maxOffsetY * (abs(newOffsetY) / newOffsetY)
+        }
+
+        let newOffset = CGPoint(x: newOffsetX, y: newOffsetY)
+        if newOffset != offset {
+            withAnimation {
+                offset = newOffset
+            }
+        }
+        
+        self.lastTranslation = .zero
     }
 }
 
-@available(iOS 13.0, *)
-struct WrapperImageViewer: UIViewControllerRepresentable {
-    private let images: [UIImage]
-    @Binding private var binding: Bool
-
-    public init(images: [UIImage], isPresenting: Binding<Bool>) {
-        self.images = images
-        self._binding = isPresenting
-    }
-
-    public func makeUIViewController(context: UIViewControllerRepresentableContext<WrapperImageViewer>) -> UIViewController {
-        let agrume = Agrume(images: images, background: .blurred(.regular))
-        agrume.view.backgroundColor = .clear
-        agrume.addSubviews()
-        agrume.addOverlayView()
-        agrume.willDismiss = {
-            withAnimation {
-                binding = false
-            }
+struct BackgroundBlurView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
         }
-        return agrume
+        return view
     }
 
-    public func updateUIViewController(
-        _ uiViewController: UIViewController,
-        context: UIViewControllerRepresentableContext<WrapperImageViewer>
-    ) {}
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }

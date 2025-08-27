@@ -15,6 +15,7 @@ struct MomentsView: View {
     @Query(MomentListRequest(period: .upcoming, ordering: .asc)) private var moments: [Moment]
     @State private var isSearching = false
     @State var searchText = ""
+    @State private var currentTitle = NSLocalizedString("upcoming_moments", comment: "")
 
     let searchTextPublisher = PassthroughSubject<String, Never>()
 
@@ -42,10 +43,14 @@ struct MomentsView: View {
                 Spacer(minLength: 80)
             }
             // Navigation
-            .navigationTitle("moments")
+            .navigationTitle(currentTitle)
             .toolbarTitleDisplayMode(.large)
             .navigationDestination(for: Moment.self) { moment in
                 FormView(moment: moment)
+            }
+            .onAppear {
+                let period = $moments.period.wrappedValue
+                currentTitle = NSLocalizedString(period == .past ? "past_moments" : "upcoming_moments", comment: "")
             }
             // Style
             .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
@@ -72,6 +77,9 @@ struct MomentsView: View {
                             Text("upcoming_moments").tag(MomentListRequest.Period.upcoming)
                             Text("past_moments").tag(MomentListRequest.Period.past)
                         }
+                        .onChange(of: $moments.period.wrappedValue) { _, newValue in
+                            currentTitle = NSLocalizedString(newValue == .past ? "past_moments" : "upcoming_moments", comment: "")
+                        }
                     }
 
                     Section("ordering") {
@@ -89,7 +97,8 @@ struct MomentsView: View {
                 }
             }
 
-        }.introspect(.searchField, on: .iOS(.v17)) { searchField in
+        }
+        .introspect(.searchField, on: .iOS(.v17)) { searchField in
             if colorScheme == .dark {
                 searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
                 searchField.searchTextField.borderStyle = .none
@@ -97,6 +106,7 @@ struct MomentsView: View {
             }
         }
     }
+
 }
 
 #Preview {

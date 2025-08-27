@@ -12,10 +12,12 @@
 
 /* Moments */
 "no_moments_found" = "Keine Momente gefunden";
-"no_moments_created" = "Keine Momente erstellt";
+"no_moments_created" = "Keine Momente festgehalten";
 "update_moment" = "Moment bearbeiten";
-"upcoming_moments" = "Kommende Momente";
-"past_moments" = "Vergangene Momente";
+"upcoming_moments" = "Anstehende Momente";
+"past_moments" = "Erlebte Momente";
+"upcoming_moments_title" = "Anstehende Momente";
+"past_moments_title" = "Erlebte Momente";
 
 /* Resources */
 "no_resources_found" = "Keine Ressourcen gefunden";

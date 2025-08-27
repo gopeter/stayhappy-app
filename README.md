@@ -2,11 +2,9 @@
 
 ## Todos
 - Onboarding & Help per page
-- Sort resource list
-- "Past" Moments as Headline when filter is active
 
 ## Roadmap & Wishlist
-- Resources: tags, filter for tags, Emoji picker
+- Resources: sorting, tags, filter for tags, Emoji picker
 - App Intents
 - iPad app
 - Apple Watch?

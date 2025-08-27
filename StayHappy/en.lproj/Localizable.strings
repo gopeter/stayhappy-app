@@ -16,6 +16,8 @@
 "update_moment" = "Update moment";
 "upcoming_moments" = "Upcoming moments";
 "past_moments" = "Past moments";
+"upcoming_moments_title" = "Upcoming Moments";
+"past_moments_title" = "Past Moments";
 
 /* Resources */
 "no_resources_found" = "No resources found";

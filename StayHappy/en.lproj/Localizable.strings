@@ -1,0 +1,77 @@
+/* Navigation and Tabs */
+"moments" = "Moments";
+"resources" = "Resources";
+"highlights" = "Highlights";
+"help" = "Help";
+
+/* General Actions */
+"add" = "Add";
+"save" = "Save";
+"delete" = "Delete";
+"cancel" = "Cancel";
+
+/* Moments */
+"no_moments_found" = "No moments found";
+"no_moments_created" = "No moments created";
+"update_moment" = "Update moment";
+"upcoming_moments" = "Upcoming moments";
+"past_moments" = "Past moments";
+
+/* Resources */
+"no_resources_found" = "No resources found";
+"no_resources_created" = "No resources created";
+"update_resource" = "Update resource";
+
+/* Highlights */
+"no_highlights_created" = "No highlights created";
+
+/* Form Elements */
+"select_entry_type" = "Select entry type";
+"moment" = "Moment";
+"resource" = "Resource";
+"choose_random_color" = "Choose random color";
+"background" = "Background";
+"select_photo" = "Select photo";
+"remove_photo" = "Remove photo";
+
+/* Sorting and Filtering */
+"period" = "Period";
+"ordering" = "Ordering";
+"ascending" = "Ascending";
+"descending" = "Descending";
+
+/* Date References */
+"today" = "Today";
+"tomorrow" = "Tomorrow";
+"in_days" = "In %d days";
+
+/* Help Section */
+"thanks" = "Thanks";
+"buy_me_coffee" = "Buy me a coffee";
+
+/* Search */
+"search" = "Search";
+
+/* Widget */
+"not_available" = "Not available";
+"start_adding_moments" = "Start adding your first moments";
+
+/* Widget Names and Descriptions */
+"moments_widget_name" = "Moments Widget";
+"moments_widget_description" = "Decide whether you want to see all moments or only for a certain period of time. If there are no moments in view, select a placeholder.";
+"motivation_widget_name" = "Motivation Widget";
+"motivation_widget_description" = "Keep an eye on the things that are important to you, that help you get through the day and that bring a smile to your face.";
+
+/* Widget Intent Configuration */
+"moments_widget_configuration" = "Moments Widget Configuration";
+"motivation_widget_configuration" = "Motivation Widget Configuration";
+"widget_period" = "Period";
+"widget_placeholder" = "Placeholder";
+"widget_content" = "Content";
+"period_month" = "Month";
+"period_quarter" = "Quarter";
+"period_year" = "Year";
+"period_all" = "All";
+"motivation_resources" = "Resources";
+"motivation_highlights" = "Highlights";
+"motivation_all" = "Resources & Highlights";

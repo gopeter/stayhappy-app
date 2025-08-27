@@ -1,0 +1,25 @@
+/*
+  InfoPlist.strings
+  StayHappy
+
+  Created by Assistant on 10.01.24.
+
+*/
+
+/* App Display Name */
+"CFBundleDisplayName" = "StayHappy";
+
+/* App Name */
+"CFBundleName" = "StayHappy";
+
+/* Privacy Usage Descriptions */
+"NSPhotoLibraryUsageDescription" = "StayHappy needs access to your photo library to let you add photos to your moments.";
+"NSCameraUsageDescription" = "StayHappy needs access to your camera to let you take photos for your moments.";
+
+/* Widget Display Names */
+"MomentsWidget" = "Moments";
+"MotivationWidget" = "Motivation";
+
+/* Widget Descriptions */
+"MomentsWidgetDescription" = "See your upcoming moments at a glance";
+"MotivationWidgetDescription" = "Get motivated with your resources and highlights";

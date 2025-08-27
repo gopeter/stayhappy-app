@@ -32,7 +32,7 @@ struct MomentsView: View {
                             Spacer(minLength: 80)
                             HStack {
                                 Spacer()
-                                Text(isSearching ? "No moments found" : "No moments created").foregroundStyle(.gray)
+                                Text(isSearching ? "no_moments_found" : "no_moments_created").foregroundStyle(.gray)
                                 Spacer()
                             }
                         }
@@ -42,7 +42,7 @@ struct MomentsView: View {
                 Spacer(minLength: 80)
             }
             // Navigation
-            .navigationTitle("Moments")
+            .navigationTitle("moments")
             .toolbarTitleDisplayMode(.large)
             .navigationDestination(for: Moment.self) { moment in
                 FormView(moment: moment)
@@ -67,17 +67,17 @@ struct MomentsView: View {
             // Actions
             .toolbar {
                 Menu {
-                    Section("Period") {
-                        Picker("Period", selection: $moments.period) {
-                            Text("Upcoming moments").tag(MomentListRequest.Period.upcoming)
-                            Text("Past moments").tag(MomentListRequest.Period.past)
+                    Section("period") {
+                        Picker("period", selection: $moments.period) {
+                            Text("upcoming_moments").tag(MomentListRequest.Period.upcoming)
+                            Text("past_moments").tag(MomentListRequest.Period.past)
                         }
                     }
 
-                    Section("Ordering") {
-                        Picker("Ordering", selection: $moments.ordering) {
-                            Text("Ascending").tag(MomentListRequest.Ordering.asc)
-                            Text("Descending").tag(MomentListRequest.Ordering.desc)
+                    Section("ordering") {
+                        Picker("ordering", selection: $moments.ordering) {
+                            Text("ascending").tag(MomentListRequest.Ordering.asc)
+                            Text("descending").tag(MomentListRequest.Ordering.desc)
                         }
                     }
 

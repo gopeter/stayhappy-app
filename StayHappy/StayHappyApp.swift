@@ -41,6 +41,7 @@ struct StayHappyApp: App {
                 .onOpenURL { url in
                     handleDeepLink(url: url)
                 }
+
         }
     }
 

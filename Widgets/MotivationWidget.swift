@@ -34,7 +34,7 @@ struct MotivationWidgtEntry: TimelineEntry {
 struct MotivationWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: MotivationWidgtEntry
-    
+
     @ViewBuilder
     var body: some View {
         switch widgetFamily {
@@ -45,7 +45,7 @@ struct MotivationWidgetEntryView: View {
             MotivationMedium(placeholder: entry.configuration.content)
                 .background(HappyGradients.stayHappy.linear())
         default:
-            Text("Not available")
+            Text(NSLocalizedString("not_available", comment: ""))
         }
     }
 }
@@ -65,8 +65,8 @@ struct MotivationWidget: Widget {
         }
         .contentMarginsDisabled()
         .supportedFamilies([.systemSmall, .systemMedium])
-        .configurationDisplayName("Motivation Widget")
-        .description("Keep an eye on the things that are important to you, that help you get through the day and that bring a smile to your face.")
+        .configurationDisplayName(NSLocalizedString("motivation_widget_name", comment: ""))
+        .description(NSLocalizedString("motivation_widget_description", comment: ""))
     }
 }
 

@@ -36,7 +36,7 @@ struct HighlightsView: View {
                                 Spacer(minLength: 80)
                                 HStack {
                                     Spacer()
-                                    Text("No highlights created").foregroundStyle(.gray)
+                                    Text("no_highlights_created").foregroundStyle(.gray)
                                     Spacer()
                                 }
                             }
@@ -46,7 +46,7 @@ struct HighlightsView: View {
                     Spacer(minLength: 80)
                 }.background(Color("AppBackgroundColor"))
                     .scrollContentBackground(.hidden)
-                    .navigationTitle("Highlights")
+                    .navigationTitle("highlights")
                     .toolbarTitleDisplayMode(.large)
 
             }

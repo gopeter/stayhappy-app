@@ -1,0 +1,77 @@
+/* Navigation and Tabs */
+"moments" = "Momente";
+"resources" = "Ressourcen";
+"highlights" = "Highlights";
+"help" = "Hilfe";
+
+/* General Actions */
+"add" = "Hinzufügen";
+"save" = "Speichern";
+"delete" = "Löschen";
+"cancel" = "Abbrechen";
+
+/* Moments */
+"no_moments_found" = "Keine Momente gefunden";
+"no_moments_created" = "Keine Momente erstellt";
+"update_moment" = "Moment bearbeiten";
+"upcoming_moments" = "Kommende Momente";
+"past_moments" = "Vergangene Momente";
+
+/* Resources */
+"no_resources_found" = "Keine Ressourcen gefunden";
+"no_resources_created" = "Keine Ressourcen erstellt";
+"update_resource" = "Ressource bearbeiten";
+
+/* Highlights */
+"no_highlights_created" = "Keine Highlights erstellt";
+
+/* Form Elements */
+"select_entry_type" = "Eintragstyp auswählen";
+"moment" = "Moment";
+"resource" = "Ressource";
+"choose_random_color" = "Zufällige Farbe wählen";
+"background" = "Hintergrund";
+"select_photo" = "Foto auswählen";
+"remove_photo" = "Foto entfernen";
+
+/* Sorting and Filtering */
+"period" = "Zeitraum";
+"ordering" = "Sortierung";
+"ascending" = "Aufsteigend";
+"descending" = "Absteigend";
+
+/* Date References */
+"today" = "Heute";
+"tomorrow" = "Morgen";
+"in_days" = "In %d Tagen";
+
+/* Help Section */
+"thanks" = "Danke";
+"buy_me_coffee" = "Kauf mir einen Kaffee";
+
+/* Search */
+"search" = "Suchen";
+
+/* Widget */
+"not_available" = "Nicht verfügbar";
+"start_adding_moments" = "Beginne deine ersten Momente hinzuzufügen";
+
+/* Widget Names and Descriptions */
+"moments_widget_name" = "Momente Widget";
+"moments_widget_description" = "Entscheide, ob du alle Momente oder nur für einen bestimmten Zeitraum sehen möchtest. Wenn keine Momente zu sehen sind, wähle einen Platzhalter.";
+"motivation_widget_name" = "Motivation Widget";
+"motivation_widget_description" = "Behalte die Dinge im Auge, die dir wichtig sind, die dir durch den Tag helfen und die dir ein Lächeln ins Gesicht zaubern.";
+
+/* Widget Intent Configuration */
+"moments_widget_configuration" = "Momente Widget Konfiguration";
+"motivation_widget_configuration" = "Motivation Widget Konfiguration";
+"widget_period" = "Zeitraum";
+"widget_placeholder" = "Platzhalter";
+"widget_content" = "Inhalt";
+"period_month" = "Monat";
+"period_quarter" = "Quartal";
+"period_year" = "Jahr";
+"period_all" = "Alle";
+"motivation_resources" = "Ressourcen";
+"motivation_highlights" = "Highlights";
+"motivation_all" = "Ressourcen & Highlights";

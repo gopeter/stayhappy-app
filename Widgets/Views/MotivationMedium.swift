@@ -21,7 +21,8 @@ struct MotivationMedium: View {
         do {
             try appDatabase.reader.read { db in
                 if placeholder == .all || placeholder == .highlights {
-                    self.highlights = try Moment
+                    self.highlights =
+                        try Moment
                         .all()
                         .filterByPeriod("<")
                         .filterByHighlight()
@@ -33,14 +34,16 @@ struct MotivationMedium: View {
                 let limit = placeholder == .all && self.highlights.count > 0 ? 3 : 6
 
                 if placeholder == .all || placeholder == .resources {
-                    self.resources = try Resource
+                    self.resources =
+                        try Resource
                         .all()
                         .randomRows()
                         .limit(limit)
                         .fetchAll(db)
                 }
             }
-        } catch {
+        }
+        catch {
             // TODO: log something useful
             print("error: \(error.localizedDescription)")
         }
@@ -49,11 +52,10 @@ struct MotivationMedium: View {
     var body: some View {
         let widgetSize = getWidgetSize(for: widgetFamily)
 
-        if (placeholder == .all && resources.count == 0 && highlights.count == 0) ||
-            (placeholder == .resources && resources.count == 0) ||
-            (placeholder == .highlights && highlights.count == 0)
+        if (placeholder == .all && resources.count == 0 && highlights.count == 0) || (placeholder == .resources && resources.count == 0)
+            || (placeholder == .highlights && highlights.count == 0)
         {
-            Text("Start adding your first moments")
+            Text(NSLocalizedString("start_adding_moments", comment: ""))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
                 .padding(24)
@@ -68,14 +70,18 @@ struct MotivationMedium: View {
                     HighlightsTile(highlights: highlights, size: .systemSmall)
                     ResourcesTile(resources: resources)
                 }
-            } else if resources.count > 0 && highlights.count == 0 {
+            }
+            else if resources.count > 0 && highlights.count == 0 {
                 ResourcesTile(resources: resources)
-            } else if resources.count == 0 && highlights.count > 0 {
+            }
+            else if resources.count == 0 && highlights.count > 0 {
                 HighlightsTile(highlights: highlights, size: .systemMedium)
             }
-        } else if placeholder == .resources && resources.count > 0 {
+        }
+        else if placeholder == .resources && resources.count > 0 {
             ResourcesTile(resources: resources)
-        } else if placeholder == .highlights && highlights.count > 0 {
+        }
+        else if placeholder == .highlights && highlights.count > 0 {
             HighlightsTile(highlights: highlights, size: .systemMedium)
         }
     }

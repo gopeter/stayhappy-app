@@ -10,35 +10,35 @@ import SwiftUI
 struct FormView: View {
     @Environment(\.dismiss) var dismiss
     @State var selection: Selection = .moment
-    
+
     enum Selection {
         case moment
         case resource
     }
-    
+
     var moment: Moment?
     var resource: Resource?
     var isInSheet: Bool
-    
+
     init(for selection: Selection? = nil, moment: Moment? = nil, resource: Resource? = nil, isInSheet: Bool = false) {
         self.moment = moment
         self.resource = resource
         self.isInSheet = moment == nil && resource == nil
-        
-        if (selection != nil) {
+
+        if selection != nil {
             _selection = State(initialValue: selection!)
         }
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             if isInSheet {
                 HStack {
-                    Text("Add").font(.title).fontWeight(.bold)
+                    Text("add").font(.title).fontWeight(.bold)
                     Menu {
-                        Picker("Select entry type", selection: $selection) {
-                            Text("Moment").tag(Selection.moment)
-                            Text("Resource").tag(Selection.resource)
+                        Picker("select_entry_type", selection: $selection) {
+                            Text("moment").tag(Selection.moment)
+                            Text("resource").tag(Selection.resource)
                         }
                     } label: {
                         HStack {
@@ -46,37 +46,43 @@ struct FormView: View {
                             Image("chevron-down-symbol").padding(.top, 5)
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     if isInSheet {
-                        Button(action: {
-                            dismiss()
-                        }, label: {
-                            Image("x-symbol")
-                                .resizable()
-                                .frame(width: 18.0, height: 18.0)
-                            
-                        })
+                        Button(
+                            action: {
+                                dismiss()
+                            },
+                            label: {
+                                Image("x-symbol")
+                                    .resizable()
+                                    .frame(width: 18.0, height: 18.0)
+
+                            }
+                        )
                     }
                 }.padding(.horizontal, 20)
                     .padding(.top, moment == nil && resource == nil ? 40 : 20)
             }
-            
+
             if moment != nil {
                 MomentFormView(moment: moment)
-                    .navigationTitle("Moment")
+                    .navigationTitle("moment")
                     .navigationBarTitleDisplayMode(.inline)
-            } else if resource != nil {
+            }
+            else if resource != nil {
                 ResourceFormView(resource: resource)
-                    .navigationTitle("Resource")
+                    .navigationTitle("resource")
                     .navigationBarTitleDisplayMode(.inline)
-            } else if selection == Selection.moment {
+            }
+            else if selection == Selection.moment {
                 MomentFormView(moment: nil)
-            } else if selection == Selection.resource {
+            }
+            else if selection == Selection.resource {
                 ResourceFormView(resource: nil)
             }
-                
+
         }.background(Color("AppBackgroundColor"))
     }
 }

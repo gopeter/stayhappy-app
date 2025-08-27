@@ -5,8 +5,8 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import os.log
 import SwiftUI
+import os.log
 
 struct ResourceFormView: View {
     @Environment(\.appDatabase) private var appDatabase
@@ -40,7 +40,8 @@ struct ResourceFormView: View {
             try appDatabase.saveResource(&newResource)
 
             dismiss()
-        } catch {
+        }
+        catch {
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
     }
@@ -49,7 +50,8 @@ struct ResourceFormView: View {
         do {
             try appDatabase.deleteResources([resource!.id])
             dismiss()
-        } catch {
+        }
+        catch {
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
     }
@@ -60,8 +62,9 @@ struct ResourceFormView: View {
                 TextField("Description", text: $title).focused($isFocused)
             } header: {
                 if resource != nil {
-                    Text("Update resource")
-                } else {
+                    Text("update_resource")
+                }
+                else {
                     Color.clear
                         .frame(width: 0, height: 0)
                         .accessibilityHidden(true)
@@ -69,14 +72,21 @@ struct ResourceFormView: View {
             }.listRowBackground(Color("CardBackgroundColor"))
 
             Section {
-                Button(action: addResource, label: {
-                    Text("Save")
-                }).disabled(disableForm)
+                Button(
+                    action: addResource,
+                    label: {
+                        Text("save")
+                    }
+                ).disabled(disableForm)
 
                 if resource != nil {
-                    Button(role: .destructive, action: deleteResource, label: {
-                        Text("Delete")
-                    })
+                    Button(
+                        role: .destructive,
+                        action: deleteResource,
+                        label: {
+                            Text("delete")
+                        }
+                    )
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
         }.scrollContentBackground(.hidden)

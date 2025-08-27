@@ -14,12 +14,12 @@ enum WidgetPeriodType: String, AppEnum {
     case year
     case all
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Period"
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("widget_period"))
     static var caseDisplayRepresentations: [WidgetPeriodType: DisplayRepresentation] = [
-        .month: "Month",
-        .quarter: "Quarter",
-        .year: "Year",
-        .all: "All",
+        .month: DisplayRepresentation(title: LocalizedStringResource("period_month")),
+        .quarter: DisplayRepresentation(title: LocalizedStringResource("period_quarter")),
+        .year: DisplayRepresentation(title: LocalizedStringResource("period_year")),
+        .all: DisplayRepresentation(title: LocalizedStringResource("period_all")),
     ]
 }
 
@@ -28,27 +28,27 @@ enum WidgetMotivationType: String, AppEnum {
     case highlights
     case all
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Placeholder"
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("widget_placeholder"))
     static var caseDisplayRepresentations: [WidgetMotivationType: DisplayRepresentation] = [
-        .resources: "Resources",
-        .highlights: "Highlights",
-        .all: "Resources & Highlights",
+        .resources: DisplayRepresentation(title: LocalizedStringResource("motivation_resources")),
+        .highlights: DisplayRepresentation(title: LocalizedStringResource("motivation_highlights")),
+        .all: DisplayRepresentation(title: LocalizedStringResource("motivation_all")),
     ]
 }
 
 struct MomentsWidgetConfigurationIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "Moments Widget Configuration"
+    static var title: LocalizedStringResource = LocalizedStringResource("moments_widget_configuration")
 
-    @Parameter(title: "Period", default: .all)
+    @Parameter(title: LocalizedStringResource("widget_period"), default: .all)
     var period: WidgetPeriodType
 
-    @Parameter(title: "Placeholder", default: .all)
+    @Parameter(title: LocalizedStringResource("widget_placeholder"), default: .all)
     var placeholder: WidgetMotivationType
 }
 
 struct MotivationWidgetConfigurationIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "Motivation Widget Configuration"
+    static var title: LocalizedStringResource = LocalizedStringResource("motivation_widget_configuration")
 
-    @Parameter(title: "Content", default: .highlights)
+    @Parameter(title: LocalizedStringResource("widget_content"), default: .highlights)
     var content: WidgetMotivationType
 }

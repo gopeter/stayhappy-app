@@ -18,6 +18,7 @@ struct HighlightView: View {
 
     @State private var isImagePresented = false
     @State private var showShareSheet = false
+    @EnvironmentObject var globalData: GlobalData
 
     init(moment: Moment, deviceSize: CGSize, widgetSize: CGSize) {
         self.moment = moment
@@ -159,6 +160,23 @@ struct HighlightView: View {
                     }
                 }
             }
+            .onAppear {
+                checkAndOpenImage()
+            }
+            .onChange(of: globalData.highlightImageToShow) { _ in
+                checkAndOpenImage()
+            }
+    }
+
+    private func checkAndOpenImage() {
+        let shouldOpenImage = globalData.highlightImageToShow == moment.id
+
+        if shouldOpenImage && photoImage != nil && !isImagePresented {
+            // Clear the trigger first to prevent multiple views from reacting
+            globalData.highlightImageToShow = nil
+            // Open the image immediately
+            isImagePresented = true
+        }
     }
 }
 

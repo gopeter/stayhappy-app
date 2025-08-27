@@ -72,5 +72,6 @@ struct HighlightsTile: View {
                     }
                 }.padding(.all)
             }
+            .widgetURL(URL(string: "stayhappy://highlights/image/\(highlight.id)"))
     }
 }

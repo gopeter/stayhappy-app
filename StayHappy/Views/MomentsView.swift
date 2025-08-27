@@ -26,7 +26,8 @@ struct MomentsView: View {
                         ForEach(moments) { moment in
                             MomentView(moment: moment)
                         }
-                    } else {
+                    }
+                    else {
                         VStack {
                             Spacer(minLength: 80)
                             HStack {

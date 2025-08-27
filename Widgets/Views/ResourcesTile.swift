@@ -13,8 +13,6 @@ struct ResourcesTile: View {
     var resources: [Resource]
 
     var body: some View {
-        let widgetSize = getWidgetSize(for: widgetFamily)
-
         VStack {
             Text(
                 resources.map { resource in

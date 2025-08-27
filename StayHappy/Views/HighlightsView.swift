@@ -10,6 +10,7 @@ import SwiftUI
 
 struct HighlightsView: View {
     @Query(HighlightListRequest()) private var moments: [Moment]
+    @EnvironmentObject var globalData: GlobalData
 
     let deviceSize = UIScreen.main.bounds.size
     let widgetSize = getWidgetSize(for: .systemMedium)
@@ -23,8 +24,11 @@ struct HighlightsView: View {
                             Spacer(minLength: 4)
 
                             ForEach(self.moments, id: \.id) { moment in
-                                HighlightView(moment: moment, deviceSize: deviceSize, widgetSize: widgetSize)
-
+                                HighlightView(
+                                    moment: moment,
+                                    deviceSize: deviceSize,
+                                    widgetSize: widgetSize
+                                )
                             }
                         }
                         else {
@@ -44,6 +48,7 @@ struct HighlightsView: View {
                     .scrollContentBackground(.hidden)
                     .navigationTitle("Highlights")
                     .toolbarTitleDisplayMode(.large)
+
             }
         }
     }

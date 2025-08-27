@@ -2,8 +2,6 @@
 
 ## Todos
 - Onboarding & Help per page
-- Share options when viewing highlight in fullscreen; show fullscreen toolbar
-- Deeplink to highlight from Widget
 - Sort resource list
 - Translation
 - "Past" Moments as Headline when filter is active

@@ -3,6 +3,8 @@
 "resources" = "Resources";
 "highlights" = "Highlights";
 "help" = "Help";
+"restart_onboarding" = "Restart Tour";
+"restart_onboarding_description" = "Start the introduction tour again to learn about all features of StayHappy.";
 
 /* General Actions */
 "add" = "Add";
@@ -77,3 +79,28 @@
 "motivation_resources" = "Resources";
 "motivation_highlights" = "Highlights";
 "motivation_all" = "Resources & Highlights";
+
+/* Onboarding */
+"onboarding_welcome_title" = "Welcome to StayHappy";
+"onboarding_welcome_subtitle" = "...your little memory aid for the good things in life";
+"onboarding_welcome_button" = "Start Tour";
+"onboarding_skip" = "Skip";
+
+"onboarding_purpose_title" = "Why StayHappy?";
+"onboarding_purpose_text" = "During depressive episodes, focus on good things is quickly lost. StayHappy uses widgets to remind you again and again that there's more out there.";
+
+"onboarding_moments_title" = "Collect Your Moments";
+"onboarding_moments_text" = "Note down small moments you can look forward to. The new episode of your favorite series, a bath, or something delicious to eat. Bigger moments can be marked as highlights and accompanied by a picture.";
+
+"onboarding_resources_title" = "Your Daily Resources";
+"onboarding_resources_text" = "Write down which resources could enrich you every day. The delicious cappuccino every morning, the scent of your favorite perfume, or dear people around you.";
+
+"onboarding_widgets_title" = "Widgets on Your Home Screen";
+"onboarding_widgets_text" = "StayHappy takes all this information and shows you a clever selection in various widgets that can help you find some hope and look forward to the next day.";
+
+"onboarding_finish_button" = "Let's go!";
+
+/* Onboarding Navigation */
+"onboarding_back" = "Back";
+"onboarding_next" = "Next";
+"onboarding_continue" = "Continue";

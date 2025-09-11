@@ -30,6 +30,10 @@
 		4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB9E2B87A601009D506C /* HappyGradients.swift */; };
 		4558FBA22B87B0D5009D506C /* Hue in Frameworks */ = {isa = PBXBuildFile; productRef = 4558FBA12B87B0D5009D506C /* Hue */; };
 		455FECA72B90FAFF006A2592 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 455FECA62B90FAFF006A2592 /* README.md */; };
+		45783E742E5F9BD000DDAC08 /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45783E732E5F9BD000DDAC08 /* OnboardingData.swift */; };
+		45783E752E5F9BD000DDAC08 /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45783E732E5F9BD000DDAC08 /* OnboardingData.swift */; };
+		45783E782E5F9BDE00DDAC08 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45783E772E5F9BDE00DDAC08 /* OnboardingView.swift */; };
+		45783E792E5F9BDE00DDAC08 /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45783E762E5F9BDE00DDAC08 /* OnboardingPageView.swift */; };
 		457DED642D80569900BE5F24 /* .swift-format in Resources */ = {isa = PBXBuildFile; fileRef = 457DED632D80569600BE5F24 /* .swift-format */; };
 		457E5AD02B8E81D800F2E268 /* SmoothGradient in Frameworks */ = {isa = PBXBuildFile; productRef = 457E5ACF2B8E81D800F2E268 /* SmoothGradient */; };
 		459792C72B74FEBD0047A555 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 459792C62B74FEBD0047A555 /* SwiftUIIntrospect */; };
@@ -150,6 +154,9 @@
 		4558FB852B874D6C009D506C /* HighlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightView.swift; sourceTree = "<group>"; };
 		4558FB9E2B87A601009D506C /* HappyGradients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HappyGradients.swift; sourceTree = "<group>"; };
 		455FECA62B90FAFF006A2592 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		45783E732E5F9BD000DDAC08 /* OnboardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingData.swift; sourceTree = "<group>"; };
+		45783E762E5F9BDE00DDAC08 /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
+		45783E772E5F9BDE00DDAC08 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		457DED632D80569600BE5F24 /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
 		459BE7822B8E9C1000433B60 /* TitleCased.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCased.swift; sourceTree = "<group>"; };
 		459BE7922B8FC93B00433B60 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -408,6 +415,8 @@
 		45BBE2392B67E7E80076D062 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45783E762E5F9BDE00DDAC08 /* OnboardingPageView.swift */,
+				45783E772E5F9BDE00DDAC08 /* OnboardingView.swift */,
 				454328DB2B7635AC007956A0 /* FormView.swift */,
 				45E4F7302B6C3B2F005C0E77 /* HelpView.swift */,
 				45E4F7322B6C3B7E005C0E77 /* HighlightsView.swift */,
@@ -438,6 +447,7 @@
 		45E1655E2B4EF72900F55A17 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				45783E732E5F9BD000DDAC08 /* OnboardingData.swift */,
 				45E1655F2B4EF96700F55A17 /* Moment.swift */,
 				454328D72B763480007956A0 /* Resource.swift */,
 			);
@@ -672,6 +682,7 @@
 				45ADE7982C00BC6500303B4B /* Environment.swift in Sources */,
 				45AFCB9B2BE03A81009D1FD4 /* Error.swift in Sources */,
 				45AFCB902BE03A3B009D1FD4 /* WidgetIntent.swift in Sources */,
+				45783E752E5F9BD000DDAC08 /* OnboardingData.swift in Sources */,
 				45AFCB9C2BE03A83009D1FD4 /* Moment.swift in Sources */,
 				45F8C9022BEBFA46004D8718 /* WidgetSize.swift in Sources */,
 				45ADE78E2BFFC6CD00303B4B /* HighlightsTile.swift in Sources */,
@@ -699,6 +710,7 @@
 				45ADE7922BFFC92700303B4B /* WidgetIntent.swift in Sources */,
 				454328D42B76148D007956A0 /* KeyboardVisibility.swift in Sources */,
 				454328DA2B763527007956A0 /* ResourceFormView.swift in Sources */,
+				45783E742E5F9BD000DDAC08 /* OnboardingData.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45AFCBB72BE4E5C0009D1FD4 /* Date.swift in Sources */,
 				453F617D2D7752400075A3F9 /* ImageViewer.swift in Sources */,
@@ -713,6 +725,8 @@
 				453F617F2D7765BE0075A3F9 /* FadeInFullScreenCover.swift in Sources */,
 				45E0180D2B822900009C594F /* FileManager.swift in Sources */,
 				45F8C8F12BE96F0B004D8718 /* ImageSaliencyService.swift in Sources */,
+				45783E782E5F9BDE00DDAC08 /* OnboardingView.swift in Sources */,
+				45783E792E5F9BDE00DDAC08 /* OnboardingPageView.swift in Sources */,
 				45ADE7962BFFCD1E00303B4B /* Environment.swift in Sources */,
 				45F8C8FF2BEB96E7004D8718 /* QuickLookService.swift in Sources */,
 				45E165602B4EF96700F55A17 /* Moment.swift in Sources */,

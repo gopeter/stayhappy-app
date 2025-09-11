@@ -3,6 +3,8 @@
 "resources" = "Ressourcen";
 "highlights" = "Highlights";
 "help" = "Hilfe";
+"restart_onboarding" = "Tour erneut starten";
+"restart_onboarding_description" = "Starte die Einführungstour noch einmal, um alle Funktionen von StayHappy kennenzulernen.";
 
 /* General Actions */
 "add" = "Hinzufügen";
@@ -77,3 +79,28 @@
 "motivation_resources" = "Ressourcen";
 "motivation_highlights" = "Highlights";
 "motivation_all" = "Ressourcen & Highlights";
+
+/* Onboarding */
+"onboarding_welcome_title" = "Willkommen bei StayHappy";
+"onboarding_welcome_subtitle" = "...deiner kleinen Gedächtnisstütze für die guten Dinge im Leben";
+"onboarding_welcome_button" = "Tour starten";
+"onboarding_skip" = "Überspringen";
+
+"onboarding_purpose_title" = "Warum StayHappy?";
+"onboarding_purpose_text" = "In depressiven Episoden geht der Fokus auf die guten Dinge schnell verloren. StayHappy erinnert dich mit Hilfe von Widgets immer wieder daran, dass da noch mehr ist.";
+
+"onboarding_moments_title" = "Sammle deine Momente";
+"onboarding_moments_text" = "Notiere dir kleine Momente, auf die du dich freuen kannst. Die neue Folge deiner Lieblings-Serie, ein Bad oder etwas Leckeres zu Essen. Größere Momente können als Highlight markiert und mit einem Bild versehen werden.";
+
+"onboarding_resources_title" = "Deine täglichen Ressourcen";
+"onboarding_resources_text" = "Schreibe dir auf, welche Ressourcen dich jeden Tag bereichern könnten. Der leckere Cappuccino jeden Morgen, der Duft deines Lieblingsparfums oder liebe Menschen in deiner Nähe.";
+
+"onboarding_widgets_title" = "Widgets auf dem Home-Screen";
+"onboarding_widgets_text" = "StayHappy nimmt all diese Informationen und zeigt dir in verschiedenen Widgets eine clevere Auswahl an, die dir helfen kann, etwas Hoffnung zu fassen und dich auf den nächsten Tag zu freuen.";
+
+"onboarding_finish_button" = "Los geht's!";
+
+/* Onboarding Navigation */
+"onboarding_back" = "Zurück";
+"onboarding_next" = "Weiter";
+"onboarding_continue" = "Weiter";

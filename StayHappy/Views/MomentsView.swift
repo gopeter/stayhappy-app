@@ -15,6 +15,7 @@ struct MomentsView: View {
     @Query(MomentListRequest(period: .upcoming, ordering: .asc)) private var moments: [Moment]
     @State private var isSearching = false
     @State var searchText = ""
+    @State private var currentTitle = NSLocalizedString("upcoming_moments", comment: "")
 
     let searchTextPublisher = PassthroughSubject<String, Never>()
 
@@ -26,12 +27,13 @@ struct MomentsView: View {
                         ForEach(moments) { moment in
                             MomentView(moment: moment)
                         }
-                    } else {
+                    }
+                    else {
                         VStack {
                             Spacer(minLength: 80)
                             HStack {
                                 Spacer()
-                                Text(isSearching ? "No moments found" : "No moments created").foregroundStyle(.gray)
+                                Text(isSearching ? "no_moments_found" : "no_moments_created").foregroundStyle(.gray)
                                 Spacer()
                             }
                         }
@@ -41,10 +43,14 @@ struct MomentsView: View {
                 Spacer(minLength: 80)
             }
             // Navigation
-            .navigationTitle("Moments")
+            .navigationTitle(currentTitle)
             .toolbarTitleDisplayMode(.large)
             .navigationDestination(for: Moment.self) { moment in
                 FormView(moment: moment)
+            }
+            .onAppear {
+                let period = $moments.period.wrappedValue
+                currentTitle = NSLocalizedString(period == .past ? "past_moments" : "upcoming_moments", comment: "")
             }
             // Style
             .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
@@ -66,17 +72,20 @@ struct MomentsView: View {
             // Actions
             .toolbar {
                 Menu {
-                    Section("Period") {
-                        Picker("Period", selection: $moments.period) {
-                            Text("Upcoming moments").tag(MomentListRequest.Period.upcoming)
-                            Text("Past moments").tag(MomentListRequest.Period.past)
+                    Section("period") {
+                        Picker("period", selection: $moments.period) {
+                            Text("upcoming_moments").tag(MomentListRequest.Period.upcoming)
+                            Text("past_moments").tag(MomentListRequest.Period.past)
+                        }
+                        .onChange(of: $moments.period.wrappedValue) { _, newValue in
+                            currentTitle = NSLocalizedString(newValue == .past ? "past_moments" : "upcoming_moments", comment: "")
                         }
                     }
 
-                    Section("Ordering") {
-                        Picker("Ordering", selection: $moments.ordering) {
-                            Text("Ascending").tag(MomentListRequest.Ordering.asc)
-                            Text("Descending").tag(MomentListRequest.Ordering.desc)
+                    Section("ordering") {
+                        Picker("ordering", selection: $moments.ordering) {
+                            Text("ascending").tag(MomentListRequest.Ordering.asc)
+                            Text("descending").tag(MomentListRequest.Ordering.desc)
                         }
                     }
 
@@ -88,7 +97,8 @@ struct MomentsView: View {
                 }
             }
 
-        }.introspect(.searchField, on: .iOS(.v17)) { searchField in
+        }
+        .introspect(.searchField, on: .iOS(.v17)) { searchField in
             if colorScheme == .dark {
                 searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
                 searchField.searchTextField.borderStyle = .none
@@ -96,6 +106,7 @@ struct MomentsView: View {
             }
         }
     }
+
 }
 
 #Preview {

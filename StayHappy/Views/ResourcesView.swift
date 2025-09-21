@@ -31,19 +31,20 @@ struct ResourcesView: View {
                         }.listRowBackground(Color("CardBackgroundColor")).listRowInsets(.init(top: 0, leading: 20, bottom: 0, trailing: 12))
                     }
 
-                } else {
+                }
+                else {
                     VStack {
                         Spacer(minLength: 80)
                         HStack {
                             Spacer()
-                            Text(isSearching ? "No resources found" : "No resources created").foregroundStyle(.gray)
+                            Text(isSearching ? "no_resources_found" : "no_resources_created").foregroundStyle(.gray)
                             Spacer()
                         }
                     }.listRowBackground(Color("AppBackgroundColor"))
                 }
             }
             // Navigation
-            .navigationTitle("Resources")
+            .navigationTitle("resources")
             .toolbarTitleDisplayMode(.large)
             .navigationDestination(for: Resource.self) { resource in
                 FormView(resource: resource)

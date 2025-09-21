@@ -50,7 +50,6 @@ struct MomentDetail: View {
     }
 }
 
-
 struct MomentsSmall: View {
     @Environment(\.appDatabase) var appDatabase
 
@@ -62,7 +61,8 @@ struct MomentsSmall: View {
 
         do {
             try appDatabase.reader.read { db in
-                self.moments = try Moment
+                self.moments =
+                    try Moment
                     .all()
                     .filterByPeriod(">=")
                     .filterByPeriod("<=", period: entry.configuration.period)
@@ -70,7 +70,8 @@ struct MomentsSmall: View {
                     .limit(4)
                     .fetchAll(db)
             }
-        } catch {
+        }
+        catch {
             // TODO: log something useful
             print("error: \(error.localizedDescription)")
         }
@@ -79,7 +80,8 @@ struct MomentsSmall: View {
     var body: some View {
         if moments.count == 0 {
             MotivationSmall(placeholder: entry.configuration.placeholder)
-        } else {
+        }
+        else {
             HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     if moments.count == 4 {
@@ -111,15 +113,17 @@ struct MomentsMedium: View {
 
         do {
             try appDatabase.reader.read { db in
-                self.moments = try Moment
+                self.moments =
+                    try Moment
                     .all()
                     .filterByPeriod(">=")
                     .filterByPeriod("<=", period: entry.configuration.period)
                     .order(Moment.Columns.startAt.asc)
-                    .limit(8)
+                    .limit(3)
                     .fetchAll(db)
             }
-        } catch {
+        }
+        catch {
             // TODO: log something useful
             print("error: \(error.localizedDescription)")
         }
@@ -128,7 +132,8 @@ struct MomentsMedium: View {
     var body: some View {
         if moments.count == 0 {
             MotivationMedium(placeholder: entry.configuration.placeholder)
-        } else {
+        }
+        else {
             HStack(alignment: .center, spacing: moments.count > 4 ? 8 : 0) {
                 VStack(alignment: .leading, spacing: 10) {
                     ForEach(moments.prefix(4)) { moment in
@@ -140,25 +145,24 @@ struct MomentsMedium: View {
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .padding(EdgeInsets(top: 32, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
 
-                if (moments.count > 4) {
+                if moments.count > 4 {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(moments.dropFirst(4).prefix(4)) { moment in
                             MomentDetail(moment: moment)
                         }
-                        
+
                         Spacer()
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .padding(EdgeInsets(top: 32, leading: moments.count > 4 ? 0 : 16, bottom: 16, trailing: 16))
-                } else {
+                }
+                else {
                     MotivationSmall(placeholder: entry.configuration.placeholder)
                 }
             }
         }
     }
 }
-
-
 
 struct MomentsWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
@@ -174,7 +178,7 @@ struct MomentsWidgetEntryView: View {
             MomentsMedium(entry: entry)
                 .background(HappyGradients.stayHappy.linear())
         default:
-            Text("Not available")
+            Text(NSLocalizedString("not_available", comment: ""))
         }
     }
 }
@@ -194,8 +198,8 @@ struct MomentsWidget: Widget {
         }
         .contentMarginsDisabled()
         .supportedFamilies([.systemSmall, .systemMedium])
-        .configurationDisplayName("Moments Widget")
-        .description("Decide whether you want to see all moments or only for a certain period of time. If there are no moments in view, select a placeholder.")
+        .configurationDisplayName(NSLocalizedString("moments_widget_name", comment: ""))
+        .description(NSLocalizedString("moments_widget_description", comment: ""))
     }
 }
 

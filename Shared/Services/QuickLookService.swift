@@ -5,8 +5,8 @@
 //  Created by Peter Oesteritz on 08.05.24.
 //
 
-import UIKit
 import QuickLookThumbnailing
+import UIKit
 
 actor QuicklookService {
     static let shared = QuicklookService()
@@ -27,8 +27,7 @@ actor QuicklookService {
         )
         
         do {
-            
-                let representation = try await generator.generateBestRepresentation(for: request)
+            let representation = try await generator.generateBestRepresentation(for: request)
             
             return representation.uiImage
         } catch {

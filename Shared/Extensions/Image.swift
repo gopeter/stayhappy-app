@@ -1,9 +1,10 @@
 //
-// UIImageExtensions.swift
-// VisionFrameworkApp
+//  IImageExtensions.swift
+//  VisionFrameworkApp
 //
-// Created by sarim khan on 25/07/2023.
-// See: https://github.com/sarimk80/VisionFrameworkApp/blob/32c270ec0f2a4c00dcdf8f71fa81f7e0f9b869ea/VisionFrameworkApp/Helper/UIImageExtensions.swift#L20
+//  Created by sarim khan on 25/07/2023.
+//  See: https://github.com/sarimk80/VisionFrameworkApp/blob/32c270ec0f2a4c00dcdf8f71fa81f7e0f9b869ea/VisionFrameworkApp/Helper/UIImageExtensions.swift#L20
+//
 
 import Foundation
 import UIKit

@@ -7,28 +7,25 @@
 
 import SwiftUI
 
-struct NavigationItem: Identifiable {
+struct NavigationItem: View {
     let id: String = UUID().uuidString
     let icon: String
     let action: () -> Void
     let isActive: Bool
     
-    func button() -> some View {
-        return Button(action: action, label: {
-            HStack {
-                Spacer()
-                Image(self.icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(isActive ? Color.accentColor : Color.gray)
-                Spacer()
-            }.frame(height: 54)
-                .contentShape(Rectangle())
-        }).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
+    var body: some View {
+        Button(action: action, label: {
+            Image(self.icon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30.0, height: 20.0)
+                .foregroundStyle(isActive ? Color.accentColor : Color.gray)
+                .padding()
+                .frame(width: .infinity, height: 54)
+        })
+            .contentShape(Rectangle())
+
             .buttonStyle(HighlightButtonStyle())
-            
-            
     }
 }
 
@@ -46,15 +43,15 @@ struct NavigationBarView: View {
             HStack(spacing: 0) {
                 NavigationItem(icon: "calendar-range-symbol", action: {
                     globalData.activeView = Views.moments
-                }, isActive: globalData.activeView == Views.moments).button()
+                }, isActive: globalData.activeView == Views.moments)
                 
                 NavigationItem(icon: "coffee-symbol", action: {
                     globalData.activeView = Views.resources
-                }, isActive: globalData.activeView == Views.resources).button()
+                }, isActive: globalData.activeView == Views.resources)
                 
                 NavigationItem(icon: "plus-circle-symbol", action: {
                     isPresented.toggle()
-                }, isActive: false).button().sheet(isPresented: $isPresented) {
+                }, isActive: false).sheet(isPresented: $isPresented) {
                     NavigationStack {
                         FormView(for: globalData.activeView == Views.resources ? .resource : .moment)
                     }
@@ -62,12 +59,12 @@ struct NavigationBarView: View {
                 
                 NavigationItem(icon: "heart-symbol", action: {
                     globalData.activeView = Views.highlights
-                }, isActive: globalData.activeView == Views.highlights).button()
+                }, isActive: globalData.activeView == Views.highlights)
                 
                 NavigationItem(icon: "badge-help-symbol", action: {
                     globalData.activeView = Views.help
-                }, isActive: globalData.activeView == Views.help).button()
-            }.padding(.horizontal, 35)
+                }, isActive: globalData.activeView == Views.help)
+            }.padding(.horizontal, 0)
         }
     }
 }

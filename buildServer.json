@@ -1,0 +1,19 @@
+{
+	"name": "xcode build server",
+	"version": "0.2",
+	"bspVersion": "2.0",
+	"languages": [
+		"c",
+		"cpp",
+		"objective-c",
+		"objective-cpp",
+		"swift"
+	],
+	"argv": [
+		"/opt/homebrew/bin/xcode-build-server"
+	],
+	"workspace": "/Users/peter_oesteritz/Sites/Workspace/PGW/stayhappy-app/StayHappy.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/peter_oesteritz/Library/Developer/Xcode/DerivedData/StayHappy-dtjuakfvruwrxmhclrfrqzuhwcto",
+	"scheme": "StayHappy",
+	"kind": "xcode"
+}

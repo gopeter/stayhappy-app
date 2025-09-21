@@ -11,7 +11,7 @@ func getWeekday(_ date: Date) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "E"
     let weekDay = dateFormatter.string(from: date)
-    
+
     return weekDay
 }
 
@@ -29,12 +29,14 @@ struct WidgetDate: View {
     var body: some View {
         HStack(spacing: 0) {
             if calendar.isDateInToday(date) {
-                Text("Today")
-            } else if calendar.isDateInTomorrow(date) {
-                Text("Tomorrow")
-            } else {
+                Text(NSLocalizedString("today", comment: ""))
+            }
+            else if calendar.isDateInTomorrow(date) {
+                Text(NSLocalizedString("tomorrow", comment: ""))
+            }
+            else {
                 let diff = calendar.numberOfDaysBetween(Date(), and: date)
-                Text("In \(diff) days")
+                Text(String(format: NSLocalizedString("in_days", comment: ""), diff))
             }
 
             if size != .small {

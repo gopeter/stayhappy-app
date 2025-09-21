@@ -1,0 +1,106 @@
+/* Navigation and Tabs */
+"moments" = "Moments";
+"resources" = "Resources";
+"highlights" = "Highlights";
+"help" = "Help";
+"restart_onboarding" = "Restart Tour";
+"restart_onboarding_description" = "Start the introduction tour again to learn about all features of StayHappy.";
+
+/* General Actions */
+"add" = "Add";
+"save" = "Save";
+"delete" = "Delete";
+"cancel" = "Cancel";
+
+/* Moments */
+"no_moments_found" = "No moments found";
+"no_moments_created" = "No moments created";
+"update_moment" = "Update moment";
+"upcoming_moments" = "Upcoming moments";
+"past_moments" = "Past moments";
+"upcoming_moments_title" = "Upcoming Moments";
+"past_moments_title" = "Past Moments";
+
+/* Resources */
+"no_resources_found" = "No resources found";
+"no_resources_created" = "No resources created";
+"update_resource" = "Update resource";
+
+/* Highlights */
+"no_highlights_created" = "No highlights created";
+
+/* Form Elements */
+"select_entry_type" = "Select entry type";
+"moment" = "Moment";
+"resource" = "Resource";
+"choose_random_color" = "Choose random color";
+"background" = "Background";
+"select_photo" = "Select photo";
+"remove_photo" = "Remove photo";
+
+/* Sorting and Filtering */
+"period" = "Period";
+"ordering" = "Ordering";
+"ascending" = "Ascending";
+"descending" = "Descending";
+
+/* Date References */
+"today" = "Today";
+"tomorrow" = "Tomorrow";
+"in_days" = "In %d days";
+
+/* Help Section */
+"thanks" = "Thanks";
+"buy_me_coffee" = "Buy me a coffee";
+
+/* Search */
+"search" = "Search";
+
+/* Widget */
+"not_available" = "Not available";
+"start_adding_moments" = "Start adding your first moments";
+
+/* Widget Names and Descriptions */
+"moments_widget_name" = "Moments Widget";
+"moments_widget_description" = "Decide whether you want to see all moments or only for a certain period of time. If there are no moments in view, select a placeholder.";
+"motivation_widget_name" = "Motivation Widget";
+"motivation_widget_description" = "Keep an eye on the things that are important to you, that help you get through the day and that bring a smile to your face.";
+
+/* Widget Intent Configuration */
+"moments_widget_configuration" = "Moments Widget Configuration";
+"motivation_widget_configuration" = "Motivation Widget Configuration";
+"widget_period" = "Period";
+"widget_placeholder" = "Placeholder";
+"widget_content" = "Content";
+"period_month" = "Month";
+"period_quarter" = "Quarter";
+"period_year" = "Year";
+"period_all" = "All";
+"motivation_resources" = "Resources";
+"motivation_highlights" = "Highlights";
+"motivation_all" = "Resources & Highlights";
+
+/* Onboarding */
+"onboarding_welcome_title" = "Welcome to StayHappy";
+"onboarding_welcome_subtitle" = "...your little memory aid for the good things in life";
+"onboarding_welcome_button" = "Start Tour";
+"onboarding_skip" = "Skip";
+
+"onboarding_purpose_title" = "Why StayHappy?";
+"onboarding_purpose_text" = "During depressive episodes, focus on good things is quickly lost. StayHappy uses widgets to remind you again and again that there's more out there.";
+
+"onboarding_moments_title" = "Collect Your Moments";
+"onboarding_moments_text" = "Note down small moments you can look forward to. The new episode of your favorite series, a bath, or something delicious to eat. Bigger moments can be marked as highlights and accompanied by a picture.";
+
+"onboarding_resources_title" = "Your Daily Resources";
+"onboarding_resources_text" = "Write down which resources could enrich you every day. The delicious cappuccino every morning, the scent of your favorite perfume, or dear people around you.";
+
+"onboarding_widgets_title" = "Widgets on Your Home Screen";
+"onboarding_widgets_text" = "StayHappy takes all this information and shows you a clever selection in various widgets that can help you find some hope and look forward to the next day.";
+
+"onboarding_finish_button" = "Let's go!";
+
+/* Onboarding Navigation */
+"onboarding_back" = "Back";
+"onboarding_next" = "Next";
+"onboarding_continue" = "Continue";

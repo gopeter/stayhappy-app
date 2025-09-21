@@ -31,7 +31,7 @@ class ImageSaver {
     
     func writeToDisk(image: UIImage, fileName: String) {
         if let jpegData = image.jpegData(compressionQuality: 0.85) {
-            try? jpegData.write(to: FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg"), options: [.atomic, .completeFileProtection])
+            try? jpegData.write(to: FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg"), options: [.atomic])
         }
     }
     

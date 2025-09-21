@@ -4,8 +4,8 @@
 //
 //  Created by Peter Oesteritz on 06.02.24.
 //
-// See: https://github.com/groue/GRDB.swift/blob/4b934fda754b1cab34394ea89c2dd5acd170d50e/Documentation/DemoApps/GRDBCombineDemo/GRDBCombineDemo/AppDatabase.swift
-// and https://github.com/groue/GRDB.swift/blob/4b934fda754b1cab34394ea89c2dd5acd170d50e/Documentation/DemoApps/GRDBCombineDemo/GRDBCombineDemo/Persistence.swift
+//  See: https://github.com/groue/GRDB.swift/blob/4b934fda754b1cab34394ea89c2dd5acd170d50e/Documentation/DemoApps/GRDBCombineDemo/GRDBCombineDemo/AppDatabase.swift
+//  See: https://github.com/groue/GRDB.swift/blob/4b934fda754b1cab34394ea89c2dd5acd170d50e/Documentation/DemoApps/GRDBCombineDemo/GRDBCombineDemo/Persistence.swift
 
 import Foundation
 import GRDB

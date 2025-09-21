@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 enum ImageSize: String, CaseIterable {
     case systemSmall
@@ -15,9 +16,11 @@ enum ImageSize: String, CaseIterable {
 struct HighlightsTile: View {
     var highlight: Moment
     var photoImage: UIImage?
+    var size: ImageSize
 
     init(highlights: [Moment], size: ImageSize) {
         self.highlight = highlights[0]
+        self.size = size
 
         if highlight.photo != nil {
             let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: highlight.photo!))-\(size).jpg")
@@ -26,17 +29,25 @@ struct HighlightsTile: View {
     }
 
     var body: some View {
-        let widgetSize = getWidgetSize(for: .systemSmall)
+        let widgetFamily: WidgetFamily = size == .systemSmall ? .systemSmall : .systemMedium
+        let widgetSize = getWidgetSize(for: widgetFamily)
 
         RoundedRectangle(cornerRadius: 0, style: .continuous)
-            .fill(photoImage == nil ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: widgetSize.width) : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0))
+            .fill(
+                photoImage == nil
+                    ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: widgetSize.width)
+                    : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0)
+            )
+            .frame(maxWidth: .infinity)
             .frame(height: widgetSize.height)
             .background {
                 if photoImage != nil {
                     Image(uiImage: photoImage!)
                         .resizable()
-                        .scaledToFit()
-                        .frame(height: widgetSize.height, alignment: .center)
+                        .scaledToFill()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: widgetSize.height)
+                        .clipped()
                 }
             }
             .overlay {
@@ -61,5 +72,6 @@ struct HighlightsTile: View {
                     }
                 }.padding(.all)
             }
+            .widgetURL(URL(string: "stayhappy://highlights/image/\(highlight.id)"))
     }
 }

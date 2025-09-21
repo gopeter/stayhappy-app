@@ -8,20 +8,51 @@
 import SwiftUI
 
 struct HelpView: View {
+    @EnvironmentObject var onboardingState: OnboardingState
+
     var body: some View {
         NavigationStack {
             List {
-                Text("Help")
-                Text("Thanks")
-                Text("Buy me a coffee")
+                Section {
+                    Button(action: {
+                        onboardingState.resetOnboarding()
+                    }) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Image(systemName: "arrow.clockwise.circle.fill")
+                                    .foregroundColor(.blue)
+                                    .font(.title2)
+                                Text("restart_onboarding")
+                                    .foregroundColor(.primary)
+                                    .font(.headline)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary)
+                                    .font(.caption)
+                            }
+                            Text("restart_onboarding_description")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                                .multilineTextAlignment(.leading)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+
+                Section {
+                    Text("help")
+                    Text("thanks")
+                    Text("buy_me_coffee")
+                }
             }.background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Help")
-                .toolbarTitleDisplayMode(.large)
+                .navigationTitle("help")
         }
     }
 }
 
 #Preview {
     HelpView()
+        .environmentObject(OnboardingState())
 }

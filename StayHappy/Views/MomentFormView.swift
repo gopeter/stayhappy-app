@@ -5,9 +5,9 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import os.log
 import PhotosUI
 import SwiftUI
+import os.log
 
 struct BackgroundOptionView: View {
     @Environment(\.dismiss) var dismiss
@@ -18,40 +18,51 @@ struct BackgroundOptionView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                Button(action: {
-                    self.selectedGradient = self.gradients.randomElement()!
-                    dismiss()
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Text("Choose random color").padding(.vertical, 14)
-                        Spacer()
-                    }
-                })
-
-                ForEach(0 ..< gradients.count, id: \.self) { index in
-                    Button(action: {
-                        self.selectedGradient = self.gradients[index]
-                    }, label: {
+                Button(
+                    action: {
+                        self.selectedGradient = self.gradients.randomElement()!
+                        dismiss()
+                    },
+                    label: {
                         HStack {
-                            Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 24, height: 24)
-                                .foregroundStyle(.text.opacity(self.selectedGradient == self.gradients[index] ? 1 : 0.3))
-                                .padding(.trailing, 10)
-
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(HappyGradients(rawValue: self.gradients[index])!.linear())
-                                .frame(height: 80)
-                                .overlay {
-                                    Text(self.gradients[index].titleCased()).foregroundStyle(.white) .shadow(color: .black.opacity(0.4), radius: 3, x: 0, y: 1)
-                                }
+                            Spacer()
+                            Text("choose_random_color").padding(.vertical, 14)
+                            Spacer()
                         }
-                    }).padding(.horizontal, 20)
+                    }
+                )
+
+                ForEach(0..<gradients.count, id: \.self) { index in
+                    Button(
+                        action: {
+                            self.selectedGradient = self.gradients[index]
+                        },
+                        label: {
+                            HStack {
+                                Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 24, height: 24)
+                                    .foregroundStyle(.text.opacity(self.selectedGradient == self.gradients[index] ? 1 : 0.3))
+                                    .padding(.trailing, 10)
+
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(HappyGradients(rawValue: self.gradients[index])!.linear())
+                                    .frame(height: 80)
+                                    .overlay {
+                                        Text(self.gradients[index].titleCased()).foregroundStyle(.white).shadow(
+                                            color: .black.opacity(0.4),
+                                            radius: 3,
+                                            x: 0,
+                                            y: 1
+                                        )
+                                    }
+                            }
+                        }
+                    ).padding(.horizontal, 20)
                 }
             }
-        }.navigationTitle("Background")
+        }.navigationTitle("background")
             .navigationBarTitleDisplayMode(.inline)
             .background(Color("AppBackgroundColor"))
     }
@@ -106,19 +117,19 @@ struct MomentFormView: View {
         }
 
         // save image to file system if ...
-        if
-            // ... no photo was given and a photo was selected
-            (moment?.photo == nil && photoImage != nil) ||
+        if  // ... no photo was given and a photo was selected
+        (moment?.photo == nil && photoImage != nil)
             // ... a photo was given and a new one was chosen
-            (moment?.photo != nil && photoPickerItem != nil && photoImage != nil)
+            || (moment?.photo != nil && photoPickerItem != nil && photoImage != nil)
         {
             photo = UUID().uuidString
             let imageSaver = ImageSaver(image: photoImage!, fileName: photo!)
-            
+
             do {
-                try imageSaver.writeToDisk()    
+                try imageSaver.writeToDisk()
                 try imageSaver.generateWidgetThumbnails()
-            } catch {
+            }
+            catch {
                 // TODO: log something useful
                 Logger.debug.error("Error: \(error.localizedDescription)")
             }
@@ -140,7 +151,8 @@ struct MomentFormView: View {
             try appDatabase.saveMoment(&newMoment)
 
             dismiss()
-        } catch {
+        }
+        catch {
             // TODO: log something useful
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
@@ -150,7 +162,8 @@ struct MomentFormView: View {
         do {
             try appDatabase.deleteMoments([moment!.id])
             dismiss()
-        } catch {
+        }
+        catch {
             // TODO: log something useful
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
@@ -169,8 +182,9 @@ struct MomentFormView: View {
                 Toggle("Highlight", isOn: $isHighlight)
             } header: {
                 if moment != nil {
-                    Text("Update moment")
-                } else {
+                    Text("update_moment")
+                }
+                else {
                     Color.clear
                         .frame(width: 0, height: 0)
                         .accessibilityHidden(true)
@@ -181,13 +195,15 @@ struct MomentFormView: View {
                 Section {
                     if photoImage == nil {
                         ZStack {
-                            NavigationLink(destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background)) {
+                            NavigationLink(
+                                destination: BackgroundOptionView(gradients: HappyGradients.allCases.map { $0.rawValue }, selectedGradient: $background)
+                            ) {
                                 EmptyView()
-                            } .opacity(0.0)
+                            }.opacity(0.0)
                                 .buttonStyle(PlainButtonStyle())
 
                             HStack {
-                                Text("Background")
+                                Text("background")
                                     .foregroundStyle(.text)
                                     .padding(.leading, 20)
 
@@ -212,15 +228,20 @@ struct MomentFormView: View {
                                 .frame(height: 150)
                                 .padding(0)
 
-                        } else {
-                            Text("Select photo").padding(.horizontal, 20)
+                        }
+                        else {
+                            Text("select_photo").padding(.horizontal, 20)
                         }
                     }
 
                     if photoImage != nil {
-                        Button(role: .destructive, action: removeImage, label: {
-                            Text("Remove photo")
-                        }).padding(.horizontal, 20)
+                        Button(
+                            role: .destructive,
+                            action: removeImage,
+                            label: {
+                                Text("remove_photo")
+                            }
+                        ).padding(.horizontal, 20)
                     }
                 }.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     .listRowBackground(Color("CardBackgroundColor"))
@@ -228,7 +249,8 @@ struct MomentFormView: View {
                         Task {
                             if let loaded = try? await photoPickerItem?.loadTransferable(type: Data.self) {
                                 photoImage = UIImage(data: loaded)
-                            } else {
+                            }
+                            else {
                                 print("Failed")
                             }
                         }
@@ -236,14 +258,21 @@ struct MomentFormView: View {
             }
 
             Section {
-                Button(action: saveMoment, label: {
-                    Text("Save")
-                }).disabled(disableForm)
+                Button(
+                    action: saveMoment,
+                    label: {
+                        Text("save")
+                    }
+                ).disabled(disableForm)
 
                 if moment != nil {
-                    Button(role: .destructive, action: deleteMoment, label: {
-                        Text("Delete")
-                    })
+                    Button(
+                        role: .destructive,
+                        action: deleteMoment,
+                        label: {
+                            Text("delete")
+                        }
+                    )
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
         }.scrollContentBackground(.hidden)

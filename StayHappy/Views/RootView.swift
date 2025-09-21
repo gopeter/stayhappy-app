@@ -27,17 +27,6 @@ struct RootView: View {
 
             NavigationBarView()
         }.ignoresSafeArea(.keyboard)
-            .onAppear {
-                #if DEBUG
-                    // Simple localization debug
-                    let momentsText = NSLocalizedString("moments", comment: "")
-                    let helpText = NSLocalizedString("help", comment: "")
-                    print("🧪 Localization Debug:")
-                    print("   'moments' -> '\(momentsText)'")
-                    print("   'help' -> '\(helpText)'")
-                    print("   Bundle localizations: \(Bundle.main.localizations)")
-                #endif
-            }
     }
 }
 

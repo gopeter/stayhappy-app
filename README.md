@@ -1,7 +1,7 @@
 # StayHappy
 
 ## Todos
-- Onboarding & Help per page
+- Help (+ per page)
 
 ## Roadmap & Wishlist
 - Resources: sorting, tags, filter for tags, Emoji picker

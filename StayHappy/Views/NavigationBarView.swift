@@ -18,9 +18,13 @@ struct NavigationItem: View {
             Image(self.icon)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 20.0, height: 20.0)
+                .frame(width: 30.0, height: 20.0)
                 .foregroundStyle(isActive ? Color.accentColor : Color.gray)
-        }).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
+                .padding()
+                .frame(width: .infinity, height: 54)
+        })
+            .contentShape(Rectangle())
+
             .buttonStyle(HighlightButtonStyle())
     }
 }
@@ -60,7 +64,7 @@ struct NavigationBarView: View {
                 NavigationItem(icon: "badge-help-symbol", action: {
                     globalData.activeView = Views.help
                 }, isActive: globalData.activeView == Views.help)
-            }.padding(.horizontal, 35)
+            }.padding(.horizontal, 0)
         }
     }
 }

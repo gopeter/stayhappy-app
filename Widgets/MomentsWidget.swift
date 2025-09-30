@@ -158,7 +158,6 @@ struct MomentsMedium: View {
                 }
                 else {
                     MotivationSmall(placeholder: entry.configuration.placeholder)
-                        .padding(EdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 16))
                 }
             }
         }

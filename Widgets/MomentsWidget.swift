@@ -134,30 +134,31 @@ struct MomentsMedium: View {
             MotivationMedium(placeholder: entry.configuration.placeholder)
         }
         else {
-            HStack(alignment: .center, spacing: moments.count > 4 ? 8 : 0) {
+            HStack(alignment: .top, spacing: moments.count > 4 ? 8 : 0) {
                 VStack(alignment: .leading, spacing: 10) {
                     ForEach(moments.prefix(4)) { moment in
                         MomentDetail(moment: moment)
                     }
-
+    
                     Spacer()
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 32, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
-
+                .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
+    
                 if moments.count > 4 {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(moments.dropFirst(4).prefix(4)) { moment in
                             MomentDetail(moment: moment)
                         }
-
+    
                         Spacer()
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 32, leading: moments.count > 4 ? 0 : 16, bottom: 16, trailing: 16))
+                    .padding(EdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 16))
                 }
                 else {
                     MotivationSmall(placeholder: entry.configuration.placeholder)
+                        .padding(EdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 16))
                 }
             }
         }

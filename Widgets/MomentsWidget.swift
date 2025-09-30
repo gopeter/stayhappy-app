@@ -143,7 +143,7 @@ struct MomentsMedium: View {
                     Spacer()
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
+                .padding(EdgeInsets(top: 32, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
     
                 if moments.count > 4 {
                     VStack(alignment: .leading, spacing: 10) {
@@ -154,7 +154,7 @@ struct MomentsMedium: View {
                         Spacer()
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 16))
+                    .padding(EdgeInsets(top: 32, leading: 0, bottom: 16, trailing: 16))
                 }
                 else {
                     MotivationSmall(placeholder: entry.configuration.placeholder)

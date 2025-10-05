@@ -127,7 +127,7 @@ struct MomentFormView: View {
 
             do {
                 try imageSaver.writeToDisk()
-                try imageSaver.generateWidgetThumbnails()
+                imageSaver.reloadWidgets()
             }
             catch {
                 // TODO: log something useful

@@ -26,6 +26,11 @@
 		454328DA2B763527007956A0 /* ResourceFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328D92B763527007956A0 /* ResourceFormView.swift */; };
 		454328DC2B7635AC007956A0 /* FormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328DB2B7635AC007956A0 /* FormView.swift */; };
 		454328E22B76D4F3007956A0 /* HighlightButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */; };
+		454D8CBB2E92AA7A00AF382D /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454D8CBA2E92AA7A00AF382D /* Localization.swift */; };
+		454D8CBC2E92AA7A00AF382D /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454D8CBA2E92AA7A00AF382D /* Localization.swift */; };
+		454D8CBE2E92AA8B00AF382D /* ImageProcessingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454D8CBD2E92AA8B00AF382D /* ImageProcessingService.swift */; };
+		454D8CBF2E92AA8B00AF382D /* ImageProcessingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454D8CBD2E92AA8B00AF382D /* ImageProcessingService.swift */; };
+		454D8CC02E92AAD400AF382D /* ImageSaliencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */; };
 		4558FB862B874D6C009D506C /* HighlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB852B874D6C009D506C /* HighlightView.swift */; };
 		4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB9E2B87A601009D506C /* HappyGradients.swift */; };
 		4558FBA22B87B0D5009D506C /* Hue in Frameworks */ = {isa = PBXBuildFile; productRef = 4558FBA12B87B0D5009D506C /* Hue */; };
@@ -94,8 +99,6 @@
 		45F8C8F32BE96F9F004D8718 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8F22BE96F9F004D8718 /* Image.swift */; };
 		45F8C8F42BE97C17004D8718 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8F22BE96F9F004D8718 /* Image.swift */; };
 		45F8C8FF2BEB96E7004D8718 /* QuickLookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */; };
-		45F8C9012BEBF0EF004D8718 /* WidgetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */; };
-		45F8C9022BEBFA46004D8718 /* WidgetSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */; };
 		45F8C9052BEFF650004D8718 /* MotivationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8C9032BEFF650004D8718 /* MotivationWidget.swift */; };
 /* End PBXBuildFile section */
 
@@ -151,6 +154,8 @@
 		454328D92B763527007956A0 /* ResourceFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceFormView.swift; sourceTree = "<group>"; };
 		454328DB2B7635AC007956A0 /* FormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormView.swift; sourceTree = "<group>"; };
 		454328E12B76D4F3007956A0 /* HighlightButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightButtonStyle.swift; sourceTree = "<group>"; };
+		454D8CBA2E92AA7A00AF382D /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		454D8CBD2E92AA8B00AF382D /* ImageProcessingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessingService.swift; sourceTree = "<group>"; };
 		4558FB852B874D6C009D506C /* HighlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightView.swift; sourceTree = "<group>"; };
 		4558FB9E2B87A601009D506C /* HappyGradients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HappyGradients.swift; sourceTree = "<group>"; };
 		455FECA62B90FAFF006A2592 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -204,7 +209,6 @@
 		45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaliencyService.swift; sourceTree = "<group>"; };
 		45F8C8F22BE96F9F004D8718 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookService.swift; sourceTree = "<group>"; };
-		45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSize.swift; sourceTree = "<group>"; };
 		45F8C9032BEFF650004D8718 /* MotivationWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -447,8 +451,8 @@
 		45E1655E2B4EF72900F55A17 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				45783E732E5F9BD000DDAC08 /* OnboardingData.swift */,
 				45E1655F2B4EF96700F55A17 /* Moment.swift */,
+				45783E732E5F9BD000DDAC08 /* OnboardingData.swift */,
 				454328D72B763480007956A0 /* Resource.swift */,
 			);
 			path = Models;
@@ -457,8 +461,8 @@
 		45F8C8F52BE97C23004D8718 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				454D8CBA2E92AA7A00AF382D /* Localization.swift */,
 				454014FE2B7278C0003A7E24 /* Log.swift */,
-				45F8C9002BEBF0EF004D8718 /* WidgetSize.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -466,6 +470,7 @@
 		45F8C8FD2BEB96D3004D8718 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				454D8CBD2E92AA8B00AF382D /* ImageProcessingService.swift */,
 				45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */,
 				45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */,
 			);
@@ -668,15 +673,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				454D8CBE2E92AA8B00AF382D /* ImageProcessingService.swift in Sources */,
 				45AFCB8C2BE03A3B009D1FD4 /* WidgetsBundle.swift in Sources */,
 				45ADE7912BFFC84800303B4B /* ResourcesTile.swift in Sources */,
 				45ADE78D2BFFC6C800303B4B /* MotivationSmall.swift in Sources */,
 				45AFCBB22BE4181D009D1FD4 /* WidgetDate.swift in Sources */,
 				45AFCBB02BE37E5B009D1FD4 /* Database.swift in Sources */,
+				454D8CC02E92AAD400AF382D /* ImageSaliencyService.swift in Sources */,
 				45AFCB9A2BE03A7E009D1FD4 /* TitleCased.swift in Sources */,
 				45CC79B92C07C5B400D254E5 /* MotivationMedium.swift in Sources */,
 				45F8C8F42BE97C17004D8718 /* Image.swift in Sources */,
 				45AFCBAA2BE0444C009D1FD4 /* Log.swift in Sources */,
+				454D8CBC2E92AA7A00AF382D /* Localization.swift in Sources */,
 				45AFCB8E2BE03A3B009D1FD4 /* MomentsWidget.swift in Sources */,
 				45F8C9052BEFF650004D8718 /* MotivationWidget.swift in Sources */,
 				45ADE7982C00BC6500303B4B /* Environment.swift in Sources */,
@@ -684,7 +692,6 @@
 				45AFCB902BE03A3B009D1FD4 /* WidgetIntent.swift in Sources */,
 				45783E752E5F9BD000DDAC08 /* OnboardingData.swift in Sources */,
 				45AFCB9C2BE03A83009D1FD4 /* Moment.swift in Sources */,
-				45F8C9022BEBFA46004D8718 /* WidgetSize.swift in Sources */,
 				45ADE78E2BFFC6CD00303B4B /* HighlightsTile.swift in Sources */,
 				45AFCBB82BE4E5C0009D1FD4 /* Date.swift in Sources */,
 				45AFCBB52BE4CFFF009D1FD4 /* Calendar.swift in Sources */,
@@ -702,7 +709,6 @@
 				45E4F7312B6C3B2F005C0E77 /* HelpView.swift in Sources */,
 				45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */,
 				4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */,
-				45F8C9012BEBF0EF004D8718 /* WidgetSize.swift in Sources */,
 				45F8C8F32BE96F9F004D8718 /* Image.swift in Sources */,
 				45AFCBB42BE4CFFF009D1FD4 /* Calendar.swift in Sources */,
 				45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */,
@@ -713,7 +719,9 @@
 				45783E742E5F9BD000DDAC08 /* OnboardingData.swift in Sources */,
 				45E1655B2B4EF68700F55A17 /* RootView.swift in Sources */,
 				45AFCBB72BE4E5C0009D1FD4 /* Date.swift in Sources */,
+				454D8CBB2E92AA7A00AF382D /* Localization.swift in Sources */,
 				453F617D2D7752400075A3F9 /* ImageViewer.swift in Sources */,
+				454D8CBF2E92AA8B00AF382D /* ImageProcessingService.swift in Sources */,
 				45E4F72F2B6BC2CF005C0E77 /* MomentView.swift in Sources */,
 				454014F82B71322B003A7E24 /* Database.swift in Sources */,
 				459BE7832B8E9C1000433B60 /* TitleCased.swift in Sources */,

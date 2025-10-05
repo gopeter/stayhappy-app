@@ -13,7 +13,6 @@ struct HighlightsView: View {
     @EnvironmentObject var globalData: GlobalData
 
     let deviceSize = UIScreen.main.bounds.size
-    let widgetSize = getWidgetSize(for: .systemMedium)
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -26,8 +25,7 @@ struct HighlightsView: View {
                             ForEach(self.moments, id: \.id) { moment in
                                 HighlightView(
                                     moment: moment,
-                                    deviceSize: deviceSize,
-                                    widgetSize: widgetSize
+                                    deviceSize: deviceSize
                                 )
                             }
                         }

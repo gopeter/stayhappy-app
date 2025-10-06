@@ -170,8 +170,7 @@ struct HighlightView: View {
         }
 
         // Load original image for full-screen view
-        let photoUrl = FileManager.documentsDirectory
-            .appendingPathComponent("\(photoFileName).jpg")
+        let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
         photoImage = UIImage(contentsOfFile: photoUrl.path)
 
         // Generate thumbnail using ImageProcessingService

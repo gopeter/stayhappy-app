@@ -11,148 +11,148 @@ import Throttler
 struct HighlightView: View {
     var moment: Moment
     var deviceSize: CGSize
-
+    
     @State private var thumbnailImage: UIImage?
     @State private var photoImage: UIImage?
     @State private var isImagePresented = false
     @State private var showShareSheet = false
     @EnvironmentObject var globalData: GlobalData
-
+    
     init(moment: Moment, deviceSize: CGSize) {
         self.moment = moment
         self.deviceSize = deviceSize
     }
-
+    
     var body: some View {
-        GeometryReader { geometry in
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(
-                    thumbnailImage == nil
-                        ? HappyGradients(rawValue: moment.background)!.radial(
-                            startRadius: -50,
-                            endRadius: geometry.size.width
-                        )
-                        : RadialGradient(
-                            gradient: Gradient(colors: [.clear, .clear]),
-                            center: .center,
-                            startRadius: 0,
-                            endRadius: 0
-                        )
+        RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .fill(
+                thumbnailImage == nil
+                ? HappyGradients(rawValue: moment.background)!.radial(
+                    startRadius: -50,
+                    endRadius: self.deviceSize.width
                 )
-                .frame(width: geometry.size.width - 40, height: 120)
-                .padding(.horizontal, 20)
-                .background {
-                    if thumbnailImage != nil {
-                        Image(uiImage: thumbnailImage!)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: geometry.size.width - 40, height: 120, alignment: .center)
-                            .cornerRadius(10)
-                            .padding(.horizontal, 20)
-                            .clipped()
-                    }
-                }
-                .overlay {
-                    VStack {
-                        Spacer()
-                        HStack(alignment: .bottom) {
-                            VStack(alignment: .leading) {
-                                Text(
-                                    moment.startAt.formatted(
-                                        .dateTime.day().month().year()
-                                    )
-                                ).foregroundStyle(.white)
-                                    .font(.caption)
-                                    .shadow(
-                                        color: .black.opacity(0.4),
-                                        radius: 2,
-                                        x: 0,
-                                        y: 1
-                                    )
-                                Text(moment.title)
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.white)
-                                    .shadow(
-                                        color: .black.opacity(0.4),
-                                        radius: 3,
-                                        x: 0,
-                                        y: 1
-                                    )
-                            }
-
-                            Spacer()
-
-                            if photoImage != nil {
-                                Button(
-                                    action: {
-                                        debounce(.seconds(0.1), option: .runFirst) {
-                                            isImagePresented = true
-                                        }
-                                    },
-                                    label: {
-                                        Image("maximize-symbol")
-                                            .foregroundStyle(.white)
-                                            .shadow(
-                                                color: .black.opacity(0.4),
-                                                radius: 3,
-                                                x: 0,
-                                                y: 1
-                                            )
-                                            .padding(10)
-                                    }
-                                )
-                                .contentShape(Rectangle())
-                                .offset(x: 5, y: 5)
-                            }
-                        }.padding(.horizontal, 40)
-                            .padding(.bottom, 20)
-                    }
-                }
-                .onAppear {
-                    checkAndOpenImage()
-                    loadImages(viewSize: geometry.size)
-                }
-                .onChange(of: globalData.highlightImageToShow) { _ in
-                    checkAndOpenImage()
-                }
-        }
-        .fadeInFullScreenCover(isPresented: $isImagePresented) {
-            Group {
-                if let image = photoImage {
-                    ZStack {
-                        ImageViewer(image: image)
-                            .ignoresSafeArea(.all)
-
-                        VStack {
-                            Spacer()
-
-                            HStack {
-                                Spacer()
-                                ImageViewerNavigationBarView(
-                                    onShare: { showShareSheet = true },
-                                    onClose: {
-                                        isImagePresented = false
-                                    }
-                                )
-                                Spacer()
-                            }
-                        }
-                    }
-                    .ignoresSafeArea(.all)
-
-                    .sheet(isPresented: $showShareSheet) {
-                        if let image = photoImage {
-                            ShareSheet(activityItems: [image])
-                        }
-                    }
-                }
-                else {
-                    EmptyView()
+                : RadialGradient(
+                    gradient: Gradient(colors: [.clear, .clear]),
+                    center: .center,
+                    startRadius: 0,
+                    endRadius: 0
+                )
+            )
+            .frame(width: self.deviceSize.width - 40, height: 120)
+            .padding(.horizontal, 20)
+            .background {
+                if thumbnailImage != nil {
+                    Image(uiImage: thumbnailImage!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: self.deviceSize.width - 40, height: 120, alignment: .center)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 20)
+                        .clipped()
                 }
             }
+            .overlay {
+                VStack {
+                    Spacer()
+                    HStack(alignment: .bottom) {
+                        VStack(alignment: .leading) {
+                            Text(
+                                moment.startAt.formatted(
+                                    .dateTime.day().month().year()
+                                )
+                            ).foregroundStyle(.white)
+                                .font(.caption)
+                                .shadow(
+                                    color: .black.opacity(0.4),
+                                    radius: 2,
+                                    x: 0,
+                                    y: 1
+                                )
+                            Text(moment.title)
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
+                                .shadow(
+                                    color: .black.opacity(0.4),
+                                    radius: 3,
+                                    x: 0,
+                                    y: 1
+                                )
+                        }
+                        
+                        Spacer()
+                        
+                        if photoImage != nil {
+                            Button(
+                                action: {
+                                    debounce(.seconds(0.1), option: .runFirst) {
+                                        isImagePresented = true
+                                    }
+                                },
+                                label: {
+                                    Image("maximize-symbol")
+                                        .foregroundStyle(.white)
+                                        .shadow(
+                                            color: .black.opacity(0.4),
+                                            radius: 3,
+                                            x: 0,
+                                            y: 1
+                                        )
+                                        .padding(10)
+                                }
+                            )
+                            .contentShape(Rectangle())
+                            .offset(x: 5, y: 5)
+                        }
+                    }.padding(.horizontal, 40)
+                        .padding(.bottom, 20)
+                }
+            }
+            .onAppear {
+                checkAndOpenImage()
+                loadImages(viewSize: self.deviceSize)
+            }
+            .onChange(of: globalData.highlightImageToShow) { _ in
+                checkAndOpenImage()
+            }
+            .fadeInFullScreenCover(isPresented: $isImagePresented) {
+                Group {
+                    if let image = photoImage {
+                        ZStack {
+                            ImageViewer(image: image)
+                                .ignoresSafeArea(.all)
+                            
+                            VStack {
+                                Spacer()
+                                
+                                HStack {
+                                    Spacer()
+                                    ImageViewerNavigationBarView(
+                                        onShare: { showShareSheet = true },
+                                        onClose: {
+                                            isImagePresented = false
+                                        }
+                                    )
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .ignoresSafeArea(.all)
+                        
+                        .sheet(isPresented: $showShareSheet) {
+                            if let image = photoImage {
+                                ShareSheet(activityItems: [image])
+                            }
+                        }
+                    }
+                    else {
+                        EmptyView()
+                    }
+                }
+                
+            }
         }
-    }
+    
 
     private func checkAndOpenImage() {
         let shouldOpenImage = globalData.highlightImageToShow == moment.id

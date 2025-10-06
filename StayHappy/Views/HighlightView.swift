@@ -247,7 +247,7 @@ struct ImageNavigationItem: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(isActive ? Color.accentColor : Color.white)
+                    .foregroundStyle(Color.gray)
             }
         ).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
             .buttonStyle(HighlightButtonStyle())
@@ -281,5 +281,5 @@ struct ImageNavigationItem: View {
             updatedAt: Date()
         ),
         deviceSize: UIScreen.main.bounds.size
-    )
+    ).environmentObject(GlobalData(activeView: .highlights))
 }

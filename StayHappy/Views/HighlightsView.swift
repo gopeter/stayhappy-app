@@ -53,5 +53,5 @@ struct HighlightsView: View {
 }
 
 #Preview {
-    HighlightsView()
+    HighlightsView().environmentObject(GlobalData(activeView: .highlights))
 }

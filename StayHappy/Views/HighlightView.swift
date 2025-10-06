@@ -11,32 +11,32 @@ import Throttler
 struct HighlightView: View {
     var moment: Moment
     var deviceSize: CGSize
-    
+
     @State private var thumbnailImage: UIImage?
     @State private var photoImage: UIImage?
     @State private var isImagePresented = false
     @State private var showShareSheet = false
     @EnvironmentObject var globalData: GlobalData
-    
+
     init(moment: Moment, deviceSize: CGSize) {
         self.moment = moment
         self.deviceSize = deviceSize
     }
-    
+
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(
                 thumbnailImage == nil
-                ? HappyGradients(rawValue: moment.background)!.radial(
-                    startRadius: -50,
-                    endRadius: self.deviceSize.width
-                )
-                : RadialGradient(
-                    gradient: Gradient(colors: [.clear, .clear]),
-                    center: .center,
-                    startRadius: 0,
-                    endRadius: 0
-                )
+                    ? HappyGradients(rawValue: moment.background)!.radial(
+                        startRadius: -50,
+                        endRadius: self.deviceSize.width
+                    )
+                    : RadialGradient(
+                        gradient: Gradient(colors: [.clear, .clear]),
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 0
+                    )
             )
             .frame(width: self.deviceSize.width - 40, height: 120)
             .padding(.horizontal, 20)
@@ -79,9 +79,9 @@ struct HighlightView: View {
                                     y: 1
                                 )
                         }
-                        
+
                         Spacer()
-                        
+
                         if photoImage != nil {
                             Button(
                                 action: {
@@ -121,10 +121,10 @@ struct HighlightView: View {
                         ZStack {
                             ImageViewer(image: image)
                                 .ignoresSafeArea(.all)
-                            
+
                             VStack {
                                 Spacer()
-                                
+
                                 HStack {
                                     Spacer()
                                     ImageViewerNavigationBarView(
@@ -138,7 +138,7 @@ struct HighlightView: View {
                             }
                         }
                         .ignoresSafeArea(.all)
-                        
+
                         .sheet(isPresented: $showShareSheet) {
                             if let image = photoImage {
                                 ShareSheet(activityItems: [image])
@@ -149,10 +149,9 @@ struct HighlightView: View {
                         EmptyView()
                     }
                 }
-                
+
             }
-        }
-    
+    }
 
     private func checkAndOpenImage() {
         let shouldOpenImage = globalData.highlightImageToShow == moment.id
@@ -166,23 +165,41 @@ struct HighlightView: View {
     }
 
     private func loadImages(viewSize: CGSize) {
-        guard let photoFileName = moment.photo else { return }
+        guard let photoFileName = moment.photo else {
+            print("DEBUG HighlightView: No photo filename for moment \(moment.id)")
+            return
+        }
+
+        print("DEBUG HighlightView: Loading images for '\(photoFileName)' with view size: \(viewSize)")
 
         // Load original image for full-screen view
         let photoUrl = FileManager.documentsDirectory
             .appendingPathComponent("\(photoFileName).jpg")
         photoImage = UIImage(contentsOfFile: photoUrl.path)
 
+        print("DEBUG HighlightView: Original image loaded: \(photoImage != nil ? "SUCCESS" : "FAILED")")
+        if let img = photoImage {
+            print("DEBUG HighlightView: Original image size: \(img.size)")
+        }
+
         // Generate thumbnail using ImageProcessingService
         Task {
             let targetSize = CGSize(width: viewSize.width - 40, height: 120)
+            print("DEBUG HighlightView: Target thumbnail size: \(targetSize)")
+
             let processedImage = await ImageProcessingService.shared.getProcessedImage(
                 for: photoFileName,
                 targetSize: targetSize
             )
 
+            print("DEBUG HighlightView: ImageProcessingService result: \(processedImage != nil ? "SUCCESS" : "FAILED")")
+            if let img = processedImage {
+                print("DEBUG HighlightView: Processed image size: \(img.size)")
+            }
+
             await MainActor.run {
                 thumbnailImage = processedImage
+                print("DEBUG HighlightView: Set thumbnailImage on main thread")
             }
         }
     }

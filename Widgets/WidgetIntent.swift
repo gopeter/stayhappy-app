@@ -49,6 +49,6 @@ struct MomentsWidgetConfigurationIntent: WidgetConfigurationIntent {
 struct MotivationWidgetConfigurationIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = LocalizedStringResource("motivation_widget_configuration")
 
-    @Parameter(title: LocalizedStringResource("widget_content"), default: .highlights)
+    @Parameter(title: LocalizedStringResource("widget_content"), default: .all)
     var content: WidgetMotivationType
 }

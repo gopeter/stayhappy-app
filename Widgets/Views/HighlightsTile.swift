@@ -62,7 +62,9 @@ struct HighlightsTile: View {
 
                             Spacer()
                         }
-                    }.padding(.all)
+                    }
+                    .padding(16)
+                    
                 }
                 .widgetURL(URL(string: "stayhappy://highlights/image/\(highlight.id)"))
                 .onAppear {

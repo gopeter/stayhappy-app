@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImageProcessingService {
+final class ImageProcessingService: @unchecked Sendable {
     static let shared = ImageProcessingService()
 
     private var cache: NSCache<NSString, UIImage> = NSCache()
@@ -27,10 +27,10 @@ class ImageProcessingService {
     ///   - widgetSize: The actual widget size from GeometryReader
     /// - Returns: Processed UIImage or nil if not found
     func getProcessedImage(for fileName: String, widgetSize: CGSize) async -> UIImage? {
-        let cacheKey = "\(fileName)-\(Int(widgetSize.width))x\(Int(widgetSize.height))" as NSString
+        let cacheKey = "\(fileName)-\(Int(widgetSize.width))x\(Int(widgetSize.height))"
 
         // Check cache first
-        if let cachedImage = cache.object(forKey: cacheKey) {
+        if let cachedImage = cache.object(forKey: cacheKey as NSString) {
             return cachedImage
         }
 
@@ -41,15 +41,15 @@ class ImageProcessingService {
         }
 
         // Process image with device scale
-        let deviceScale = UIScreen.main.scale
+        let deviceScale = await UIScreen.main.scale
         let targetSize = CGSize(width: widgetSize.width * deviceScale, height: widgetSize.height * deviceScale)
         let processedImage = await processImage(originalImage, targetSize: targetSize)
 
         // Cache the result with cost (image size in bytes)
         let cost = Int(processedImage.size.width * processedImage.size.height * 4)  // 4 bytes per pixel (RGBA)
         cacheQueue.async(flags: .barrier) {
-            self.cache.setObject(processedImage, forKey: cacheKey, cost: cost)
-            self.cacheKeys.insert(cacheKey as String)
+            self.cache.setObject(processedImage, forKey: cacheKey as NSString, cost: cost)
+            self.cacheKeys.insert(cacheKey)
         }
 
         return processedImage
@@ -61,10 +61,10 @@ class ImageProcessingService {
     ///   - targetSize: The target size for the processed image
     /// - Returns: Processed UIImage or nil if not found
     func getProcessedImage(for fileName: String, targetSize: CGSize) async -> UIImage? {
-        let cacheKey = "\(fileName)-\(Int(targetSize.width))x\(Int(targetSize.height))" as NSString
+        let cacheKey = "\(fileName)-\(Int(targetSize.width))x\(Int(targetSize.height))"
 
         // Check cache first
-        if let cachedImage = cache.object(forKey: cacheKey) {
+        if let cachedImage = cache.object(forKey: cacheKey as NSString) {
             return cachedImage
         }
 
@@ -80,8 +80,8 @@ class ImageProcessingService {
         // Cache the result with cost (image size in bytes)
         let cost = Int(processedImage.size.width * processedImage.size.height * 4)  // 4 bytes per pixel (RGBA)
         cacheQueue.async(flags: .barrier) {
-            self.cache.setObject(processedImage, forKey: cacheKey, cost: cost)
-            self.cacheKeys.insert(cacheKey as String)
+            self.cache.setObject(processedImage, forKey: cacheKey as NSString, cost: cost)
+            self.cacheKeys.insert(cacheKey)
         }
 
         return processedImage

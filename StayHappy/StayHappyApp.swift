@@ -59,6 +59,10 @@ struct StayHappyApp: App {
                         .onOpenURL { url in
                             handleDeepLink(url: url)
                         }
+                        .task {
+                            // Run widget image migration on app startup
+                            await WidgetImageMigrationService.shared.runMigrationIfNeeded()
+                        }
                 }
                 else {
                     OnboardingView()

@@ -8,35 +8,26 @@
 import SwiftUI
 
 struct MomentsSmall: View {
-    @Environment(\.appDatabase) var appDatabase
-
     var entry: MomentsWidgtEntry
-    var moments: [Moment] = []
 
-    init(entry: MomentsWidgtEntry) {
-        self.entry = entry
-
-        do {
-            try appDatabase.reader.read { db in
-                self.moments =
-                    try Moment
-                    .all()
-                    .filterByPeriod(">=")
-                    .filterByPeriod("<=", period: entry.configuration.period)
-                    .order(Moment.Columns.startAt.asc)
-                    .limit(4)
-                    .fetchAll(db)
-            }
-        }
-        catch {
-            // TODO: log something useful
-            print("error: \(error.localizedDescription)")
-        }
+    private var moments: [Moment] {
+        Array(entry.moments.prefix(4))
     }
 
     var body: some View {
         if moments.count == 0 {
-            MotivationSmall(placeholder: entry.configuration.placeholder)
+            MotivationSmall(
+                entry: MotivationWidgtEntry(
+                    date: entry.date,
+                    configuration: {
+                        let config = MotivationWidgetConfigurationIntent()
+                        config.content = entry.configuration.placeholder
+                        return config
+                    }(),
+                    resources: entry.placeholderResources,
+                    highlights: entry.placeholderHighlights
+                )
+            )
         }
         else {
             HStack {

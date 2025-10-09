@@ -179,7 +179,7 @@ struct HighlightView: View {
 
             let processedImage = await ImageProcessingService.shared.getProcessedImage(
                 for: photoFileName,
-                targetSize: targetSize
+                size: targetSize
             )
 
             await MainActor.run {

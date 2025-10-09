@@ -37,106 +37,54 @@ final class ImageProcessingService: @unchecked Sendable {
 
     // MARK: - Public Interface
 
-    /// Generates a processed image for the given widget size
+    /// Gets the appropriate pre-generated widget image
     /// - Parameters:
     ///   - fileName: The base filename of the image
-    ///   - widgetSize: The actual widget size from GeometryReader
-    /// - Returns: Processed UIImage or nil if not found
-    func getProcessedImage(for fileName: String, widgetSize: CGSize) async -> UIImage? {
-        let cacheKey = "\(fileName)-\(Int(widgetSize.width))x\(Int(widgetSize.height))"
-        let cacheKeyNS = cacheKey as NSString
+    ///   - size: The widget size (used to determine aspect ratio)
+    /// - Returns: Pre-generated widget image or nil if not found
+    func getProcessedImage(for fileName: String, size: CGSize) async -> UIImage? {
+        // Determine which pre-generated image to use based on aspect ratio
+        let aspectRatio = size.width / size.height
+        let widgetSuffix: String
+
+        if aspectRatio > 1.5 {
+            // Wide widget (medium) - use 2x1 variant
+            widgetSuffix = "_widget_2x1"
+        }
+        else {
+            // Square-ish widget (small) - use 1x1 variant
+            widgetSuffix = "_widget_1x1"
+        }
+
+        let widgetFileName = "\(fileName)\(widgetSuffix)"
+        let cacheKey = "\(widgetFileName)-\(Int(size.width))x\(Int(size.height))"
 
         // Check memory cache first
-        if let cachedImage = cache.object(forKey: cacheKeyNS) {
+        if let cachedImage = cache.object(forKey: cacheKey as NSString) {
             return cachedImage
         }
 
-        // Check disk cache
-        if let diskCachedImage = await loadFromDiskCache(cacheKey: cacheKey) {
-            // Put it back in memory cache for faster access
-            let cost = Int(diskCachedImage.size.width * diskCachedImage.size.height * 4)
-            cacheQueue.async(flags: .barrier) {
-                self.cache.setObject(diskCachedImage, forKey: cacheKeyNS, cost: cost)
-                self.cacheKeys.insert(cacheKey)
-            }
-            return diskCachedImage
+        // Try to load pre-generated widget image
+        let widgetImagePath = FileManager.documentsDirectory.appendingPathComponent("\(widgetFileName).jpg")
+        guard let widgetImage = UIImage(contentsOfFile: widgetImagePath.path) else {
+            // Fallback: try original image if widget image doesn't exist
+            let originalImagePath = FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg")
+            return UIImage(contentsOfFile: originalImagePath.path)
         }
 
-        // Load original image
-        let originalImagePath = FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg")
-        guard let originalImage = UIImage(contentsOfFile: originalImagePath.path) else {
-            return nil
-        }
-
-        // Process image with device scale
-        let deviceScale = UIScreen.main.scale
-        let targetSize = CGSize(width: widgetSize.width * deviceScale, height: widgetSize.height * deviceScale)
-        let processedImage = await processImage(originalImage, targetSize: targetSize)
-
-        // Cache the result in memory and disk
-        let cost = Int(processedImage.size.width * processedImage.size.height * 4)  // 4 bytes per pixel (RGBA)
+        // Cache the widget image in memory
+        let cost = Int(widgetImage.size.width * widgetImage.size.height * 4)
         cacheQueue.async(flags: .barrier) {
-            self.cache.setObject(processedImage, forKey: cacheKeyNS, cost: cost)
+            self.cache.setObject(widgetImage, forKey: cacheKey as NSString, cost: cost)
             self.cacheKeys.insert(cacheKey)
         }
 
-        // Save to disk cache asynchronously
-        await saveToDiskCache(image: processedImage, cacheKey: cacheKey)
-
-        return processedImage
-    }
-
-    /// Generates a processed image for a custom size (used in main app views)
-    /// - Parameters:
-    ///   - fileName: The base filename of the image
-    ///   - targetSize: The target size for the processed image
-    /// - Returns: Processed UIImage or nil if not found
-    func getProcessedImage(for fileName: String, targetSize: CGSize) async -> UIImage? {
-        let cacheKey = "\(fileName)-\(Int(targetSize.width))x\(Int(targetSize.height))"
-        let cacheKeyNS = cacheKey as NSString
-
-        // Check memory cache first
-        if let cachedImage = cache.object(forKey: cacheKeyNS) {
-            return cachedImage
-        }
-
-        // Check disk cache
-        if let diskCachedImage = await loadFromDiskCache(cacheKey: cacheKey) {
-            // Put it back in memory cache for faster access
-            let cost = Int(diskCachedImage.size.width * diskCachedImage.size.height * 4)
-            cacheQueue.async(flags: .barrier) {
-                self.cache.setObject(diskCachedImage, forKey: cacheKeyNS, cost: cost)
-                self.cacheKeys.insert(cacheKey)
-            }
-            return diskCachedImage
-        }
-
-        // Load original image
-        let originalImagePath = FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg")
-        guard let originalImage = UIImage(contentsOfFile: originalImagePath.path) else {
-            return nil
-        }
-
-        // Process image
-        let processedImage = await processImage(originalImage, targetSize: targetSize)
-
-        // Cache the result in memory and disk
-        let cost = Int(processedImage.size.width * processedImage.size.height * 4)  // 4 bytes per pixel (RGBA)
-        cacheQueue.async(flags: .barrier) {
-            self.cache.setObject(processedImage, forKey: cacheKeyNS, cost: cost)
-            self.cacheKeys.insert(cacheKey)
-        }
-
-        // Save to disk cache asynchronously
-        await saveToDiskCache(image: processedImage, cacheKey: cacheKey)
-
-        return processedImage
+        return widgetImage
     }
 
     // MARK: - Private Processing Methods
 
-    private func processImage(_ image: UIImage, targetSize: CGSize) async -> UIImage {
-        // MEMORY-OPTIMIZED: Get focal point using small image for saliency
+    public func processImage(_ image: UIImage, targetSize: CGSize) async -> UIImage {
         let focalPoint = await getSalientFocalPoint(image)
 
         // Scale down first to avoid memory issues with large images

@@ -5,8 +5,8 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import SwiftUI
 import os.log
+import SwiftUI
 
 struct ResourceFormView: View {
     @Environment(\.appDatabase) private var appDatabase

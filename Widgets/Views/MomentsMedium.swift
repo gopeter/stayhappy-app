@@ -8,57 +8,44 @@
 import SwiftUI
 
 struct MomentsMedium: View {
-    @Environment(\.appDatabase) var appDatabase
-
     var entry: MomentsWidgtEntry
-    var moments: [Moment] = []
-
-    init(entry: MomentsWidgtEntry) {
-        self.entry = entry
-
-        do {
-            try appDatabase.reader.read { db in
-                self.moments =
-                    try Moment
-                    .all()
-                    .filterByPeriod(">=")
-                    .filterByPeriod("<=", period: entry.configuration.period)
-                    .order(Moment.Columns.startAt.asc)
-                    .limit(4)
-                    .fetchAll(db)
-            }
-        }
-        catch {
-            // TODO: log something useful
-            print("error: \(error.localizedDescription)")
-        }
-    }
 
     var body: some View {
-        if moments.count == 0 {
-            MotivationMedium(placeholder: entry.configuration.placeholder)
+        if entry.moments.count == 0 {
+            MotivationMedium(
+                entry: MotivationWidgtEntry(
+                    date: entry.date,
+                    configuration: {
+                        let config = MotivationWidgetConfigurationIntent()
+                        config.content = entry.configuration.placeholder
+                        return config
+                    }(),
+                    resources: entry.placeholderResources,
+                    highlights: entry.placeholderHighlights
+                )
+            )
         }
         else {
             GeometryReader { geometry in
-                HStack(alignment: .top, spacing: moments.count > 4 ? 8 : 0) {
+                HStack(alignment: .top, spacing: entry.moments.count > 4 ? 8 : 0) {
                     VStack(alignment: .leading, spacing: 10) {
-                        ForEach(moments.prefix(4)) { moment in
+                        ForEach(entry.moments.prefix(4)) { moment in
                             MomentTile(moment: moment)
                         }
-                        
+
                         Spacer()
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 16)
                     .padding(.leading, 16)
-                    .padding(.trailing, moments.count > 4 ? 0 : 8)
-                    
-                    if moments.count > 4 {
+                    .padding(.trailing, entry.moments.count > 4 ? 0 : 8)
+
+                    if entry.moments.count > 4 {
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(moments.dropFirst(4).prefix(4)) { moment in
+                            ForEach(entry.moments.dropFirst(4).prefix(4)) { moment in
                                 MomentTile(moment: moment)
                             }
-                            
+
                             Spacer()
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
@@ -67,7 +54,18 @@ struct MomentsMedium: View {
                         .padding(.trailing, 16)
                     }
                     else {
-                        MotivationSmall(placeholder: entry.configuration.placeholder)
+                        MotivationSmall(
+                            entry: MotivationWidgtEntry(
+                                date: entry.date,
+                                configuration: {
+                                    let config = MotivationWidgetConfigurationIntent()
+                                    config.content = entry.configuration.placeholder
+                                    return config
+                                }(),
+                                resources: entry.placeholderResources,
+                                highlights: entry.placeholderHighlights
+                            )
+                        )
                     }
                 }
                 .frame(maxHeight: geometry.size.height)

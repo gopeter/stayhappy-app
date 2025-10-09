@@ -8,45 +8,20 @@
 import SwiftUI
 
 struct MotivationMedium: View {
-    @Environment(\.appDatabase) var appDatabase
     @Environment(\.widgetFamily) var widgetFamily
 
-    var placeholder: WidgetMotivationType
-    var resources: [Resource] = []
-    var highlights: [Moment] = []
+    var entry: MotivationWidgtEntry
 
-    init(placeholder: WidgetMotivationType) {
-        self.placeholder = placeholder
+    private var placeholder: WidgetMotivationType {
+        entry.configuration.content
+    }
 
-        do {
-            try appDatabase.reader.read { db in
-                if placeholder == .all || placeholder == .highlights {
-                    self.highlights =
-                        try Moment
-                        .all()
-                        .filterByPeriod("<")
-                        .filterByHighlight()
-                        .order(sql: "RANDOM()")
-                        .limit(1)
-                        .fetchAll(db)
-                }
+    private var resources: [Resource] {
+        entry.resources
+    }
 
-                let limit = placeholder == .all && self.highlights.count > 0 ? 3 : 6
-
-                if placeholder == .all || placeholder == .resources {
-                    self.resources =
-                        try Resource
-                        .all()
-                        .randomRows()
-                        .limit(limit)
-                        .fetchAll(db)
-                }
-            }
-        }
-        catch {
-            // TODO: log something useful
-            print("error: \(error.localizedDescription)")
-        }
+    private var highlights: [Moment] {
+        entry.highlights
     }
 
     var body: some View {

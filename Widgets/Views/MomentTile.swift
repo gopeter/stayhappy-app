@@ -18,7 +18,7 @@ struct MomentTile: View {
                 .opacity(0.5)
 
             Text(moment.title)
-                .font(.system(size: 13, weight: .regular))
+                .font(.system(size: 14, weight: .regular))
                 .minimumScaleFactor(0.92)
                 .lineLimit(1)
                 .foregroundStyle(.white)

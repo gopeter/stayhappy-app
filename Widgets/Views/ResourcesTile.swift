@@ -21,7 +21,7 @@ struct ResourcesTile: View {
             )
             .minimumScaleFactor(0.8)
             .foregroundStyle(.white)
-            .padding(.all)
+            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
 
             Spacer()

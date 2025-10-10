@@ -9,6 +9,7 @@ import Combine
 import Foundation
 import GRDB
 import GRDBQuery
+import UIKit
 import WidgetKit
 
 // MARK: - Moment Mutation Model
@@ -189,12 +190,25 @@ extension Moment {
     }
     
     static func makeRandomPastHighlight(index: Int) -> MomentMutation {
-        MomentMutation(
+        let imageSaver = ImageSaver(
+            image: UIImage(named: "highlight"),
+            fileName: "preview\(index)"
+        )
+
+        do {
+            try imageSaver.writeToDisk()
+            imageSaver.reloadWidgets()
+        }
+        catch {
+            // ...
+        }
+        
+        return MomentMutation(
             title: "A really long test moment \(index)",
             startAt: Date().withSubtractedHours(hours: 24 * Double(index + 1)),
             isHighlight: true,
             background: HappyGradients.allCases.map { $0.rawValue }.randomElement()!,
-            photo: nil
+            photo: "preview\(index)"
         )
     }
 }

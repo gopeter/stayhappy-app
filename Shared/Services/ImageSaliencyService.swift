@@ -1,92 +1,90 @@
 //
 //  ImageSaliencyService.swift
-//
-//  This class is responsible for analyzing an input UIImage using the Vision framework's VNGenerateAttentionBasedSaliencyImageRequest to generate a saliency map and extract salient object's bounding box points. The resulting points (topLeft, topRight, bottomLeft, bottomRight) are then used to draw a rectangle around the salient object on the original image.
+//  StayHappy
 //
 //  Created by Peter Oesteritz on 11.05.24.
-//  See: https://medium.com/@sarimk80/enhancing-visual-focus-exploring-vngenerateattentionbasedsaliencyimagerequest-in-swiftui-f7f925f519c3
-//  See: https://medium.com/@kamil.tustanowski/saliency-detection-using-the-vision-framework-d53a38e4ccaa
+//  Rewritten using modern Vision async/await API
 //
 
-import Combine
 import Foundation
+import UIKit
 import Vision
-import VisionKit
 
 class ImageSaliencyService {
-    var uiImage: UIImage
-    var salientRect: CGRect
-    
+    private let image: UIImage
+
     // MARK: - Init
-    
+
     init(uiImage: UIImage) {
-        self.uiImage = uiImage
-        self.salientRect = CGRect(x: 0, y: 0, width: 0, height: 0)
+        self.image = uiImage
     }
-    
-    // MARK: - Image Analysis
-    
-    /// Analyzes the given UIImage to generate the saliency map and extract the salient object's bounding box points.
-    /// - Parameter uiImage: The input UIImage to be analyzed.
-    func analyzeImage() {
-        guard let cgImage = self.uiImage.cgImage else { return }
-        let requestHandler = VNImageRequestHandler(cgImage: cgImage, orientation: .up)
-        let request = VNGenerateAttentionBasedSaliencyImageRequest()
-        
-        // Use CPU-only mode for simulator to improve performance
-        #if targetEnvironment(simulator)
-        request.usesCPUOnly = true
-        #endif
-        
+
+    // MARK: - Public Interface
+
+    /// Returns the focal point as percentage using modern Vision async/await API
+    func focalPoint() async -> CGPoint {
         do {
-            // Perform the request to generate the saliency map
-            try requestHandler.perform([request])
-            
-            // There is just on result when using AttentionBasedSaliency
-            guard let observation = request.results?.first as? VNSaliencyImageObservation else { return }
-            guard let observationBoundingBox = observation.salientObjects?.first?.boundingBox.rectangle(in: self.uiImage) else { return }
-            
-            self.salientRect = CGRect(origin: observationBoundingBox.origin.translateFromCoreImageToUIKitCoordinateSpace(using: self.uiImage.size.height - observationBoundingBox.size.height),
-                                      size: observationBoundingBox.size)
-        } catch {
-            print(error.localizedDescription)
+            let saliencyObservation = try await performSaliencyAnalysis()
+            let focalPoint = calculateFocalPoint(from: saliencyObservation)
+            return focalPoint
         }
-    }
-    
-    // returns the focal point as percentage
-    func focalPoint() -> CGPoint {
-        self.analyzeImage()
-        
-        // return center
-        if self.salientRect.width == 0 {
+        catch {
             return CGPoint(x: 0.5, y: 0.5)
         }
-        
-        return CGPoint(
-            x: (self.salientRect.origin.x + self.salientRect.width / 2) / self.uiImage.size.width,
-            y: (self.salientRect.origin.y + self.salientRect.height / 2) / self.uiImage.size.height
+    }
+
+    // MARK: - Private Methods
+
+    private func performSaliencyAnalysis() async throws -> SaliencyImageObservation {
+        guard let cgImage = image.cgImage else {
+            throw SaliencyError.invalidImage
+        }
+
+        let request = GenerateAttentionBasedSaliencyImageRequest()
+        let observation = try await request.perform(on: cgImage)
+
+        return observation
+    }
+
+    private func calculateFocalPoint(from observation: SaliencyImageObservation) -> CGPoint {
+        // Check if we have salient objects
+        guard !observation.salientObjects.isEmpty else {
+            return CGPoint(x: 0.5, y: 0.5)
+        }
+
+        // Get the first (most prominent) salient object
+        let primaryObject = observation.salientObjects.first!
+        let boundingBox = primaryObject.boundingBox
+
+        // Calculate center of bounding box (Vision coordinates are normalized 0-1)
+        let centerX = boundingBox.origin.x + boundingBox.width / 2
+        let centerY = 1.0 - (boundingBox.origin.y + boundingBox.height / 2)  // Convert from Vision (bottom-left origin) to UIKit (top-left origin)
+
+        // Ensure values are within bounds
+        let focalPoint = CGPoint(
+            x: max(0.0, min(1.0, centerX)),
+            y: max(0.0, min(1.0, centerY))
         )
+
+        return focalPoint
     }
 }
 
-extension CGRect {
-    func rectangle(in image: UIImage) -> CGRect {
-        VNImageRectForNormalizedRect(self,
-                                     Int(image.size.width),
-                                     Int(image.size.height))
-    }
-    
-    var points: [CGPoint] {
-        return [origin, CGPoint(x: origin.x + width, y: origin.y),
-                CGPoint(x: origin.x + width, y: origin.y + height), CGPoint(x: origin.x, y: origin.y + height)]
-    }
-}
+// MARK: - Error Handling
 
-extension CGPoint {
-    func translateFromCoreImageToUIKitCoordinateSpace(using height: CGFloat) -> CGPoint {
-        let transform = CGAffineTransform(scaleX: 1, y: -1)
-            .translatedBy(x: 0, y: -height)
-        
-        return self.applying(transform)
+enum SaliencyError: Error, LocalizedError {
+    case invalidImage
+    case analysisTimeout
+    case visionFrameworkError(Error)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidImage:
+            return "Could not convert UIImage to CGImage"
+        case .analysisTimeout:
+            return "Saliency analysis timed out"
+        case .visionFrameworkError(let error):
+            return "Vision Framework error: \(error.localizedDescription)"
+        }
     }
 }

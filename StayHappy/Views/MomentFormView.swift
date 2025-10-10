@@ -5,9 +5,9 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
+import os.log
 import PhotosUI
 import SwiftUI
-import os.log
 
 struct BackgroundOptionView: View {
     @Environment(\.dismiss) var dismiss
@@ -127,7 +127,7 @@ struct MomentFormView: View {
 
             do {
                 try imageSaver.writeToDisk()
-                try imageSaver.generateWidgetThumbnails()
+                imageSaver.reloadWidgets()
             }
             catch {
                 // TODO: log something useful

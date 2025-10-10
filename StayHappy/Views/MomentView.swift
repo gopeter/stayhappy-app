@@ -22,7 +22,6 @@ struct MomentView: View {
     
     func toggleHighlight(for moment: Moment) {
         do {
-            // TODO: is there really no simple way to destruct the moment as params?
             var updatedMoment = MomentMutation(
                 id: moment.id,
                 title: moment.title,

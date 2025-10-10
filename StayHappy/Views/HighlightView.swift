@@ -11,33 +11,14 @@ import Throttler
 struct HighlightView: View {
     var moment: Moment
     var deviceSize: CGSize
-    var widgetSize: CGSize
 
-    var thumbnailImage: UIImage?
-    var photoImage: UIImage?
-
-    @State private var isImagePresented = false
-    @State private var showShareSheet = false
+    @State private var thumbnailImage: UIImage?
+    @State private var photoImage: UIImage?
     @EnvironmentObject var globalData: GlobalData
 
-    init(moment: Moment, deviceSize: CGSize, widgetSize: CGSize) {
+    init(moment: Moment, deviceSize: CGSize) {
         self.moment = moment
         self.deviceSize = deviceSize
-        self.widgetSize = widgetSize
-
-        if moment.photo != nil {
-            let thumbnailUrl = FileManager.documentsDirectory
-                .appendingPathComponent(
-                    "\(String(describing: moment.photo!))-systemMedium.jpg"
-                )
-            self.thumbnailImage = UIImage(contentsOfFile: thumbnailUrl.path)
-
-            let photoUrl = FileManager.documentsDirectory
-                .appendingPathComponent(
-                    "\(String(describing: moment.photo!)).jpg"
-                )
-            self.photoImage = UIImage(contentsOfFile: photoUrl.path)
-        }
     }
 
     var body: some View {
@@ -46,7 +27,7 @@ struct HighlightView: View {
                 thumbnailImage == nil
                     ? HappyGradients(rawValue: moment.background)!.radial(
                         startRadius: -50,
-                        endRadius: deviceSize.width
+                        endRadius: self.deviceSize.width
                     )
                     : RadialGradient(
                         gradient: Gradient(colors: [.clear, .clear]),
@@ -55,14 +36,14 @@ struct HighlightView: View {
                         endRadius: 0
                     )
             )
-            .frame(width: deviceSize.width - 40, height: 120)
+            .frame(width: self.deviceSize.width - 40, height: 120)
             .padding(.horizontal, 20)
             .background {
                 if thumbnailImage != nil {
                     Image(uiImage: thumbnailImage!)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: deviceSize.width - 40, height: 120, alignment: .center)
+                        .frame(width: self.deviceSize.width - 40, height: 120, alignment: .center)
                         .cornerRadius(10)
                         .padding(.horizontal, 20)
                         .clipped()
@@ -103,7 +84,11 @@ struct HighlightView: View {
                             Button(
                                 action: {
                                     debounce(.seconds(0.1), option: .runFirst) {
-                                        isImagePresented = true
+                                        // Use global fullscreen system with animation
+                                        globalData.fullscreenImage = photoImage
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            globalData.isFullscreenPresented = true
+                                        }
                                     }
                                 },
                                 label: {
@@ -125,45 +110,11 @@ struct HighlightView: View {
                         .padding(.bottom, 20)
                 }
             }
-            .fadeInFullScreenCover(isPresented: $isImagePresented) {
-                Group {
-                    if let image = photoImage {
-                        ZStack {
-                            ImageViewer(image: image)
-                                .ignoresSafeArea(.all)
-
-                            VStack {
-                                Spacer()
-
-                                HStack {
-                                    Spacer()
-                                    ImageViewerNavigationBarView(
-                                        onShare: { showShareSheet = true },
-                                        onClose: {
-                                            isImagePresented = false
-                                        }
-                                    )
-                                    Spacer()
-                                }
-                            }
-                        }
-                        .ignoresSafeArea(.all)
-
-                        .sheet(isPresented: $showShareSheet) {
-                            if let image = photoImage {
-                                ShareSheet(activityItems: [image])
-                            }
-                        }
-                    }
-                    else {
-                        EmptyView()
-                    }
-                }
-            }
             .onAppear {
                 checkAndOpenImage()
+                loadImages(viewSize: self.deviceSize)
             }
-            .onChange(of: globalData.highlightImageToShow) { _ in
+            .onChange(of: globalData.highlightImageToShow) { newValue in
                 checkAndOpenImage()
             }
     }
@@ -171,78 +122,49 @@ struct HighlightView: View {
     private func checkAndOpenImage() {
         let shouldOpenImage = globalData.highlightImageToShow == moment.id
 
-        if shouldOpenImage && photoImage != nil && !isImagePresented {
-            // Clear the trigger first to prevent multiple views from reacting
-            globalData.highlightImageToShow = nil
-            // Open the image immediately
-            isImagePresented = true
-        }
-    }
-}
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let activityItems: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        return controller
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
-struct ImageViewerNavigationBarView: View {
-    let onShare: () -> Void
-    let onClose: () -> Void
-
-    var body: some View {
-        HStack(spacing: 0) {
-            Spacer()
-
-            ImageNavigationItem(
-                icon: "share-symbol",
-                action: onShare,
-                isActive: false
-            )
-
-            Spacer()
-
-            ImageNavigationItem(
-                icon: "minimize-symbol",
-                action: onClose,
-                isActive: false
-            )
-
-            Spacer()
-        }
-        .frame(width: 120, height: 54)
-        .background(
-            RoundedRectangle(cornerRadius: 18)
-                .fill(Color("ToolbarBackgroundColor"))
-                .shadow(color: Color.black.opacity(0.35), radius: 5, y: 2)
-        )
-        .padding(.bottom, 34)
-    }
-}
-
-struct ImageNavigationItem: View {
-    let id: String = UUID().uuidString
-    let icon: String
-    let action: () -> Void
-    let isActive: Bool
-
-    var body: some View {
-        Button(
-            action: action,
-            label: {
-                Image(icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(isActive ? Color.accentColor : Color.white)
+        if shouldOpenImage {
+            if photoImage != nil {
+                // Image is loaded, use global fullscreen system with animation
+                globalData.fullscreenImage = photoImage
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    globalData.isFullscreenPresented = true
+                }
+                globalData.clearHighlightImageTrigger()
             }
-        ).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
-            .buttonStyle(HighlightButtonStyle())
+            else {
+                // If photoImage is nil, we don't clear the trigger yet
+                // The image will be checked again when loadImages completes
+            }
+        }
+    }
+
+    private func loadImages(viewSize: CGSize) {
+        guard let photoFileName = moment.photo else {
+            return
+        }
+
+        // Load original image for full-screen view
+        let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
+        photoImage = UIImage(contentsOfFile: photoUrl.path)
+
+        // Check if we need to open the image after loading the original image
+        checkAndOpenImage()
+
+        // Generate thumbnail using ImageProcessingService
+        Task {
+            let targetSize = CGSize(width: viewSize.width - 40, height: 120)
+
+            let processedImage = await ImageProcessingService.shared.getProcessedImage(
+                for: photoFileName,
+                size: targetSize
+            )
+
+            await MainActor.run {
+                thumbnailImage = processedImage
+                // Check if we need to open the image after loading
+                checkAndOpenImage()
+            }
+        }
     }
 }
 
@@ -254,7 +176,7 @@ struct ImageNavigationItem: View {
 
     do {
         try imageSaver.writeToDisk()
-        try imageSaver.generateWidgetThumbnails()
+        imageSaver.reloadWidgets()
     }
     catch {
         // ...
@@ -272,7 +194,6 @@ struct ImageNavigationItem: View {
             createdAt: Date(),
             updatedAt: Date()
         ),
-        deviceSize: UIScreen.main.bounds.size,
-        widgetSize: getWidgetSize(for: .systemMedium)
-    )
+        deviceSize: UIScreen.main.bounds.size
+    ).environmentObject(GlobalData(activeView: .highlights))
 }

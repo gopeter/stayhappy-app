@@ -6,6 +6,7 @@
 //
 
 import Combine
+import GRDB
 import GRDBQuery
 import SwiftUI
 
@@ -20,13 +21,84 @@ class GlobalData: ObservableObject {
     @Published var activeView: Views
     @Published var highlightImageToShow: Int64? = nil
 
+    // Global fullscreen image state
+    @Published var fullscreenImage: UIImage? = nil
+    @Published var isFullscreenPresented: Bool = false
+
+    internal var highlightTriggerTimer: Timer?
+
     init(activeView: Views) {
         self.activeView = activeView
     }
 
     func openHighlightImage(momentId: Int64) {
         self.activeView = .highlights
-        self.highlightImageToShow = momentId
+
+        // Try to load image immediately for instant opening
+        if let image = loadImageForMoment(momentId: momentId) {
+            // Image loaded successfully - open with animation
+            self.fullscreenImage = image
+            withAnimation(.easeInOut(duration: 0.3)) {
+                self.isFullscreenPresented = true
+            }
+            self.clearHighlightImageTrigger()
+        }
+        else {
+            // Fallback to old system with much shorter timeout
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.highlightImageToShow = momentId
+                self.startSafetyTimer(for: momentId)
+            }
+        }
+    }
+
+    private func loadImageForMoment(momentId: Int64) -> UIImage? {
+        // Try to load the image directly from the database
+        do {
+            let appDatabase = AppDatabase.shared
+            let moment = try appDatabase.reader.read { db in
+                try Moment.fetchOne(db, key: momentId)
+            }
+
+            guard let moment = moment,
+                let photoFileName = moment.photo
+            else {
+                return nil
+            }
+
+            let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
+            return UIImage(contentsOfFile: photoUrl.path)
+        }
+        catch {
+            return nil
+        }
+    }
+
+    private func startSafetyTimer(for momentId: Int64) {
+        // Much shorter timeout - only 2 seconds total
+        highlightTriggerTimer?.invalidate()
+        highlightTriggerTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if self.highlightImageToShow == momentId {
+                    self.highlightImageToShow = nil
+                }
+            }
+        }
+    }
+
+    func clearHighlightImageTrigger() {
+        highlightTriggerTimer?.invalidate()
+        highlightTriggerTimer = nil
+        highlightImageToShow = nil
+    }
+
+    func closeFullscreenImage() {
+        isFullscreenPresented = false
+        // Delay clearing the image to allow fade-out animation to complete
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            self.fullscreenImage = nil
+        }
     }
 }
 
@@ -58,6 +130,10 @@ struct StayHappyApp: App {
                         .environmentObject(appStateManager.onboardingState)
                         .onOpenURL { url in
                             handleDeepLink(url: url)
+                        }
+                        .task {
+                            // Run widget image migration on app startup
+                            await WidgetImageMigrationService.shared.runMigrationIfNeeded()
                         }
                 }
                 else {

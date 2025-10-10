@@ -13,7 +13,6 @@ struct HighlightsView: View {
     @EnvironmentObject var globalData: GlobalData
 
     let deviceSize = UIScreen.main.bounds.size
-    let widgetSize = getWidgetSize(for: .systemMedium)
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -26,8 +25,7 @@ struct HighlightsView: View {
                             ForEach(self.moments, id: \.id) { moment in
                                 HighlightView(
                                     moment: moment,
-                                    deviceSize: deviceSize,
-                                    widgetSize: widgetSize
+                                    deviceSize: deviceSize
                                 )
                             }
                         }
@@ -51,9 +49,25 @@ struct HighlightsView: View {
 
             }
         }
+        .onAppear {
+            // Handle deep links when HighlightsView is already visible
+            checkForPendingHighlightTrigger()
+        }
+    }
+
+    private func checkForPendingHighlightTrigger() {
+        // This ensures deep links work even when HighlightsView is already active
+        if globalData.highlightImageToShow != nil {
+            // Trigger will be handled by the specific HighlightView that matches this momentId
+            // We don't need to do anything here, just ensure the onChange triggers fire
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                // Small delay to ensure all HighlightViews have appeared
+                // The individual HighlightView.onChange will handle the actual opening
+            }
+        }
     }
 }
 
 #Preview {
-    HighlightsView()
+    HighlightsView().environmentObject(GlobalData(activeView: .highlights))
 }

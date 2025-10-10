@@ -10,158 +10,148 @@ import SwiftUI
 import WidgetKit
 
 struct MomentsWidgetProvider: AppIntentTimelineProvider {
+    private let database: AppDatabase
+
+    init(database: AppDatabase) {
+        self.database = database
+    }
+
     func placeholder(in context: Context) -> MomentsWidgtEntry {
-        MomentsWidgtEntry(date: Date(), configuration: MomentsWidgetConfigurationIntent())
+        MomentsWidgtEntry(
+            date: Date(),
+            configuration: MomentsWidgetConfigurationIntent(),
+            moments: [],
+            placeholderResources: [],
+            placeholderHighlights: []
+        )
     }
 
     func snapshot(for configuration: MomentsWidgetConfigurationIntent, in context: Context) async -> MomentsWidgtEntry {
-        MomentsWidgtEntry(date: Date(), configuration: configuration)
+        do {
+            let moments = try loadMoments(for: configuration.period, limit: 8)
+            let (resources, highlights) = await loadPlaceholderData(for: configuration.placeholder)
+
+            return MomentsWidgtEntry(
+                date: Date(),
+                configuration: configuration,
+                moments: moments,
+                placeholderResources: resources,
+                placeholderHighlights: highlights
+            )
+        }
+        catch {
+            // Fallback to empty data on error
+            return MomentsWidgtEntry(
+                date: Date(),
+                configuration: configuration,
+                moments: [],
+                placeholderResources: [],
+                placeholderHighlights: []
+            )
+        }
     }
 
     func timeline(for configuration: MomentsWidgetConfigurationIntent, in context: Context) async -> Timeline<MomentsWidgtEntry> {
         let currentDate = Date()
-        let nextDate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
+        let nextUpdateDate = Calendar.current.date(byAdding: .hour, value: 1, to: currentDate)!
 
-        return Timeline(entries: [MomentsWidgtEntry(date: currentDate, configuration: configuration)], policy: .after(nextDate))
+        do {
+            let moments = try loadMoments(for: configuration.period, limit: 8)
+            let (resources, highlights) = await loadPlaceholderData(for: configuration.placeholder)
+
+            let entry = MomentsWidgtEntry(
+                date: currentDate,
+                configuration: configuration,
+                moments: moments,
+                placeholderResources: resources,
+                placeholderHighlights: highlights
+            )
+
+            return Timeline(entries: [entry], policy: .after(nextUpdateDate))
+        }
+        catch {
+            // Fallback to empty data on error
+            let entry = MomentsWidgtEntry(
+                date: currentDate,
+                configuration: configuration,
+                moments: [],
+                placeholderResources: [],
+                placeholderHighlights: []
+            )
+
+            return Timeline(entries: [entry], policy: .after(nextUpdateDate))
+        }
+    }
+
+    // MARK: - Data Loading
+
+    public func loadMoments(for period: WidgetPeriodType, limit: Int = 8) throws -> [Moment] {
+        let appDatabase = database
+
+        return try appDatabase.reader.read { db in
+            try Moment
+                .all()
+                .filterByPeriod(">=")
+                .filterByPeriod("<=", period: period)
+                .order(Moment.Columns.startAt.asc)
+                .limit(limit)
+                .fetchAll(db)
+        }
+    }
+
+    public func loadPlaceholderData(for placeholder: WidgetMotivationType) async -> (
+        resources: [Resource], highlights: [Moment]
+    ) {
+        do {
+            let (resources, highlights) = try loadMotivationData(for: placeholder)
+            return (resources: resources, highlights: highlights)
+        }
+        catch {
+            return (resources: [], highlights: [])
+        }
+    }
+
+    private func loadMotivationData(for placeholder: WidgetMotivationType, resourceLimit: Int = 6) throws -> (resources: [Resource], highlights: [Moment]) {
+        var resources: [Resource] = []
+        var highlights: [Moment] = []
+
+        let appDatabase = database
+
+        try appDatabase.reader.read { db in
+            if placeholder == .all || placeholder == .highlights {
+                highlights =
+                    try Moment
+                    .all()
+                    .filterByPeriod("<")
+                    .filterByHighlight()
+                    .order(sql: "RANDOM()")
+                    .limit(1)
+                    .fetchAll(db)
+            }
+
+            // Adjust resource limit if we have highlights in .all mode
+            let actualResourceLimit = placeholder == .all && highlights.count > 0 ? 3 : resourceLimit
+
+            if placeholder == .all || placeholder == .resources {
+                resources =
+                    try Resource
+                    .all()
+                    .randomRows()
+                    .limit(actualResourceLimit)
+                    .fetchAll(db)
+            }
+        }
+
+        return (resources: resources, highlights: highlights)
     }
 }
 
 struct MomentsWidgtEntry: TimelineEntry {
     let date: Date
     let configuration: MomentsWidgetConfigurationIntent
-}
-
-struct MomentDetail: View {
-    var moment: Moment
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            WidgetDate(date: moment.startAt, size: .small)
-                .font(.system(size: 9, weight: .heavy))
-                .foregroundStyle(.white)
-                .opacity(0.5)
-
-            Text(moment.title)
-                .font(.system(size: 12, weight: .regular))
-                .minimumScaleFactor(0.92)
-                .lineLimit(1)
-                .foregroundStyle(.white)
-        }
-    }
-}
-
-struct MomentsSmall: View {
-    @Environment(\.appDatabase) var appDatabase
-
-    var entry: MomentsWidgtEntry
-    var moments: [Moment] = []
-
-    init(entry: MomentsWidgtEntry) {
-        self.entry = entry
-
-        do {
-            try appDatabase.reader.read { db in
-                self.moments =
-                    try Moment
-                    .all()
-                    .filterByPeriod(">=")
-                    .filterByPeriod("<=", period: entry.configuration.period)
-                    .order(Moment.Columns.startAt.asc)
-                    .limit(4)
-                    .fetchAll(db)
-            }
-        }
-        catch {
-            // TODO: log something useful
-            print("error: \(error.localizedDescription)")
-        }
-    }
-
-    var body: some View {
-        if moments.count == 0 {
-            MotivationSmall(placeholder: entry.configuration.placeholder)
-        }
-        else {
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    if moments.count == 4 {
-                        Spacer()
-                    }
-
-                    ForEach(moments) { moment in
-                        MomentDetail(moment: moment)
-                    }
-
-                    Spacer()
-                }
-
-                Spacer()
-            }
-            .padding(.all)
-        }
-    }
-}
-
-struct MomentsMedium: View {
-    @Environment(\.appDatabase) var appDatabase
-
-    var entry: MomentsWidgtEntry
-    var moments: [Moment] = []
-
-    init(entry: MomentsWidgtEntry) {
-        self.entry = entry
-
-        do {
-            try appDatabase.reader.read { db in
-                self.moments =
-                    try Moment
-                    .all()
-                    .filterByPeriod(">=")
-                    .filterByPeriod("<=", period: entry.configuration.period)
-                    .order(Moment.Columns.startAt.asc)
-                    .limit(8)
-                    .fetchAll(db)
-            }
-        }
-        catch {
-            // TODO: log something useful
-            print("error: \(error.localizedDescription)")
-        }
-    }
-
-    var body: some View {
-        if moments.count == 0 {
-            MotivationMedium(placeholder: entry.configuration.placeholder)
-        }
-        else {
-            HStack(alignment: .top, spacing: moments.count > 4 ? 8 : 0) {
-                VStack(alignment: .leading, spacing: 10) {
-                    ForEach(moments.prefix(4)) { moment in
-                        MomentDetail(moment: moment)
-                    }
-    
-                    Spacer()
-                }
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 32, leading: 16, bottom: 16, trailing: moments.count > 4 ? 0 : 16))
-    
-                if moments.count > 4 {
-                    VStack(alignment: .leading, spacing: 10) {
-                        ForEach(moments.dropFirst(4).prefix(4)) { moment in
-                            MomentDetail(moment: moment)
-                        }
-    
-                        Spacer()
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 32, leading: 0, bottom: 16, trailing: 16))
-                }
-                else {
-                    MotivationSmall(placeholder: entry.configuration.placeholder)
-                }
-            }
-        }
-    }
+    let moments: [Moment]
+    let placeholderResources: [Resource]
+    let placeholderHighlights: [Moment]
 }
 
 struct MomentsWidgetEntryView: View {
@@ -184,13 +174,14 @@ struct MomentsWidgetEntryView: View {
 }
 
 struct MomentsWidget: Widget {
+    @Environment(\.appDatabase) var appDatabase
     let kind: String = "app.stayhappy.StayHappy.MomentsWidget"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(
             kind: kind,
             intent: MomentsWidgetConfigurationIntent.self,
-            provider: MomentsWidgetProvider()
+            provider: MomentsWidgetProvider(database: appDatabase)
         ) { entry in
             MomentsWidgetEntryView(entry: entry)
                 .unredacted()
@@ -206,5 +197,17 @@ struct MomentsWidget: Widget {
 #Preview(as: .systemMedium) {
     MomentsWidget()
 } timeline: {
-    MomentsWidgtEntry(date: .now, configuration: MomentsWidgetConfigurationIntent())
+    let appDatabase = AppDatabase.random()
+
+    let provider = MomentsWidgetProvider(database: appDatabase)
+    let moments = try? provider.loadMoments(for: .all, limit: 4)
+    let (resources, highlights) = await provider.loadPlaceholderData(for: .highlights)
+
+    MomentsWidgtEntry(
+        date: .now,
+        configuration: MomentsWidgetConfigurationIntent(),
+        moments: moments!,
+        placeholderResources: resources,
+        placeholderHighlights: highlights
+    )
 }

@@ -8,48 +8,23 @@
 import SwiftUI
 
 struct MotivationSmall: View {
-    @Environment(\.appDatabase) var appDatabase
     @Environment(\.widgetFamily) var widgetFamily
 
-    var placeholder: WidgetMotivationType
-    var resources: [Resource] = []
-    var highlights: [Moment] = []
+    var entry: MotivationWidgtEntry
 
-    init(placeholder: WidgetMotivationType) {
-        self.placeholder = placeholder
+    private var placeholder: WidgetMotivationType {
+        entry.configuration.content
+    }
 
-        do {
-            try appDatabase.reader.read { db in
-                if placeholder == .all || placeholder == .resources {
-                    self.resources =
-                        try Resource
-                        .all()
-                        .randomRows()
-                        .limit(3)
-                        .fetchAll(db)
-                }
+    private var resources: [Resource] {
+        entry.resources
+    }
 
-                if placeholder == .all || placeholder == .highlights {
-                    self.highlights =
-                        try Moment
-                        .all()
-                        .filterByPeriod("<")
-                        .filterByHighlight()
-                        .order(sql: "RANDOM()")
-                        .limit(1)
-                        .fetchAll(db)
-                }
-            }
-        }
-        catch {
-            // TODO: log something useful
-            print("error: \(error.localizedDescription)")
-        }
+    private var highlights: [Moment] {
+        entry.highlights
     }
 
     var body: some View {
-        let widgetSize = getWidgetSize(for: widgetFamily)
-
         if (placeholder == .all && resources.count == 0 && highlights.count == 0) || (placeholder == .resources && resources.count == 0)
             || (placeholder == .highlights && highlights.count == 0)
         {
@@ -57,8 +32,8 @@ struct MotivationSmall: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
                 .padding(24)
-                .frame(maxWidth: widgetSize.width)
-                .frame(maxHeight: widgetSize.height)
+                .frame(maxWidth: .infinity)
+                .frame(maxHeight: .infinity)
         }
 
         // TODO: this looks ugly, there must be a way to achieve this ... smarter?

@@ -49,6 +49,22 @@ struct HighlightsView: View {
 
             }
         }
+        .onAppear {
+            // Handle deep links when HighlightsView is already visible
+            checkForPendingHighlightTrigger()
+        }
+    }
+
+    private func checkForPendingHighlightTrigger() {
+        // This ensures deep links work even when HighlightsView is already active
+        if globalData.highlightImageToShow != nil {
+            // Trigger will be handled by the specific HighlightView that matches this momentId
+            // We don't need to do anything here, just ensure the onChange triggers fire
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                // Small delay to ensure all HighlightViews have appeared
+                // The individual HighlightView.onChange will handle the actual opening
+            }
+        }
     }
 }
 

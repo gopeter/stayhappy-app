@@ -14,8 +14,6 @@ struct HighlightView: View {
 
     @State private var thumbnailImage: UIImage?
     @State private var photoImage: UIImage?
-    @State private var isImagePresented = false
-    @State private var showShareSheet = false
     @EnvironmentObject var globalData: GlobalData
 
     init(moment: Moment, deviceSize: CGSize) {
@@ -86,7 +84,11 @@ struct HighlightView: View {
                             Button(
                                 action: {
                                     debounce(.seconds(0.1), option: .runFirst) {
-                                        isImagePresented = true
+                                        // Use global fullscreen system with animation
+                                        globalData.fullscreenImage = photoImage
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            globalData.isFullscreenPresented = true
+                                        }
                                     }
                                 },
                                 label: {
@@ -112,55 +114,27 @@ struct HighlightView: View {
                 checkAndOpenImage()
                 loadImages(viewSize: self.deviceSize)
             }
-            .onChange(of: globalData.highlightImageToShow) { _ in
+            .onChange(of: globalData.highlightImageToShow) { newValue in
                 checkAndOpenImage()
-            }
-            .fadeInFullScreenCover(isPresented: $isImagePresented) {
-                Group {
-                    if let image = photoImage {
-                        ZStack {
-                            ImageViewer(image: image)
-                                .ignoresSafeArea(.all)
-
-                            VStack {
-                                Spacer()
-
-                                HStack {
-                                    Spacer()
-                                    ImageViewerNavigationBarView(
-                                        onShare: { showShareSheet = true },
-                                        onClose: {
-                                            isImagePresented = false
-                                        }
-                                    )
-                                    Spacer()
-                                }
-                            }
-                        }
-                        .ignoresSafeArea(.all)
-
-                        .sheet(isPresented: $showShareSheet) {
-                            if let image = photoImage {
-                                ShareSheet(activityItems: [image])
-                            }
-                        }
-                    }
-                    else {
-                        EmptyView()
-                    }
-                }
-
             }
     }
 
     private func checkAndOpenImage() {
         let shouldOpenImage = globalData.highlightImageToShow == moment.id
 
-        if shouldOpenImage && photoImage != nil && !isImagePresented {
-            // Clear the trigger first to prevent multiple views from reacting
-            globalData.highlightImageToShow = nil
-            // Open the image immediately
-            isImagePresented = true
+        if shouldOpenImage {
+            if photoImage != nil {
+                // Image is loaded, use global fullscreen system with animation
+                globalData.fullscreenImage = photoImage
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    globalData.isFullscreenPresented = true
+                }
+                globalData.clearHighlightImageTrigger()
+            }
+            else {
+                // If photoImage is nil, we don't clear the trigger yet
+                // The image will be checked again when loadImages completes
+            }
         }
     }
 
@@ -173,6 +147,9 @@ struct HighlightView: View {
         let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
         photoImage = UIImage(contentsOfFile: photoUrl.path)
 
+        // Check if we need to open the image after loading the original image
+        checkAndOpenImage()
+
         // Generate thumbnail using ImageProcessingService
         Task {
             let targetSize = CGSize(width: viewSize.width - 40, height: 120)
@@ -184,74 +161,10 @@ struct HighlightView: View {
 
             await MainActor.run {
                 thumbnailImage = processedImage
+                // Check if we need to open the image after loading
+                checkAndOpenImage()
             }
         }
-    }
-}
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let activityItems: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        return controller
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
-struct ImageViewerNavigationBarView: View {
-    let onShare: () -> Void
-    let onClose: () -> Void
-
-    var body: some View {
-        HStack(spacing: 0) {
-            Spacer()
-
-            ImageNavigationItem(
-                icon: "share-symbol",
-                action: onShare,
-                isActive: false
-            )
-
-            Spacer()
-
-            ImageNavigationItem(
-                icon: "minimize-symbol",
-                action: onClose,
-                isActive: false
-            )
-
-            Spacer()
-        }
-        .frame(width: 120, height: 54)
-        .background(
-            RoundedRectangle(cornerRadius: 18)
-                .fill(Color("ToolbarBackgroundColor"))
-                .shadow(color: Color.black.opacity(0.35), radius: 5, y: 2)
-        )
-        .padding(.bottom, 34)
-    }
-}
-
-struct ImageNavigationItem: View {
-    let id: String = UUID().uuidString
-    let icon: String
-    let action: () -> Void
-    let isActive: Bool
-
-    var body: some View {
-        Button(
-            action: action,
-            label: {
-                Image(icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(Color.gray)
-            }
-        ).frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
-            .buttonStyle(HighlightButtonStyle())
     }
 }
 

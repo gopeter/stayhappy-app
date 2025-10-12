@@ -5,9 +5,9 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import os.log
 import PhotosUI
 import SwiftUI
+import os.log
 
 struct BackgroundOptionView: View {
     @Environment(\.dismiss) var dismiss
@@ -79,6 +79,7 @@ struct MomentFormView: View {
     @State private var background: String
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
+    @State private var previewImage: UIImage?
 
     @FocusState private var isFocused: Bool
 
@@ -100,6 +101,7 @@ struct MomentFormView: View {
         if moment?.photo != nil {
             let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: moment!.photo!)).jpg")
             self._photoImage = State(initialValue: UIImage(contentsOfFile: photoUrl.path))
+
         }
     }
 
@@ -171,6 +173,17 @@ struct MomentFormView: View {
 
     func removeImage() {
         photoImage = nil
+        previewImage = nil
+    }
+
+    @MainActor
+    private func generatePreviewImage(from image: UIImage) async {
+        // Generate preview with same aspect ratio as highlight tiles (2:1 for medium widgets)
+        let screenWidth = UIScreen.main.bounds.width
+        let previewSize = CGSize(width: screenWidth - 40, height: 150)
+
+        let processedImage = await ImageProcessingService.shared.processImage(image, targetSize: previewSize)
+        previewImage = processedImage
     }
 
     var body: some View {
@@ -221,13 +234,21 @@ struct MomentFormView: View {
                     }
 
                     PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                        if photoImage != nil {
+                        if let preview = previewImage {
+                            Image(uiImage: preview)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 150)
+                                .clipped()
+                                .padding(0)
+                        }
+                        else if photoImage != nil {
                             Image(uiImage: photoImage!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(height: 150)
+                                .clipped()
                                 .padding(0)
-
                         }
                         else {
                             Text("select_photo").padding(.horizontal, 20)
@@ -249,6 +270,11 @@ struct MomentFormView: View {
                         Task {
                             if let loaded = try? await photoPickerItem?.loadTransferable(type: Data.self) {
                                 photoImage = UIImage(data: loaded)
+
+                                // Generate saliency-based preview
+                                if let image = photoImage {
+                                    await generatePreviewImage(from: image)
+                                }
                             }
                             else {
                                 print("Failed")
@@ -278,6 +304,16 @@ struct MomentFormView: View {
         }.scrollContentBackground(.hidden)
             .onAppear {
                 isFocused = true
+
+                // Generate preview for existing moment
+                if moment?.photo != nil, let photoFileName = moment?.photo {
+                    let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
+                    if let image = UIImage(contentsOfFile: photoUrl.path) {
+                        Task {
+                            await generatePreviewImage(from: image)
+                        }
+                    }
+                }
             }
     }
 }

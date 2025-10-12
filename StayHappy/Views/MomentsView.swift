@@ -88,7 +88,6 @@ struct MomentsView: View {
                             Text("descending").tag(MomentListRequest.Ordering.desc)
                         }
                     }
-
                 } label: {
                     VStack(spacing: 0) {
                         Spacer()
@@ -98,12 +97,10 @@ struct MomentsView: View {
             }
 
         }
-        .introspect(.searchField, on: .iOS(.v17)) { searchField in
-            if colorScheme == .dark {
-                searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
-                searchField.searchTextField.borderStyle = .none
-                searchField.searchTextField.layer.cornerRadius = 10
-            }
+        .introspect(.searchField, on: .iOS(.v18, .v26)) { searchField in
+            searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
+            searchField.searchTextField.borderStyle = .none
+            searchField.searchTextField.layer.cornerRadius = 10
         }
     }
 

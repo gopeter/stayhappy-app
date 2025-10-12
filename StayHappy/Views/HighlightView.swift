@@ -114,7 +114,7 @@ struct HighlightView: View {
                 checkAndOpenImage()
                 loadImages(viewSize: self.deviceSize)
             }
-            .onChange(of: globalData.highlightImageToShow) { newValue in
+            .onChange(of: globalData.highlightImageToShow) { _, newValue in
                 checkAndOpenImage()
             }
     }

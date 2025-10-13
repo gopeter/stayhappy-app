@@ -54,6 +54,18 @@
 "thanks" = "Thanks";
 "buy_me_coffee" = "Buy me a coffee";
 
+/* Coffee View Content */
+"coffee_intro_title" = "A Private Project";
+"coffee_intro_text" = "StayHappy is a purely private project. The app is free and should remain so forever.";
+"coffee_opensource_title" = "Open Source";
+"coffee_opensource_text" = "The source code of the app is freely available on GitHub.";
+"coffee_support_title" = "Support";
+"coffee_support_text" = "If someone would like to say thank you with a small contribution, they can gladly do so via BuyMeACoffee:";
+"coffee_button_title" = "Buy me a coffee";
+"coffee_button_subtitle" = "buymeacoffee.com/stayhappy";
+"coffee_costs_title" = "Project Costs";
+"coffee_costs_text" = "The costs for this project currently amount to about €140 per year, every euro of support is very welcome :-)";
+
 /* About App Content */
 "about_app_intro" = "StayHappy is a little helper that accompanies you through depressive episodes – and beyond – and reminds you to keep the good things in sight and to do something good for yourself. The app was developed by affected individuals from their own experience and needs.";
 "about_app_concept" = "The idea behind it is simple: a widget on the home screen permanently reminds you of a handful of beautiful little things that are coming up in the next few days. Today the delicious homemade lasagna, tomorrow the new episode of your favorite series, and the day after tomorrow a hot bath when the children are sleeping. If you don't have anything planned, you'll be presented with beautiful moments from the past or a few points from your personal resource list.";

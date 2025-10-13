@@ -54,6 +54,18 @@
 "thanks" = "Danke";
 "buy_me_coffee" = "Kauf mir einen Kaffee";
 
+/* Coffee View Content */
+"coffee_intro_title" = "Ein privates Projekt";
+"coffee_intro_text" = "StayHappy ist ein rein privates Projekt. Die App ist kostenlos und soll es auch für immer bleiben.";
+"coffee_opensource_title" = "Open Source";
+"coffee_opensource_text" = "Der Quellcode der App ist frei auf GitHub verfügbar.";
+"coffee_support_title" = "Unterstützung";
+"coffee_support_text" = "Falls sich jemand mit einem kleinen Obolus bedanken möchte, kann das gerne über BuyMeACoffee tun:";
+"coffee_button_title" = "Kauf mir einen Kaffee";
+"coffee_button_subtitle" = "buymeacoffee.com/stayhappy";
+"coffee_costs_title" = "Projektkosten";
+"coffee_costs_text" = "Die Kosten für dieses Projekt belaufen sich aktuell auf ca. 140€ im Jahr, jeder Euro Unterstützung ist da sehr willkommen :-)";
+
 /* About App Content */
 "about_app_intro" = "StayHappy ist ein kleiner Helfer, der einen durch depressive Episoden – und auch darüber hinaus – begleitet und daran erinnert, die guten Dinge im Blick zu behalten und sich selbst etwas Gutes zu tun. Die App wurde von Betroffenen aus der eigenen Erfahrung und dem eigenen Bedarf heraus entwickelt.";
 "about_app_concept" = "Die Idee dahinter ist simpel: ein Widget auf dem Homescreen erinnert einen permanent an eine Hand voll schöner Kleinigkeiten, die in den nächsten Tagen anstehen. Heute die leckere selbstgemachte Lasagne, morgen die neue Folge deiner Lieblingsserie und übermorgen ein heißes Bad wenn die Kinder schlafen. Falls man mal nix hat, werden einem schöne Momente aus der Vergangenheit oder ein paar Punkte aus der persönlichen Ressourcen-Liste präsentiert.";

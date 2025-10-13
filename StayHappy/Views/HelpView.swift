@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Link: View {
+struct NavLink: View {
     var label: String
 
     var body: some View {
@@ -154,7 +154,133 @@ struct ThanksView: View {
 
 struct CoffeeView: View {
     var body: some View {
-        Text("coffee")
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 32) {
+                    // Intro Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.pink)
+                                .font(.title2)
+                            Text("coffee_intro_title")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                        }
+
+                        Text("coffee_intro_text")
+                            .font(.body)
+                            .lineSpacing(4)
+                            .foregroundColor(.primary)
+                    }
+
+                    // GitHub Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Image(systemName: "chevron.left.forwardslash.chevron.right")
+                                .foregroundColor(.green)
+                                .font(.title2)
+                            Text("coffee_opensource_title")
+                                .font(.headline)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                        }
+
+                        Text("coffee_opensource_text")
+                            .font(.body)
+                            .lineSpacing(4)
+                            .foregroundColor(.primary)
+
+                        Link(destination: URL(string: "https://github.com/gopeter/stayhappy-app")!) {
+                            HStack {
+                                Image(systemName: "link")
+                                    .font(.caption)
+                                Text("github.com/gopeter/stayhappy-app")
+                                    .font(.callout)
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption2)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(Color.secondary.opacity(0.1))
+                            .foregroundColor(.primary)
+                            .cornerRadius(8)
+                        }
+                    }
+
+                    // Buy Me a Coffee Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image(systemName: "cup.and.saucer.fill")
+                                .foregroundColor(.orange)
+                                .font(.title2)
+                            Text("coffee_support_title")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                        }
+
+                        Text("coffee_support_text")
+                            .font(.body)
+                            .lineSpacing(4)
+                            .foregroundColor(.primary)
+
+                        // Call to Action Button
+                        Link(destination: URL(string: "https://buymeacoffee.com/stayhappy")!) {
+                            HStack {
+                                Image(systemName: "link")
+                                    .font(.caption)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("coffee_button_title")
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                    Text("coffee_button_subtitle")
+                                        .font(.caption)
+                                        .opacity(0.8)
+                                }
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption2)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 16)
+                            .background(HappyGradients.stayHappy.linear())
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                            .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                        }
+
+                        // Cost Info
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Image(systemName: "info.circle.fill")
+                                    .foregroundColor(.blue)
+                                    .font(.title3)
+                                Text("coffee_costs_title")
+                                    .font(.headline)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.primary)
+                            }
+
+                            Text("coffee_costs_text")
+                                .font(.callout)
+                                .lineSpacing(3)
+                                .foregroundColor(.primary.opacity(0.8))
+                        }
+                        .padding(20)
+                        .background(Color.blue.opacity(0.08))
+                        .cornerRadius(12)
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+            }
+            .background(Color("AppBackgroundColor"))
+            .navigationTitle("buy_me_coffee")
+            .navigationBarTitleDisplayMode(.large)
+        }
     }
 }
 
@@ -199,7 +325,7 @@ struct HelpView: View {
                             AboutView()
                         },
                         label: {
-                            Link(label: "about_app")
+                            NavLink(label: "about_app")
                         }
                     )
 
@@ -208,7 +334,7 @@ struct HelpView: View {
                             ThanksView()
                         },
                         label: {
-                            Link(label: "thanks")
+                            NavLink(label: "thanks")
                         }
                     )
 
@@ -217,7 +343,7 @@ struct HelpView: View {
                             CoffeeView()
                         },
                         label: {
-                            Link(label: "buy_me_coffee")
+                            NavLink(label: "buy_me_coffee")
                         }
                     )
                 }.listRowBackground(Color("CardBackgroundColor"))

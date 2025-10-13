@@ -68,12 +68,10 @@ struct ResourcesView: View {
                 transaction.animation = nil
             }
             .background(Color("AppBackgroundColor").ignoresSafeArea(.all))
-        }.introspect(.searchField, on: .iOS(.v17)) { searchField in
-            if colorScheme == .dark {
-                searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
-                searchField.searchTextField.borderStyle = .none
-                searchField.searchTextField.layer.cornerRadius = 10
-            }
+        }.introspect(.searchField, on: .iOS(.v18, .v26)) { searchField in
+            searchField.searchTextField.backgroundColor = UIColor(named: "CardBackgroundColor")
+            searchField.searchTextField.borderStyle = .none
+            searchField.searchTextField.layer.cornerRadius = 10
         }
     }
 }

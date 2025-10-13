@@ -50,8 +50,25 @@
 "in_days" = "In %d Tagen";
 
 /* Help Section */
+"about_app" = "Über diese App";
 "thanks" = "Danke";
 "buy_me_coffee" = "Kauf mir einen Kaffee";
+
+/* About App Content */
+"about_app_intro" = "StayHappy ist ein kleiner Helfer, der einen durch depressive Episoden – und auch darüber hinaus – begleitet und daran erinnert, die guten Dinge im Blick zu behalten und sich selbst etwas Gutes zu tun. Die App wurde von Betroffenen aus der eigenen Erfahrung und dem eigenen Bedarf heraus entwickelt.";
+"about_app_concept" = "Die Idee dahinter ist simpel: ein Widget auf dem Homescreen erinnert einen permanent an eine Hand voll schöner Kleinigkeiten, die in den nächsten Tagen anstehen. Heute die leckere selbstgemachte Lasagne, morgen die neue Folge deiner Lieblingsserie und übermorgen ein heißes Bad wenn die Kinder schlafen. Falls man mal nix hat, werden einem schöne Momente aus der Vergangenheit oder ein paar Punkte aus der persönlichen Ressourcen-Liste präsentiert.";
+"about_app_resources" = "Ressourcen sind alltägliche Sachen, die einem wichtig sind, Freude bereiten, einen stärken oder sogar ausmachen. Der Cappuccino jeden Morgen, die beste Freundin, ein Hobby, Sport, Musik oder einfach ein geschafftes Ziel, auf das man stolz sein kann.";
+"about_app_highlights" = "Etwas größere Momente lassen sich als Highlight definieren und dadurch mit einem Bild versehen, welches dann ebenfalls im Widget angezeigt wird. So entsteht ein bunter Mix aus kommenden und vergangenen Momenten und den alltäglichen Ressourcen, die einen Freude bereiten und Kraft geben.";
+"about_app_encouragement" = "Der Anfang kann schwer sein, aber jede noch so winzige Kleinigkeit, die einem Freude bereitet, ist wichtig. Eine besondere Handcreme am Morgen, der Duft des Lieblingsparfüms, das abgemachte Telefonat mit seinem besten Freund. Und mit dem Blick auf die schönen Kleinigkeiten, die einem in den nächsten Tagen begegnen werden, wird die Taschenlampe immer mehr Ecken ausleuchten, die vielleicht durch die Dunkelheit der Gedanken im Verborgenen lagen.";
+"about_app_disclaimer" = "StayHappy hat keinen medizinischen und therapeutischen Hintergrund und wurde lediglich aus einer Idee heraus geboren, die dem Entwickler im Alltag geholfen hat und schließlich in eine App gegossen wurde.";
+
+/* About App Section Headers */
+"about_what_is_stayhappy" = "Was ist StayHappy?";
+"about_the_idea" = "Die Idee";
+"about_resources_title" = "Ressourcen";
+"about_highlights_title" = "Highlights";
+"about_the_beginning" = "Jetzt loslegen";
+"about_important_note" = "Wichtiger Hinweis";
 
 /* Search */
 "search" = "Suchen";

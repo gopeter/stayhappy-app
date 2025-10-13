@@ -50,8 +50,25 @@
 "in_days" = "In %d days";
 
 /* Help Section */
+"about_app" = "About the app";
 "thanks" = "Thanks";
 "buy_me_coffee" = "Buy me a coffee";
+
+/* About App Content */
+"about_app_intro" = "StayHappy is a little helper that accompanies you through depressive episodes – and beyond – and reminds you to keep the good things in sight and to do something good for yourself. The app was developed by affected individuals from their own experience and needs.";
+"about_app_concept" = "The idea behind it is simple: a widget on the home screen permanently reminds you of a handful of beautiful little things that are coming up in the next few days. Today the delicious homemade lasagna, tomorrow the new episode of your favorite series, and the day after tomorrow a hot bath when the children are sleeping. If you don't have anything planned, you'll be presented with beautiful moments from the past or a few points from your personal resource list.";
+"about_app_resources" = "Resources are everyday things that are important to you, bring you joy, strengthen you, or even define you. The cappuccino every morning, your best friend, a hobby, sports, music, or simply an accomplished goal that you can be proud of.";
+"about_app_highlights" = "Somewhat larger moments can be defined as highlights and thus be provided with an image, which is then also displayed in the widget. This creates a colorful mix of upcoming and past moments and the everyday resources that bring you joy and give you strength.";
+"about_app_encouragement" = "The beginning can be difficult, but every tiny little thing that brings you joy is important. A special hand cream in the morning, the scent of your favorite perfume, the arranged phone call with your best friend. And with the view of the beautiful little things that will encounter you in the next few days, the flashlight will illuminate more and more corners that may have been hidden by the darkness of thoughts.";
+"about_app_disclaimer" = "StayHappy has no medical and therapeutic background and was merely born from an idea that helped the developer in everyday life and was finally poured into an app.";
+
+/* About App Section Headers */
+"about_what_is_stayhappy" = "What is StayHappy?";
+"about_the_idea" = "The Idea";
+"about_resources_title" = "Resources";
+"about_highlights_title" = "Highlights";
+"about_the_beginning" = "Getting Started";
+"about_important_note" = "Important Note";
 
 /* Search */
 "search" = "Search";

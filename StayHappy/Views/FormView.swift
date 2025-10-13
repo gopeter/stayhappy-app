@@ -31,59 +31,65 @@ struct FormView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            if isInSheet {
-                HStack {
-                    Text("add").font(.title).fontWeight(.bold)
-                    Menu {
-                        Picker("select_entry_type", selection: $selection) {
-                            Text("moment").tag(Selection.moment)
-                            Text("resource").tag(Selection.resource)
-                        }
-                    } label: {
-                        HStack {
-                            Text(selection == Selection.resource ? "Resource" : "Moment").font(.title).fontWeight(.bold)
-                            Image("chevron-down-symbol").padding(.top, 5)
-                        }
-                    }
+        ZStack {
+            Color("AppBackgroundColor")
+                .ignoresSafeArea(.all)
 
-                    Spacer()
-
-                    if isInSheet {
-                        Button(
-                            action: {
-                                dismiss()
-                            },
-                            label: {
-                                Image("x-symbol")
-                                    .resizable()
-                                    .frame(width: 18.0, height: 18.0)
-
+            VStack(spacing: 0) {
+                if isInSheet {
+                    HStack {
+                        Text("add").font(.title).fontWeight(.bold)
+                        Menu {
+                            Picker("select_entry_type", selection: $selection) {
+                                Text("moment").tag(Selection.moment)
+                                Text("resource").tag(Selection.resource)
                             }
-                        )
-                    }
-                }.padding(.horizontal, 20)
-                    .padding(.top, moment == nil && resource == nil ? 40 : 20)
-            }
+                        } label: {
+                            HStack {
+                                Text(selection == Selection.resource ? "Resource" : "Moment").font(.title).fontWeight(.bold)
+                                Image("chevron-down-symbol").padding(.top, 5)
+                            }
+                        }
 
-            if moment != nil {
-                MomentFormView(moment: moment)
-                    .navigationTitle("moment")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
-            else if resource != nil {
-                ResourceFormView(resource: resource)
-                    .navigationTitle("resource")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
-            else if selection == Selection.moment {
-                MomentFormView(moment: nil)
-            }
-            else if selection == Selection.resource {
-                ResourceFormView(resource: nil)
-            }
+                        Spacer()
 
-        }.background(Color("AppBackgroundColor"))
+                        if isInSheet {
+                            Button(
+                                action: {
+                                    dismiss()
+                                },
+                                label: {
+                                    Image("x-symbol")
+                                        .resizable()
+                                        .frame(width: 18.0, height: 18.0)
+
+                                }
+                            )
+                        }
+                    }.padding(.horizontal, 20)
+                        .padding(.top, moment == nil && resource == nil ? 40 : 20)
+                }
+
+                if moment != nil {
+                    MomentFormView(moment: moment)
+                        .navigationTitle("moment")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+                else if resource != nil {
+                    ResourceFormView(resource: resource)
+                        .navigationTitle("resource")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+                else if selection == Selection.moment {
+                    MomentFormView(moment: nil)
+                }
+                else if selection == Selection.resource {
+                    ResourceFormView(resource: nil)
+                }
+
+                Spacer()
+            }
+        }
     }
 }
 

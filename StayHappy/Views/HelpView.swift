@@ -20,6 +20,46 @@ struct NavLink: View {
     }
 }
 
+struct MomentHelpView: View {
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    Text("moment_help_content")
+                        .font(.body)
+                        .lineSpacing(4)
+                        .foregroundColor(.primary)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+            }
+            .background(Color("AppBackgroundColor"))
+            .navigationTitle("help_examples")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+struct ResourceHelpView: View {
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    Text("resource_help_content")
+                        .font(.body)
+                        .lineSpacing(4)
+                        .foregroundColor(.primary)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+            }
+            .background(Color("AppBackgroundColor"))
+            .navigationTitle("help_examples")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
 struct AboutView: View {
     var body: some View {
         NavigationView {

@@ -5,14 +5,15 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import os.log
 import SwiftUI
+import os.log
 
 struct ResourceFormView: View {
     @Environment(\.appDatabase) private var appDatabase
     @Environment(\.dismiss) var dismiss
 
     @State private var title: String
+    @State private var showingHelpSheet = false
 
     @FocusState private var isFocused: Bool
 
@@ -89,7 +90,27 @@ struct ResourceFormView: View {
                     )
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
+
+            Section {
+                Button(
+                    action: {
+                        showingHelpSheet = true
+                    },
+                    label: {
+                        Text("help_examples")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+                    }
+                )
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: -38, leading: 0, bottom: 0, trailing: 0))
         }.scrollContentBackground(.hidden)
+            .sheet(isPresented: $showingHelpSheet) {
+                ResourceHelpView()
+            }
             .onAppear {
                 isFocused = true
             }

@@ -54,6 +54,11 @@
 "thanks" = "Thanks";
 "buy_me_coffee" = "Buy me a coffee";
 
+/* Form Help */
+"help_examples" = "Help & Examples";
+"moment_help_content" = "Here comes the help text for moments...";
+"resource_help_content" = "Here comes the help text for resources...";
+
 /* Coffee View Content */
 "coffee_intro_title" = "A Private Project";
 "coffee_intro_text" = "StayHappy is a purely private project. The app is free and should remain so forever.";

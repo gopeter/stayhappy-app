@@ -106,7 +106,7 @@ struct ResourceFormView: View {
             }
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets(top: -38, leading: 0, bottom: 0, trailing: 0))
+            .listRowInsets(EdgeInsets(top: -30, leading: 0, bottom: 0, trailing: 0))
         }.scrollContentBackground(.hidden)
             .sheet(isPresented: $showingHelpSheet) {
                 ResourceHelpView()

@@ -98,7 +98,7 @@ struct MomentFormView: View {
         self._startAt = State(initialValue: moment?.startAt ?? Date())
         // self._endAt = State(initialValue: moment?.endAt ?? Date())
         self._background = State(initialValue: moment?.background ?? HappyGradients.allCases.map { $0.rawValue }.randomElement()!)
-        self._isHighlight = State(initialValue: moment?.isHighlight ?? true)
+        self._isHighlight = State(initialValue: moment?.isHighlight ?? false)
 
         if moment?.photo != nil {
             let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(String(describing: moment!.photo!)).jpg")
@@ -333,7 +333,7 @@ struct MomentFormView: View {
             }
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets(top: -38, leading: 0, bottom: 0, trailing: 0))
+            .listRowInsets(EdgeInsets(top: -30, leading: 0, bottom: 0, trailing: 0))
         }.scrollContentBackground(.hidden)
             .animation(.none, value: isHighlight)
             .sheet(isPresented: $showingHelpSheet) {

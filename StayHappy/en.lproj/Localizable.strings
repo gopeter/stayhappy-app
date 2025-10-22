@@ -56,7 +56,25 @@
 
 /* Form Help */
 "help_examples" = "Help & Examples";
-"moment_help_content" = "Here comes the help text for moments...";
+
+/* Moment Help Content */
+"moment_help_title" = "What are Moments?";
+"moment_help_intro" = "Moments are the small and big joys in your life - things you can look forward to or like to remember.";
+"moment_help_examples_title" = "Examples of Moments";
+"moment_help_examples" = "Small moments: The delicious homemade lasagna tonight, the new episode of your favorite series tomorrow, or a hot bath when the children are sleeping.\n\nBig moments: A concert visit, a birthday party, the next vacation, or an important appointment.";
+"moment_help_highlights_title" = "Highlights with Images";
+"moment_help_highlights" = "You can mark larger moments as highlights and add an image to them. These are then also displayed in the widget and create a colorful mix of upcoming and past moments.";
+"moment_help_tips_title" = "Tip";
+"moment_help_tips" = "Collect both small and big moments. The mix makes it! This creates a colorful collection that brings you joy and gives you strength.";
+
+"moment_help_content" = "Moments can be small or big: a handful of beautiful little things that are coming up in the next few days. Today the delicious homemade lasagna, tomorrow the new episode of your favorite series, and the day after tomorrow a hot bath when the children are sleeping. Or even the big events, like a concert visit, a birthday party, or the next vacation.\n\nLarger moments can be defined as highlights and thus be provided with an image, which is then also displayed in the widget. This creates a colorful mix of upcoming and past moments that bring you joy and give you strength.";
+
+/* Resource Help Content */
+"resource_help_title" = "Collecting Resources";
+"resource_help_intro" = "Being aware of your resources is often not that easy – but all the more helpful when you collect them, because they support you every day. What defines you, what brings you joy, what can you do or what have you achieved?";
+"resource_help_examples_title" = "Examples";
+"resource_help_examples" = "Every little thing is important and meaningful: the cappuccino every morning, your best friend, a hobby, sports, music, or simply an accomplished goal you can be proud of.";
+
 "resource_help_content" = "Here comes the help text for resources...";
 
 /* Coffee View Content */

@@ -21,41 +21,194 @@ struct NavLink: View {
 }
 
 struct MomentHelpView: View {
+    @Environment(\.dismiss) var dismiss
+
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    Text("moment_help_content")
-                        .font(.body)
-                        .lineSpacing(4)
-                        .foregroundColor(.primary)
+            ZStack {
+                Color("AppBackgroundColor")
+                    .ignoresSafeArea(.all)
+
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("help_examples").font(.title).fontWeight(.bold)
+
+                        Spacer()
+
+                        Button(
+                            action: {
+                                dismiss()
+                            },
+                            label: {
+                                Image("x-symbol")
+                                    .resizable()
+                                    .frame(width: 18.0, height: 18.0)
+                            }
+                        )
+                    }.padding(.horizontal, 20)
+                        .padding(.top, 40)
+
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 32) {
+                            // Intro Section
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Image(systemName: "heart.fill")
+                                        .foregroundColor(.pink)
+                                        .font(.title2)
+                                    Text("moment_help_title")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                }
+
+                                Text("moment_help_intro")
+                                    .font(.body)
+                                    .lineSpacing(4)
+                                    .foregroundColor(.primary)
+                            }
+
+                            // Examples Section
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Image(systemName: "lightbulb.fill")
+                                        .foregroundColor(.orange)
+                                        .font(.title2)
+                                    Text("moment_help_examples_title")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                }
+
+                                Text("moment_help_examples")
+                                    .font(.body)
+                                    .lineSpacing(4)
+                                    .foregroundColor(.primary)
+                            }
+
+                            // Highlights Section
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Image(systemName: "photo.fill")
+                                        .foregroundColor(.blue)
+                                        .font(.title2)
+                                    Text("moment_help_highlights_title")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                }
+
+                                Text("moment_help_highlights")
+                                    .font(.body)
+                                    .lineSpacing(4)
+                                    .foregroundColor(.primary)
+                            }
+
+                            // Tips Section
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Image(systemName: "star.fill")
+                                        .foregroundColor(.yellow)
+                                        .font(.title3)
+                                    Text("moment_help_tips_title")
+                                        .font(.headline)
+                                        .fontWeight(.medium)
+                                        .foregroundColor(.primary.opacity(0.8))
+                                }
+
+                                Text("moment_help_tips")
+                                    .font(.callout)
+                                    .lineSpacing(3)
+                                    .foregroundColor(.primary.opacity(0.8))
+                            }
+                            .padding(20)
+                            .background(Color.secondary.opacity(0.08))
+                            .cornerRadius(12)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 20)
+                    }
+
+                    Spacer()
                 }
-                .padding(.horizontal, 24)
-                .padding(.vertical, 20)
             }
-            .background(Color("AppBackgroundColor"))
-            .navigationTitle("help_examples")
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
 
 struct ResourceHelpView: View {
+    @Environment(\.dismiss) var dismiss
+
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    Text("resource_help_content")
-                        .font(.body)
-                        .lineSpacing(4)
-                        .foregroundColor(.primary)
+            ZStack {
+                Color("AppBackgroundColor")
+                    .ignoresSafeArea(.all)
+
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("help_examples").font(.title).fontWeight(.bold)
+
+                        Spacer()
+
+                        Button(
+                            action: {
+                                dismiss()
+                            },
+                            label: {
+                                Image("x-symbol")
+                                    .resizable()
+                                    .frame(width: 18.0, height: 18.0)
+                            }
+                        )
+                    }.padding(.horizontal, 20)
+                        .padding(.top, 40)
+
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 32) {
+                            // Intro Section
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Image(systemName: "star.fill")
+                                        .foregroundColor(.yellow)
+                                        .font(.title2)
+                                    Text("resource_help_title")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                }
+
+                                Text("resource_help_intro")
+                                    .font(.body)
+                                    .lineSpacing(4)
+                                    .foregroundColor(.primary)
+                            }
+
+                            // Examples Section
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Image(systemName: "lightbulb.fill")
+                                        .foregroundColor(.orange)
+                                        .font(.title2)
+                                    Text("resource_help_examples_title")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                }
+
+                                Text("resource_help_examples")
+                                    .font(.body)
+                                    .lineSpacing(4)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 20)
+                    }
+
+                    Spacer()
                 }
-                .padding(.horizontal, 24)
-                .padding(.vertical, 20)
             }
-            .background(Color("AppBackgroundColor"))
-            .navigationTitle("help_examples")
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 }

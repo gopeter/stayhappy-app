@@ -56,7 +56,25 @@
 
 /* Form Help */
 "help_examples" = "Hilfe & Beispiele";
-"moment_help_content" = "Hier kommt der Hilfetext für Momente...";
+
+/* Moment Help Content */
+"moment_help_title" = "Was sind Momente?";
+"moment_help_intro" = "Momente sind die kleinen und großen Freuden in deinem Leben - Dinge, auf die du dich freuen kannst oder an die du gerne zurückdenkst.";
+"moment_help_examples_title" = "Beispiele für Momente";
+"moment_help_examples" = "Kleine Momente: Die leckere selbstgemachte Lasagne heute Abend, die neue Folge deiner Lieblingsserie morgen oder ein heißes Bad wenn die Kinder schlafen.\n\nGroße Momente: Ein Konzertbesuch, eine Geburtstagsparty, der nächste Urlaub oder ein wichtiger Termin.";
+"moment_help_highlights_title" = "Highlights mit Bildern";
+"moment_help_highlights" = "Größere Momente kannst du als Highlight markieren und mit einem Bild versehen. Diese werden dann auch im Widget angezeigt und schaffen einen bunten Mix aus kommenden und vergangenen Momenten.";
+"moment_help_tips_title" = "Tipp";
+"moment_help_tips" = "Sammle sowohl kleine als auch große Momente. Die Mischung macht's! So entsteht eine bunte Sammlung, die dir Freude bereitet und Kraft gibt.";
+
+"moment_help_content" = "Momente können klein oder groß sein: eine Hand voll schöner Kleinigkeiten, die in den nächsten Tagen anstehen. Heute die leckere selbstgemachte Lasagne, morgen die neue Folge deiner Lieblingsserie und übermorgen ein heißes Bad wenn die Kinder schlafen. Oder auch die großen Ereignisse, wie ein Konzertbesuch, eine Geburtstagsparty oder der nächste Urlaub.\n\nGrößere Momente lassen sich als Highlight definieren und dadurch mit einem Bild versehen, welches dann ebenfalls im Widget angezeigt wird. So entsteht ein bunter Mix aus kommenden und vergangenen Momenten, die einen Freude bereiten und Kraft geben.";
+
+/* Resource Help Content */
+"resource_help_title" = "Ressourcen sammeln";
+"resource_help_intro" = "Sich über seine Ressourcen im Klaren zu sein ist oft nicht so einfach – aber umso hilfreicher, wenn man sie sammelt, denn sie stützen einen jeden Tag. Was macht dich aus, was bereitet dir Freude, was kannst du oder was hast du erreicht?";
+"resource_help_examples_title" = "Beispiele";
+"resource_help_examples" = "Jede Kleinigkeit ist wichtig und von Bedeutung: der Cappuccino jeden Morgen, die beste Freundin, ein Hobby, Sport, Musik oder einfach ein geschafftes Ziel, auf das man stolz sein kann.";
+
 "resource_help_content" = "Hier kommt der Hilfetext für Ressourcen...";
 
 /* Coffee View Content */

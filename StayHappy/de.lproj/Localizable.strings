@@ -50,7 +50,7 @@
 "in_days" = "In %d Tagen";
 
 /* Help Section */
-"about_app" = "Über diese App";
+"about_app" = "So funktioniert's";
 "thanks" = "Danke";
 "buy_me_coffee" = "Kauf mir einen Kaffee";
 
@@ -91,6 +91,7 @@
 
 /* About App Content */
 "about_app_intro" = "StayHappy ist ein kleiner Helfer, der einen durch depressive Episoden – und auch darüber hinaus – begleitet und daran erinnert, die guten Dinge im Blick zu behalten und sich selbst etwas Gutes zu tun. Die App wurde von Betroffenen aus der eigenen Erfahrung und dem eigenen Bedarf heraus entwickelt.";
+"about_app_widgets" = "Die Widgets sind das Herzstück von StayHappy. Du kannst dir entweder deine kommenden Momente anzeigen lassen oder dich nur an deine Highlights und Ressourcen erinnern lassen. Falls du mal nichts im Momente-Widget stehen haben solltest, werden dir automatisch vergangene Highlights oder Ressource angezeigt.\n\nWichtig: die Widgets lassen sich nach dem Hinzufügen noch konfigurieren. Dafür musst du das Widget kurz gedrückt halten und dann auf \"Widget bearbeiten\" klicken. Dort kannst du zum Beispiel noch den Zeitraum oder den Platzhalter-Inhalt konfigurieren.";
 "about_app_concept" = "Die Idee dahinter ist simpel: ein Widget auf dem Homescreen erinnert einen permanent an eine Hand voll schöner Kleinigkeiten, die in den nächsten Tagen anstehen. Heute die leckere selbstgemachte Lasagne, morgen die neue Folge deiner Lieblingsserie und übermorgen ein heißes Bad wenn die Kinder schlafen. Falls man mal nix hat, werden einem schöne Momente aus der Vergangenheit oder ein paar Punkte aus der persönlichen Ressourcen-Liste präsentiert.";
 "about_app_resources" = "Ressourcen sind alltägliche Sachen, die einem wichtig sind, Freude bereiten, einen stärken oder sogar ausmachen. Der Cappuccino jeden Morgen, die beste Freundin, ein Hobby, Sport, Musik oder einfach ein geschafftes Ziel, auf das man stolz sein kann.";
 "about_app_highlights" = "Etwas größere Momente lassen sich als Highlight definieren und dadurch mit einem Bild versehen, welches dann ebenfalls im Widget angezeigt wird. So entsteht ein bunter Mix aus kommenden und vergangenen Momenten und den alltäglichen Ressourcen, die einen Freude bereiten und Kraft geben.";
@@ -99,6 +100,7 @@
 
 /* About App Section Headers */
 "about_what_is_stayhappy" = "Was ist StayHappy?";
+"about_widgets_title" = "Die Widgets";
 "about_the_idea" = "Die Idee";
 "about_resources_title" = "Ressourcen";
 "about_highlights_title" = "Highlights";

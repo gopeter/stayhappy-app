@@ -254,6 +254,24 @@ struct AboutView: View {
                             .foregroundColor(.primary)
                     }
 
+                    // Widgets Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image(systemName: "square.grid.2x2.fill")
+                                .foregroundColor(.purple)
+                                .font(.title2)
+                            Text("about_widgets_title")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                        }
+
+                        Text("about_app_widgets")
+                            .font(.body)
+                            .lineSpacing(4)
+                            .foregroundColor(.primary)
+                    }
+
                     // Resources Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {

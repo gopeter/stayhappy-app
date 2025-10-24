@@ -90,6 +90,7 @@
 		45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */; };
 		45BBE2422B68E5E10076D062 /* ResourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2412B68E5E10076D062 /* ResourcesView.swift */; };
 		45BBE2462B69939D0076D062 /* MomentFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2452B69939D0076D062 /* MomentFormView.swift */; };
+		45C3DC112EABFF4E005DD41F /* StayHappyIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 45C3DC102EABFF4E005DD41F /* StayHappyIcon.icon */; };
 		45C99AB52B73984600F61E8D /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 45C99AB42B73984600F61E8D /* Pow */; };
 		45CC79B92C07C5B400D254E5 /* MotivationMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CC79B82C07C5B400D254E5 /* MotivationMedium.swift */; };
 		45E0180B2B8228F7009C594F /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E0180A2B8228F7009C594F /* ImageSaver.swift */; };
@@ -205,6 +206,7 @@
 		45BBE23B2B67E83B0076D062 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		45BBE2412B68E5E10076D062 /* ResourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesView.swift; sourceTree = "<group>"; };
 		45BBE2452B69939D0076D062 /* MomentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentFormView.swift; sourceTree = "<group>"; };
+		45C3DC102EABFF4E005DD41F /* StayHappyIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = StayHappyIcon.icon; sourceTree = "<group>"; };
 		45CC79B82C07C5B400D254E5 /* MotivationMedium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationMedium.swift; sourceTree = "<group>"; };
 		45E0180A2B8228F7009C594F /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
 		45E0180C2B822900009C594F /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 				457DED632D80569600BE5F24 /* .swift-format */,
 				455FECA62B90FAFF006A2592 /* README.md */,
 				45AFCBAC2BE12873009D1FD4 /* LICENSE.md */,
+				45C3DC102EABFF4E005DD41F /* StayHappyIcon.icon */,
 				45AFCBAB2BE0E629009D1FD4 /* WidgetsExtension.entitlements */,
 				459BE7912B8FC93B00433B60 /* Frameworks */,
 				45B6F6DF2B4EF0B8003A42F8 /* Products */,
@@ -652,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				455FECA72B90FAFF006A2592 /* README.md in Resources */,
+				45C3DC112EABFF4E005DD41F /* StayHappyIcon.icon in Resources */,
 				45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */,
 				451AC6422E5F8DFF00E53BE3 /* Localizable.strings in Resources */,
 				451AC6432E5F8DFF00E53BE3 /* InfoPlist.strings in Resources */,
@@ -1021,8 +1025,9 @@
 		45B6F7072B4EF0BA003A42F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = StayHappyIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = YES;
 				CODE_SIGN_ENTITLEMENTS = StayHappy/StayHappy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -1064,8 +1069,9 @@
 		45B6F7082B4EF0BA003A42F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = StayHappyIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = StayHappy/StayHappy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

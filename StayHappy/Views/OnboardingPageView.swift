@@ -38,17 +38,11 @@ struct OnboardingPageView: View {
     // MARK: - Icon Section
     private var iconSection: some View {
         Group {
-            if let systemImage = page.systemImage {
-                Image(systemName: systemImage)
-                    .font(.system(size: 80, weight: .light))
-                    .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-            }
-            else if let imageName = page.imageName {
+            if let imageName = page.imageName {
                 Image(imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 200, maxHeight: 200)
+                    .frame(maxWidth: 80, maxHeight: 80)
                     .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
             }
         }

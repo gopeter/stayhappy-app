@@ -27,6 +27,7 @@ struct RootView: View {
 
             NavigationBarView()
         }
+
         .ignoresSafeArea(.keyboard)
         .overlay {
             // Global fullscreen image overlay - completely independent
@@ -66,8 +67,11 @@ struct RootView: View {
 
 private func applyUIStyling() {
     UITabBar.appearance().isHidden = true
-    UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
-    UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
+
+    let searchBar = UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
+    searchBar.setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
+    searchBar.setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
+    searchBar.backgroundColor = .clear
 }
 
 // MARK: - Fullscreen Image Navigation
@@ -133,5 +137,6 @@ struct ShareSheet: UIViewControllerRepresentable {
 #Preview {
     RootView()
         .environment(\.appDatabase, .random())
-        .environmentObject(GlobalData(activeView: .help))
+        .environmentObject(GlobalData(activeView: .moments))
+        .environmentObject(OnboardingState())
 }

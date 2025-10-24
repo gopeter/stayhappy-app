@@ -5,9 +5,9 @@
 //  Created by Peter Oesteritz on 30.01.24.
 //
 
-import os.log
 import PhotosUI
 import SwiftUI
+import os.log
 
 struct BackgroundOptionView: View {
     @Environment(\.dismiss) var dismiss
@@ -79,6 +79,9 @@ struct MomentFormView: View {
     @State private var background: String
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
+    @State private var previewImage: UIImage?
+    @State private var isProcessingImage = false
+    @State private var showingHelpSheet = false
 
     @FocusState private var isFocused: Bool
 
@@ -171,13 +174,24 @@ struct MomentFormView: View {
 
     func removeImage() {
         photoImage = nil
+        previewImage = nil
+    }
+
+    @MainActor
+    private func generatePreviewImage(from image: UIImage) async {
+        // Generate preview with same aspect ratio as highlight tiles (2:1 for medium widgets)
+        let screenWidth = UIScreen.main.bounds.width
+        let previewSize = CGSize(width: screenWidth - 40, height: 150)
+
+        let processedImage = await ImageProcessingService.shared.processImage(image, targetSize: previewSize)
+        previewImage = processedImage
     }
 
     var body: some View {
         Form {
             Section {
-                TextField("Description", text: $title).focused($isFocused)
-                DatePicker("Date", selection: $startAt, displayedComponents: [.date])
+                TextField("description", text: $title).focused($isFocused)
+                DatePicker("date", selection: $startAt, displayedComponents: [.date])
                 // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                 Toggle("Highlight", isOn: $isHighlight)
             } header: {
@@ -221,13 +235,33 @@ struct MomentFormView: View {
                     }
 
                     PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                        if photoImage != nil {
-                            Image(uiImage: photoImage!)
+                        if let preview = previewImage {
+                            Image(uiImage: preview)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(height: 150)
+                                .clipped()
                                 .padding(0)
+                        }
+                        else if isProcessingImage {
+                            ZStack {
+                                Color.gray.opacity(0.3)
+                                    .frame(height: 150)
 
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .scaleEffect(1.2)
+                            }
+                        }
+                        else if photoImage != nil {
+                            ZStack {
+                                Color.gray.opacity(0.3)
+                                    .frame(height: 150)
+
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .scaleEffect(1.2)
+                            }
                         }
                         else {
                             Text("select_photo").padding(.horizontal, 20)
@@ -249,9 +283,17 @@ struct MomentFormView: View {
                         Task {
                             if let loaded = try? await photoPickerItem?.loadTransferable(type: Data.self) {
                                 photoImage = UIImage(data: loaded)
+                                isProcessingImage = true
+
+                                // Generate saliency-based preview
+                                if let image = photoImage {
+                                    await generatePreviewImage(from: image)
+                                    isProcessingImage = false
+                                }
                             }
                             else {
                                 print("Failed")
+                                isProcessingImage = false
                             }
                         }
                     }
@@ -275,9 +317,42 @@ struct MomentFormView: View {
                     )
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
+
+            Section {
+                Button(
+                    action: {
+                        showingHelpSheet = true
+                    },
+                    label: {
+                        Text("help_examples")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+                    }
+                )
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: -30, leading: 0, bottom: 0, trailing: 0))
         }.scrollContentBackground(.hidden)
+            .animation(.none, value: isHighlight)
+            .sheet(isPresented: $showingHelpSheet) {
+                MomentHelpView()
+            }
             .onAppear {
                 isFocused = true
+
+                // Generate preview for existing moment
+                if moment?.photo != nil, let photoFileName = moment?.photo {
+                    let photoUrl = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
+                    if let image = UIImage(contentsOfFile: photoUrl.path) {
+                        isProcessingImage = true
+                        Task {
+                            await generatePreviewImage(from: image)
+                            isProcessingImage = false
+                        }
+                    }
+                }
             }
     }
 }

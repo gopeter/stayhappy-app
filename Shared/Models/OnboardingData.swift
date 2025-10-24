@@ -16,7 +16,6 @@ struct OnboardingPage: Identifiable, Hashable {
     let subtitle: String?
     let description: String
     let imageName: String?
-    let systemImage: String?
     let gradient: HappyGradients
     let primaryButtonText: String?
     let secondaryButtonText: String?
@@ -38,8 +37,7 @@ struct OnboardingData {
             title: "onboarding_welcome_title",
             subtitle: "onboarding_welcome_subtitle",
             description: "",
-            imageName: nil,
-            systemImage: "heart.fill",
+            imageName: "heart-filled-symbol",
             gradient: .stayHappy,
             primaryButtonText: "onboarding_welcome_button",
             secondaryButtonText: "onboarding_skip"
@@ -51,9 +49,8 @@ struct OnboardingData {
             title: "onboarding_purpose_title",
             subtitle: nil,
             description: "onboarding_purpose_text",
-            imageName: nil,
-            systemImage: "brain.head.profile",
-            gradient: .trueSunset,
+            imageName: "lightbulb-symbol",
+            gradient: .stayHappy,
             primaryButtonText: nil,
             secondaryButtonText: nil
         ),
@@ -64,9 +61,8 @@ struct OnboardingData {
             title: "onboarding_moments_title",
             subtitle: nil,
             description: "onboarding_moments_text",
-            imageName: nil,
-            systemImage: "calendar.badge.plus",
-            gradient: .deepBlue,
+            imageName: "calendar-range-symbol",
+            gradient: .stayHappy,
             primaryButtonText: nil,
             secondaryButtonText: nil
         ),
@@ -77,9 +73,8 @@ struct OnboardingData {
             title: "onboarding_resources_title",
             subtitle: nil,
             description: "onboarding_resources_text",
-            imageName: nil,
-            systemImage: "cup.and.saucer.fill",
-            gradient: .springWarmth,
+            imageName: "coffee-symbol",
+            gradient: .stayHappy,
             primaryButtonText: nil,
             secondaryButtonText: nil
         ),
@@ -90,9 +85,8 @@ struct OnboardingData {
             title: "onboarding_widgets_title",
             subtitle: nil,
             description: "onboarding_widgets_text",
-            imageName: nil,
-            systemImage: "apps.iphone",
-            gradient: .nightFade,
+            imageName: "layout-grid-symbol",
+            gradient: .stayHappy,
             primaryButtonText: "onboarding_finish_button",
             secondaryButtonText: nil
         ),

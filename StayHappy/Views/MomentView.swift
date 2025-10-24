@@ -5,21 +5,21 @@
 //  Created by Peter Oesteritz on 01.02.24.
 //
 
-import os.log
 import Pow
 import SwiftUI
+import os.log
 
 struct MomentView: View {
     @Environment(\.appDatabase) private var appDatabase
     @State private var isMomentDetailSheetVisible: Bool = false
-    
+
     let formatter = DateComponentsFormatter()
     var moment: Moment
-    
+
     init(moment: Moment) {
         self.moment = moment
     }
-    
+
     func toggleHighlight(for moment: Moment) {
         do {
             var updatedMoment = MomentMutation(
@@ -33,33 +33,38 @@ struct MomentView: View {
                 createdAt: moment.createdAt,
                 updatedAt: moment.updatedAt
             )
-        
+
             try appDatabase.saveMoment(&updatedMoment)
-        } catch {
+        }
+        catch {
             // TODO: log something useful
             Logger.debug.error("Error: \(error.localizedDescription)")
         }
     }
-    
+
     func formatStartAtDate(startAt: Date) -> String {
-        formatter.allowedUnits = [.day]
-        formatter.unitsStyle = .full
-        
-        let days = formatter.string(from: Calendar.current.startOfDay(for: Date.now), to: Calendar.current.startOfDay(for: startAt))!
-        let isPastDate = days.starts(with: /-/)
-        
-        switch days {
-            case "0 days":
-                return "Today"
-            case "1 day":
-                return "Tomorrow"
-            case "-1 day":
-                return "Yesterday"
-            default:
-                return isPastDate ? String(days.dropFirst()) + " ago" : "In " + days
+        let calendar = Calendar.current
+
+        if calendar.isDateInToday(startAt) {
+            return NSLocalizedString("today", comment: "")
+        }
+        else if calendar.isDateInTomorrow(startAt) {
+            return NSLocalizedString("tomorrow", comment: "")
+        }
+        else if calendar.isDateInYesterday(startAt) {
+            return NSLocalizedString("yesterday", comment: "")
+        }
+        else {
+            let diff = calendar.numberOfDaysBetween(Date(), and: startAt)
+            if diff < 0 {
+                return String(format: NSLocalizedString("days_ago", comment: ""), abs(diff))
+            }
+            else {
+                return String(format: NSLocalizedString("in_days", comment: ""), diff)
+            }
         }
     }
-   
+
     var body: some View {
         HStack(spacing: 20) {
             // Date
@@ -67,12 +72,12 @@ struct MomentView: View {
                 Text(moment.startAt.formatted(.dateTime.weekday(.wide)))
                     .frame(alignment: .leading)
                     .font(.footnote)
-                
+
                 Text(moment.startAt.formatted(.dateTime.month().day()))
                     .frame(alignment: .leading)
                     .font(.headline)
                     .fontWeight(.bold)
-                
+
                 Text(moment.startAt.formatted(.dateTime.year()))
                     .frame(alignment: .leading)
                     .font(.footnote)
@@ -83,7 +88,7 @@ struct MomentView: View {
                 Rectangle()
                     .fill(Color(uiColor: .systemGray4))
                     .frame(width: 1, alignment: .center)
-                
+
                 Button {
                     toggleHighlight(for: moment)
                 } label: {
@@ -91,7 +96,7 @@ struct MomentView: View {
                         Circle()
                             .frame(width: 26, height: 26)
                             .foregroundStyle(Color("AppBackgroundColor"))
-                            
+
                         Image("heart-symbol")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -100,7 +105,7 @@ struct MomentView: View {
                             .opacity(moment.isHighlight ? 0 : 1)
                             .scaleEffect(moment.isHighlight ? CGSize(width: 0.3, height: 0.3) : CGSize(width: 1.0, height: 1.0))
                             .animation(.easeInOut(duration: 0.2), value: moment.isHighlight)
-                        
+
                         Image("heart-filled-symbol")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -113,32 +118,34 @@ struct MomentView: View {
                 }
                 .changeEffect(
                     .spray {
-                        Image(systemName: "heart.fill")
+                        Image("heart-filled-symbol")
                             .foregroundStyle(.red)
-                    }, value: moment.isHighlight, isEnabled: !moment.isHighlight
+                    },
+                    value: moment.isHighlight,
+                    isEnabled: !moment.isHighlight
                 )
                 .buttonStyle(HighlightButtonStyle())
                 .tint(moment.isHighlight ? .red : .gray)
             }
-            
+
             // Content Card
             NavigationLink(value: moment) {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(Color("CardBackgroundColor"))
                         .frame(alignment: Alignment.top)
-                
+
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(formatStartAtDate(startAt: moment.startAt))
                                 .font(.footnote)
                                 .foregroundStyle(.gray)
-                            
+
                             Text(moment.title)
                         }.padding(12)
-                        
+
                         Spacer()
-                        
+
                         Image("chevron-right-symbol")
                             .foregroundStyle(Color(uiColor: .systemFill))
                             .padding(.trailing, 12)
@@ -150,5 +157,16 @@ struct MomentView: View {
 }
 
 #Preview {
-    MomentView(moment: Moment(id: 1, title: "Arctic Monkeys Concert", startAt: Date(), endAt: Date(), isHighlight: true, background: HappyGradients.loveKiss.rawValue, createdAt: Date(), updatedAt: Date()))
+    MomentView(
+        moment: Moment(
+            id: 1,
+            title: "Arctic Monkeys Concert",
+            startAt: Date(),
+            endAt: Date(),
+            isHighlight: true,
+            background: HappyGradients.loveKiss.rawValue,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+    )
 }

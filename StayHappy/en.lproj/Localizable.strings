@@ -8,6 +8,8 @@
 
 /* General Actions */
 "add" = "Add";
+"new_moment" = "Add";
+"new_resource" = "Add";
 "save" = "Save";
 "delete" = "Delete";
 "cancel" = "Cancel";
@@ -37,6 +39,8 @@
 "background" = "Background";
 "select_photo" = "Select photo";
 "remove_photo" = "Remove photo";
+"description" = "Description";
+"date" = "Date";
 
 /* Sorting and Filtering */
 "period" = "Period";
@@ -47,11 +51,73 @@
 /* Date References */
 "today" = "Today";
 "tomorrow" = "Tomorrow";
+"yesterday" = "Yesterday";
 "in_days" = "In %d days";
+"days_ago" = "%d days ago";
 
 /* Help Section */
+"about_app" = "How it works";
 "thanks" = "Thanks";
 "buy_me_coffee" = "Buy me a coffee";
+
+/* Thanks Content */
+"thanks_family_title" = "To My Family";
+"thanks_family_text" = "The biggest thank you goes to my wife and my children, who support me unconditionally, love me, and give me strength to endure this illness.";
+"thanks_therapist_title" = "To My Therapist";
+"thanks_therapist_text" = "Another thank you goes to my therapist, who first gave me the idea for this app. The tireless probing for the small things that could give me strength in the coming days ultimately really led to a change in my thinking.\n\nI left almost no session without a positive outlook for the rest of the week – now I have poured this concept into an app. For that I am very grateful and I hope that this method can also help others a little.";
+
+/* Form Help */
+"help_examples" = "Help & Examples";
+
+/* Moment Help Content */
+"moment_help_title" = "What are Moments?";
+"moment_help_intro" = "Moments are the small and big joys in your life - things you can look forward to or like to remember.";
+"moment_help_examples_title" = "Examples of Moments";
+"moment_help_examples" = "Small moments: The delicious homemade lasagna tonight, the new episode of your favorite series tomorrow, or a hot bath when the children are sleeping.\n\nBig moments: A concert visit, a birthday party, the next vacation, or an important appointment.";
+"moment_help_highlights_title" = "Highlights with Images";
+"moment_help_highlights" = "You can mark larger moments as highlights and add an image to them. These are then also displayed in the widget and create a colorful mix of upcoming and past moments.";
+"moment_help_tips_title" = "Tip";
+"moment_help_tips" = "Collect both small and big moments. The mix makes it! This creates a colorful collection that brings you joy and gives you strength.";
+
+"moment_help_content" = "Moments can be small or big: a handful of beautiful little things that are coming up in the next few days. Today the delicious homemade lasagna, tomorrow the new episode of your favorite series, and the day after tomorrow a hot bath when the children are sleeping. Or even the big events, like a concert visit, a birthday party, or the next vacation.\n\nLarger moments can be defined as highlights and thus be provided with an image, which is then also displayed in the widget. This creates a colorful mix of upcoming and past moments that bring you joy and give you strength.";
+
+/* Resource Help Content */
+"resource_help_title" = "Collecting Resources";
+"resource_help_intro" = "Being aware of your resources is often not that easy – but all the more helpful when you collect them, because they support you every day. What defines you, what brings you joy, what can you do or what have you achieved?";
+"resource_help_examples_title" = "Examples";
+"resource_help_examples" = "Every little thing is important and meaningful: the cappuccino every morning, your best friend, a hobby, sports, music, or simply an accomplished goal you can be proud of.";
+
+"resource_help_content" = "Here comes the help text for resources...";
+
+/* Coffee View Content */
+"coffee_intro_title" = "A Private Project";
+"coffee_intro_text" = "StayHappy is a purely private project. The app is free and should remain so forever.";
+"coffee_opensource_title" = "Open Source";
+"coffee_opensource_text" = "The source code of the app is freely available on GitHub.";
+"coffee_support_title" = "Support";
+"coffee_support_text" = "If someone would like to say thank you with a small contribution, they can gladly do so via BuyMeACoffee:";
+"coffee_button_title" = "Buy me a coffee";
+"coffee_button_subtitle" = "buymeacoffee.com/stayhappy";
+"coffee_costs_title" = "Project Costs";
+"coffee_costs_text" = "The costs for this project currently amount to about €140 per year, every euro of support is very welcome :-)";
+
+/* About App Content */
+"about_app_intro" = "StayHappy is a little helper that accompanies you through depressive episodes – and beyond – and reminds you to keep the good things in sight and to do something good for yourself. The app was developed by affected individuals from their own experience and needs.";
+"about_app_widgets" = "The widgets are the heart of StayHappy. You can either display your upcoming moments or just be reminded of your highlights and resources. If you don't have anything in the moments widget, past highlights or resources will be automatically displayed.\n\nImportant: the widgets can be configured after adding them. To do this, long-press the widget and then tap \"Edit Widget\". There you can configure the time period or placeholder content, for example.";
+"about_app_concept" = "The idea behind it is simple: a widget on the home screen permanently reminds you of a handful of beautiful little things that are coming up in the next few days. Today the delicious homemade lasagna, tomorrow the new episode of your favorite series, and the day after tomorrow a hot bath when the children are sleeping. If you don't have anything planned, you'll be presented with beautiful moments from the past or a few points from your personal resource list.";
+"about_app_resources" = "Resources are everyday things that are important to you, bring you joy, strengthen you, or even define you. The cappuccino every morning, your best friend, a hobby, sports, music, or simply an accomplished goal that you can be proud of.";
+"about_app_highlights" = "Somewhat larger moments can be defined as highlights and thus be provided with an image, which is then also displayed in the widget. This creates a colorful mix of upcoming and past moments and the everyday resources that bring you joy and give you strength.";
+"about_app_encouragement" = "The beginning can be difficult, but every tiny little thing that brings you joy is important. A special hand cream in the morning, the scent of your favorite perfume, the arranged phone call with your best friend. And with the view of the beautiful little things that will encounter you in the next few days, the flashlight will illuminate more and more corners that may have been hidden by the darkness of thoughts.";
+"about_app_disclaimer" = "StayHappy has no medical and therapeutic background and was merely born from an idea that helped the developer in everyday life and was finally poured into an app.";
+
+/* About App Section Headers */
+"about_what_is_stayhappy" = "What is StayHappy?";
+"about_widgets_title" = "The Widgets";
+"about_the_idea" = "The Idea";
+"about_resources_title" = "Resources";
+"about_highlights_title" = "Highlights";
+"about_the_beginning" = "Getting Started";
+"about_important_note" = "Important Note";
 
 /* Search */
 "search" = "Search";

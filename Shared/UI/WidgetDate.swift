@@ -34,9 +34,17 @@ struct WidgetDate: View {
             else if calendar.isDateInTomorrow(date) {
                 Text(NSLocalizedString("tomorrow", comment: ""))
             }
+            else if calendar.isDateInYesterday(date) {
+                Text(NSLocalizedString("yesterday", comment: ""))
+            }
             else {
                 let diff = calendar.numberOfDaysBetween(Date(), and: date)
-                Text(String(format: NSLocalizedString("in_days", comment: ""), diff))
+                if diff < 0 {
+                    Text(String(format: NSLocalizedString("days_ago", comment: ""), abs(diff)))
+                }
+                else {
+                    Text(String(format: NSLocalizedString("in_days", comment: ""), diff))
+                }
             }
 
             if size != .small {

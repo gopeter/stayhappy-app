@@ -8,6 +8,8 @@
 
 /* General Actions */
 "add" = "Hinzufügen";
+"new_moment" = "Neuer";
+"new_resource" = "Neue";
 "save" = "Speichern";
 "delete" = "Löschen";
 "cancel" = "Abbrechen";
@@ -37,6 +39,8 @@
 "background" = "Hintergrund";
 "select_photo" = "Foto auswählen";
 "remove_photo" = "Foto entfernen";
+"description" = "Beschreibung";
+"date" = "Datum";
 
 /* Sorting and Filtering */
 "period" = "Zeitraum";
@@ -47,11 +51,73 @@
 /* Date References */
 "today" = "Heute";
 "tomorrow" = "Morgen";
+"yesterday" = "Gestern";
 "in_days" = "In %d Tagen";
+"days_ago" = "Vor %d Tagen";
 
 /* Help Section */
+"about_app" = "So funktioniert's";
 "thanks" = "Danke";
 "buy_me_coffee" = "Kauf mir einen Kaffee";
+
+/* Thanks Content */
+"thanks_family_title" = "An meine Familie";
+"thanks_family_text" = "Das größte Dankeschön geht an meine Frau und meine Kinder, die mich bedingungslos unterstützen, lieben und mir Kraft geben, diese Krankheit durchzustehen.";
+"thanks_therapist_title" = "An meine Therapeutin";
+"thanks_therapist_text" = "Ein weiterer Dank geht an meine Therapeutin, die mich erst auf die Idee für diese App gebracht hat. Das unermüdliche Bohren nach den kleinen Dingen, die mir in den nächsten Tagen Kraft geben könnten, hat letzten Endes wirklich zu einer Veränderung in meinem Denken geführt.\n\nOhne einen positiven Ausblick auf den Rest der Woche verließ ich fast keine Stunde – nun habe ich dieses Konzept in eine App gegossen. Dafür bin ich sehr dankbar und ich hoffe, dass diese Methode auch anderen ein wenig helfen kann.";
+
+/* Form Help */
+"help_examples" = "Hilfe & Beispiele";
+
+/* Moment Help Content */
+"moment_help_title" = "Was sind Momente?";
+"moment_help_intro" = "Momente sind die kleinen und großen Freuden in deinem Leben - Dinge, auf die du dich freuen kannst oder an die du gerne zurückdenkst.";
+"moment_help_examples_title" = "Beispiele für Momente";
+"moment_help_examples" = "Kleine Momente: Die leckere selbstgemachte Lasagne heute Abend, die neue Folge deiner Lieblingsserie morgen oder ein heißes Bad wenn die Kinder schlafen.\n\nGroße Momente: Ein Konzertbesuch, eine Geburtstagsparty, der nächste Urlaub oder ein wichtiger Termin.";
+"moment_help_highlights_title" = "Highlights mit Bildern";
+"moment_help_highlights" = "Größere Momente kannst du als Highlight markieren und mit einem Bild versehen. Diese werden dann auch im Widget angezeigt und schaffen einen bunten Mix aus kommenden und vergangenen Momenten.";
+"moment_help_tips_title" = "Tipp";
+"moment_help_tips" = "Sammle sowohl kleine als auch große Momente. Die Mischung macht's! So entsteht eine bunte Sammlung, die dir Freude bereitet und Kraft gibt.";
+
+"moment_help_content" = "Momente können klein oder groß sein: eine Hand voll schöner Kleinigkeiten, die in den nächsten Tagen anstehen. Heute die leckere selbstgemachte Lasagne, morgen die neue Folge deiner Lieblingsserie und übermorgen ein heißes Bad wenn die Kinder schlafen. Oder auch die großen Ereignisse, wie ein Konzertbesuch, eine Geburtstagsparty oder der nächste Urlaub.\n\nGrößere Momente lassen sich als Highlight definieren und dadurch mit einem Bild versehen, welches dann ebenfalls im Widget angezeigt wird. So entsteht ein bunter Mix aus kommenden und vergangenen Momenten, die einen Freude bereiten und Kraft geben.";
+
+/* Resource Help Content */
+"resource_help_title" = "Ressourcen sammeln";
+"resource_help_intro" = "Sich über seine Ressourcen im Klaren zu sein ist oft nicht so einfach – aber umso hilfreicher, wenn man sie sammelt, denn sie stützen einen jeden Tag. Was macht dich aus, was bereitet dir Freude, was kannst du oder was hast du erreicht?";
+"resource_help_examples_title" = "Beispiele";
+"resource_help_examples" = "Jede Kleinigkeit ist wichtig und von Bedeutung: der Cappuccino jeden Morgen, die beste Freundin, ein Hobby, Sport, Musik oder einfach ein geschafftes Ziel, auf das man stolz sein kann.";
+
+"resource_help_content" = "Hier kommt der Hilfetext für Ressourcen...";
+
+/* Coffee View Content */
+"coffee_intro_title" = "Ein privates Projekt";
+"coffee_intro_text" = "StayHappy ist ein rein privates Projekt. Die App ist kostenlos und soll es auch für immer bleiben.";
+"coffee_opensource_title" = "Open Source";
+"coffee_opensource_text" = "Der Quellcode der App ist frei auf GitHub verfügbar.";
+"coffee_support_title" = "Unterstützung";
+"coffee_support_text" = "Wer sich mit einem kleinen Obolus bedanken möchte, kann das gerne über den Dienst BuyMeACoffee tun:";
+"coffee_button_title" = "Kauf mir einen Kaffee";
+"coffee_button_subtitle" = "buymeacoffee.com/stayhappy";
+"coffee_costs_title" = "Projektkosten";
+"coffee_costs_text" = "Die Kosten für dieses Projekt belaufen sich aktuell auf ca. 140€ im Jahr, jeder Euro Unterstützung ist da sehr willkommen :-)";
+
+/* About App Content */
+"about_app_intro" = "StayHappy ist ein kleiner Helfer, der einen durch depressive Episoden – und auch darüber hinaus – begleitet und daran erinnert, die guten Dinge im Blick zu behalten und sich selbst etwas Gutes zu tun. Die App wurde von Betroffenen aus der eigenen Erfahrung und dem eigenen Bedarf heraus entwickelt.";
+"about_app_widgets" = "Die Widgets sind das Herzstück von StayHappy. Du kannst dir entweder deine kommenden Momente anzeigen lassen oder dich nur an deine Highlights und Ressourcen erinnern lassen. Falls du mal nichts im Momente-Widget stehen haben solltest, werden dir automatisch vergangene Highlights oder Ressource angezeigt.\n\nWichtig: die Widgets lassen sich nach dem Hinzufügen noch konfigurieren. Dafür musst du das Widget kurz gedrückt halten und dann auf \"Widget bearbeiten\" klicken. Dort kannst du zum Beispiel noch den Zeitraum oder den Platzhalter-Inhalt konfigurieren.";
+"about_app_concept" = "Die Idee dahinter ist simpel: ein Widget auf dem Homescreen erinnert einen permanent an eine Hand voll schöner Kleinigkeiten, die in den nächsten Tagen anstehen. Heute die leckere selbstgemachte Lasagne, morgen die neue Folge deiner Lieblingsserie und übermorgen ein heißes Bad wenn die Kinder schlafen. Falls man mal nix hat, werden einem schöne Momente aus der Vergangenheit oder ein paar Punkte aus der persönlichen Ressourcen-Liste präsentiert.";
+"about_app_resources" = "Ressourcen sind alltägliche Sachen, die einem wichtig sind, Freude bereiten, einen stärken oder sogar ausmachen. Der Cappuccino jeden Morgen, die beste Freundin, ein Hobby, Sport, Musik oder einfach ein geschafftes Ziel, auf das man stolz sein kann.";
+"about_app_highlights" = "Etwas größere Momente lassen sich als Highlight definieren und dadurch mit einem Bild versehen, welches dann ebenfalls im Widget angezeigt wird. So entsteht ein bunter Mix aus kommenden und vergangenen Momenten und den alltäglichen Ressourcen, die einen Freude bereiten und Kraft geben.";
+"about_app_encouragement" = "Der Anfang kann schwer sein, aber jede noch so winzige Kleinigkeit, die einem Freude bereitet, ist wichtig. Eine besondere Handcreme am Morgen, der Duft des Lieblingsparfüms, das abgemachte Telefonat mit seinem besten Freund. Und mit dem Blick auf die schönen Kleinigkeiten, die einem in den nächsten Tagen begegnen werden, wird die Taschenlampe immer mehr Ecken ausleuchten, die vielleicht durch die Dunkelheit der Gedanken im Verborgenen lagen.";
+"about_app_disclaimer" = "StayHappy hat keinen medizinischen und therapeutischen Hintergrund und wurde lediglich aus einer Idee heraus geboren, die dem Entwickler im Alltag geholfen hat und schließlich in eine App gegossen wurde.";
+
+/* About App Section Headers */
+"about_what_is_stayhappy" = "Was ist StayHappy?";
+"about_widgets_title" = "Die Widgets";
+"about_the_idea" = "Die Idee";
+"about_resources_title" = "Ressourcen";
+"about_highlights_title" = "Highlights";
+"about_the_beginning" = "Jetzt loslegen";
+"about_important_note" = "Wichtiger Hinweis";
 
 /* Search */
 "search" = "Suchen";

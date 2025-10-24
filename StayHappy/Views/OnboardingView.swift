@@ -57,7 +57,6 @@ struct OnboardingView: View {
                 )
                 .animation(.easeInOut(duration: 0.4), value: onboardingState.currentPageIndex)
 
-                
             }
         }
         // Pin top controls into the safe area
@@ -108,7 +107,7 @@ struct OnboardingView: View {
                     onboardingState.previousPage()
                 }) {
                     HStack(spacing: 8) {
-                        Image(systemName: "chevron.left")
+                        Image("chevron-left-symbol")
                             .font(.headline)
                         Text(NSLocalizedString("onboarding_back", comment: ""))
                             .font(.headline)
@@ -128,7 +127,8 @@ struct OnboardingView: View {
             Button(action: {
                 if onboardingState.isLastPage {
                     onboardingState.completeOnboarding()
-                } else {
+                }
+                else {
                     onboardingState.nextPage()
                 }
             }) {
@@ -136,7 +136,7 @@ struct OnboardingView: View {
                     Text(NSLocalizedString(onboardingState.isLastPage ? "onboarding_finish_button" : "onboarding_next", comment: ""))
                         .font(.headline)
                     if !onboardingState.isLastPage {
-                        Image(systemName: "chevron.right")
+                        Image("chevron-right-symbol")
                             .font(.headline)
                     }
                 }

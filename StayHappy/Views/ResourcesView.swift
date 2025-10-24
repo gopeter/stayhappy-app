@@ -34,7 +34,7 @@ struct ResourcesView: View {
                 }
                 else {
                     VStack {
-                        Spacer(minLength: 80)
+                        Spacer(minLength: 60)
                         HStack {
                             Spacer()
                             Text(isSearching ? "no_resources_found" : "no_resources_created").foregroundStyle(.gray)

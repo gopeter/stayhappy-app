@@ -21,11 +21,11 @@ struct NavigationItem: View {
                 .frame(width: 30.0, height: 20.0)
                 .foregroundStyle(isActive ? Color.accentColor : Color.gray)
                 .padding()
-                .frame(width: .infinity, height: 54)
+                .frame(maxWidth: .infinity)
+                .frame(height: 54)
+                .contentShape(Rectangle())
         })
-            .contentShape(Rectangle())
-
-            .buttonStyle(HighlightButtonStyle())
+        .buttonStyle(HighlightButtonStyle())
     }
 }
 
@@ -64,7 +64,7 @@ struct NavigationBarView: View {
                 NavigationItem(icon: "badge-help-symbol", action: {
                     globalData.activeView = Views.help
                 }, isActive: globalData.activeView == Views.help)
-            }.padding(.horizontal, 0)
+            }.padding(.horizontal, 28)
         }
     }
 }

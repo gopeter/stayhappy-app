@@ -190,8 +190,8 @@ struct MomentFormView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Description", text: $title).focused($isFocused)
-                DatePicker("Date", selection: $startAt, displayedComponents: [.date])
+                TextField("description", text: $title).focused($isFocused)
+                DatePicker("date", selection: $startAt, displayedComponents: [.date])
                 // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                 Toggle("Highlight", isOn: $isHighlight)
             } header: {

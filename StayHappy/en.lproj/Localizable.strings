@@ -8,6 +8,8 @@
 
 /* General Actions */
 "add" = "Add";
+"new_moment" = "Add";
+"new_resource" = "Add";
 "save" = "Save";
 "delete" = "Delete";
 "cancel" = "Cancel";
@@ -37,6 +39,8 @@
 "background" = "Background";
 "select_photo" = "Select photo";
 "remove_photo" = "Remove photo";
+"description" = "Description";
+"date" = "Date";
 
 /* Sorting and Filtering */
 "period" = "Period";
@@ -47,12 +51,20 @@
 /* Date References */
 "today" = "Today";
 "tomorrow" = "Tomorrow";
+"yesterday" = "Yesterday";
 "in_days" = "In %d days";
+"days_ago" = "%d days ago";
 
 /* Help Section */
 "about_app" = "How it works";
 "thanks" = "Thanks";
 "buy_me_coffee" = "Buy me a coffee";
+
+/* Thanks Content */
+"thanks_family_title" = "To My Family";
+"thanks_family_text" = "The biggest thank you goes to my wife and my children, who support me unconditionally, love me, and give me strength to endure this illness.";
+"thanks_therapist_title" = "To My Therapist";
+"thanks_therapist_text" = "Another thank you goes to my therapist, who first gave me the idea for this app. The tireless probing for the small things that could give me strength in the coming days ultimately really led to a change in my thinking.\n\nI left almost no session without a positive outlook for the rest of the week – now I have poured this concept into an app. For that I am very grateful and I hope that this method can also help others a little.";
 
 /* Form Help */
 "help_examples" = "Help & Examples";

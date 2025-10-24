@@ -38,7 +38,7 @@ struct FormView: View {
             VStack(spacing: 0) {
                 if isInSheet {
                     HStack {
-                        Text("add").font(.title).fontWeight(.bold)
+                        Text(selection == Selection.resource ? "new_resource" : "new_moment").font(.title).fontWeight(.bold)
                         Menu {
                             Picker("select_entry_type", selection: $selection) {
                                 Text("moment").tag(Selection.moment)

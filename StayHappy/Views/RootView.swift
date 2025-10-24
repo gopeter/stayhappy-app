@@ -138,4 +138,5 @@ struct ShareSheet: UIViewControllerRepresentable {
     RootView()
         .environment(\.appDatabase, .random())
         .environmentObject(GlobalData(activeView: .moments))
+        .environmentObject(OnboardingState())
 }

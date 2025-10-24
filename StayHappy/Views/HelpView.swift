@@ -53,8 +53,9 @@ struct MomentHelpView: View {
                             // Intro Section
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
-                                    Image(systemName: "heart.fill")
-                                        .foregroundColor(.pink)
+                                    Image("smile-symbol")
+                                        .overlay(HappyGradients.stayHappy.linear())
+                                        .mask(Image("smile-symbol"))
                                         .font(.title2)
                                     Text("moment_help_title")
                                         .font(.title2)
@@ -71,8 +72,9 @@ struct MomentHelpView: View {
                             // Examples Section
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
-                                    Image(systemName: "lightbulb.fill")
-                                        .foregroundColor(.orange)
+                                    Image("lightbulb-symbol")
+                                        .overlay(HappyGradients.stayHappy.linear())
+                                        .mask(Image("lightbulb-symbol"))
                                         .font(.title2)
                                     Text("moment_help_examples_title")
                                         .font(.title2)
@@ -89,8 +91,9 @@ struct MomentHelpView: View {
                             // Highlights Section
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
-                                    Image(systemName: "photo.fill")
-                                        .foregroundColor(.blue)
+                                    Image("heart-symbol")
+                                        .overlay(HappyGradients.stayHappy.linear())
+                                        .mask(Image("heart-symbol"))
                                         .font(.title2)
                                     Text("moment_help_highlights_title")
                                         .font(.title2)
@@ -107,8 +110,8 @@ struct MomentHelpView: View {
                             // Tips Section
                             VStack(alignment: .leading, spacing: 12) {
                                 HStack {
-                                    Image(systemName: "star.fill")
-                                        .foregroundColor(.yellow)
+                                    Image("info-symbol")
+                                        .foregroundColor(.primary.opacity(0.8))
                                         .font(.title3)
                                     Text("moment_help_tips_title")
                                         .font(.headline)
@@ -121,12 +124,14 @@ struct MomentHelpView: View {
                                     .lineSpacing(3)
                                     .foregroundColor(.primary.opacity(0.8))
                             }
-                            .padding(20)
+                            .padding(16)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.secondary.opacity(0.08))
                             .cornerRadius(12)
                         }
-                        .padding(.horizontal, 24)
+                        .padding(.horizontal, 20)
                         .padding(.vertical, 20)
+                        .padding(.bottom, 80)
                     }
 
                     Spacer()
@@ -169,8 +174,9 @@ struct ResourceHelpView: View {
                             // Intro Section
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
-                                    Image(systemName: "star.fill")
-                                        .foregroundColor(.yellow)
+                                    Image("coffee-symbol")
+                                        .overlay(HappyGradients.stayHappy.linear())
+                                        .mask(Image("coffee-symbol"))
                                         .font(.title2)
                                     Text("resource_help_title")
                                         .font(.title2)
@@ -187,8 +193,9 @@ struct ResourceHelpView: View {
                             // Examples Section
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
-                                    Image(systemName: "lightbulb.fill")
-                                        .foregroundColor(.orange)
+                                    Image("lightbulb-symbol")
+                                        .overlay(HappyGradients.stayHappy.linear())
+                                        .mask(Image("lightbulb-symbol"))
                                         .font(.title2)
                                     Text("resource_help_examples_title")
                                         .font(.title2)
@@ -202,8 +209,9 @@ struct ResourceHelpView: View {
                                     .foregroundColor(.primary)
                             }
                         }
-                        .padding(.horizontal, 24)
+                        .padding(.horizontal, 20)
                         .padding(.vertical, 20)
+                        .padding(.bottom, 80)
                     }
 
                     Spacer()
@@ -221,8 +229,9 @@ struct AboutView: View {
                     // Intro Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.pink)
+                            Image("smile-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("smile-symbol"))
                                 .font(.title2)
                             Text("about_what_is_stayhappy")
                                 .font(.title2)
@@ -239,8 +248,9 @@ struct AboutView: View {
                     // Concept Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "lightbulb.fill")
-                                .foregroundColor(.orange)
+                            Image("lightbulb-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("lightbulb-symbol"))
                                 .font(.title2)
                             Text("about_the_idea")
                                 .font(.title2)
@@ -257,8 +267,9 @@ struct AboutView: View {
                     // Widgets Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "square.grid.2x2.fill")
-                                .foregroundColor(.purple)
+                            Image("layout-grid-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("layout-grid-symbol"))
                                 .font(.title2)
                             Text("about_widgets_title")
                                 .font(.title2)
@@ -275,8 +286,9 @@ struct AboutView: View {
                     // Resources Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
+                            Image("coffee-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("coffee-symbol"))
                                 .font(.title2)
                             Text("about_resources_title")
                                 .font(.title2)
@@ -293,8 +305,9 @@ struct AboutView: View {
                     // Highlights Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "photo.fill")
-                                .foregroundColor(.blue)
+                            Image("heart-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("heart-symbol"))
                                 .font(.title2)
                             Text("about_highlights_title")
                                 .font(.title2)
@@ -311,8 +324,9 @@ struct AboutView: View {
                     // Encouragement Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "sun.max.fill")
-                                .foregroundColor(.mint)
+                            Image("sun-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("sun-symbol"))
                                 .font(.title2)
                             Text("about_the_beginning")
                                 .font(.title2)
@@ -329,8 +343,8 @@ struct AboutView: View {
                     // Disclaimer
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Image(systemName: "info.circle.fill")
-                                .foregroundColor(.secondary)
+                            Image("info-symbol")
+                                .foregroundColor(.primary.opacity(0.8))
                                 .font(.title3)
                             Text("about_important_note")
                                 .font(.headline)
@@ -343,12 +357,14 @@ struct AboutView: View {
                             .lineSpacing(3)
                             .foregroundColor(.primary.opacity(0.8))
                     }
-                    .padding(20)
+                    .padding(16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.secondary.opacity(0.08))
                     .cornerRadius(12)
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
                 .padding(.vertical, 20)
+                .padding(.bottom, 80)
             }
             .background(Color("AppBackgroundColor"))
             .navigationTitle("about_app")
@@ -359,7 +375,55 @@ struct AboutView: View {
 
 struct ThanksView: View {
     var body: some View {
-        Text("thanks")
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 32) {
+                    // Family Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image("heart-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("heart-symbol"))
+                                .font(.title2)
+                            Text("thanks_family_title")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                        }
+
+                        Text("thanks_family_text")
+                            .font(.body)
+                            .lineSpacing(4)
+                            .foregroundColor(.primary)
+                    }
+
+                    // Therapist Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Image("sparkles-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("sparkles-symbol"))
+                                .font(.title2)
+                            Text("thanks_therapist_title")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                        }
+
+                        Text("thanks_therapist_text")
+                            .font(.body)
+                            .lineSpacing(4)
+                            .foregroundColor(.primary)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
+                .padding(.bottom, 80)
+            }
+            .background(Color("AppBackgroundColor"))
+            .navigationTitle("thanks")
+            .navigationBarTitleDisplayMode(.large)
+        }
     }
 }
 
@@ -371,8 +435,9 @@ struct CoffeeView: View {
                     // Intro Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.pink)
+                            Image("smile-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("smile-symbol"))
                                 .font(.title2)
                             Text("coffee_intro_title")
                                 .font(.title2)
@@ -389,8 +454,9 @@ struct CoffeeView: View {
                     // GitHub Section
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Image(systemName: "chevron.left.forwardslash.chevron.right")
-                                .foregroundColor(.green)
+                            Image("square-code-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("square-code-symbol"))
                                 .font(.title2)
                             Text("coffee_opensource_title")
                                 .font(.headline)
@@ -405,12 +471,11 @@ struct CoffeeView: View {
 
                         Link(destination: URL(string: "https://github.com/gopeter/stayhappy-app")!) {
                             HStack {
-                                Image(systemName: "link")
-                                    .font(.caption)
                                 Text("github.com/gopeter/stayhappy-app")
                                     .font(.callout)
                                 Spacer()
-                                Image(systemName: "arrow.up.right")
+                                Image("external-link-symbol")
+                                    .foregroundColor(.primary)
                                     .font(.caption2)
                             }
                             .padding(.horizontal, 16)
@@ -424,8 +489,9 @@ struct CoffeeView: View {
                     // Buy Me a Coffee Section
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Image(systemName: "cup.and.saucer.fill")
-                                .foregroundColor(.orange)
+                            Image("coffee-symbol")
+                                .overlay(HappyGradients.stayHappy.linear())
+                                .mask(Image("coffee-symbol"))
                                 .font(.title2)
                             Text("coffee_support_title")
                                 .font(.title2)
@@ -441,8 +507,6 @@ struct CoffeeView: View {
                         // Call to Action Button
                         Link(destination: URL(string: "https://buymeacoffee.com/stayhappy")!) {
                             HStack {
-                                Image(systemName: "link")
-                                    .font(.caption)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("coffee_button_title")
                                         .font(.headline)
@@ -452,7 +516,8 @@ struct CoffeeView: View {
                                         .opacity(0.8)
                                 }
                                 Spacer()
-                                Image(systemName: "arrow.up.right")
+                                Image("external-link-symbol")
+                                    .foregroundColor(.white)
                                     .font(.caption2)
                             }
                             .padding(.horizontal, 20)
@@ -466,8 +531,8 @@ struct CoffeeView: View {
                         // Cost Info
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Image(systemName: "info.circle.fill")
-                                    .foregroundColor(.blue)
+                                Image("info-symbol")
+                                    .foregroundColor(.primary.opacity(0.8))
                                     .font(.title3)
                                 Text("coffee_costs_title")
                                     .font(.headline)
@@ -480,13 +545,15 @@ struct CoffeeView: View {
                                 .lineSpacing(3)
                                 .foregroundColor(.primary.opacity(0.8))
                         }
-                        .padding(20)
-                        .background(Color.blue.opacity(0.08))
+                        .padding(16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.secondary.opacity(0.08))
                         .cornerRadius(12)
                     }
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
                 .padding(.vertical, 20)
+                .padding(.bottom, 80)
             }
             .background(Color("AppBackgroundColor"))
             .navigationTitle("buy_me_coffee")
@@ -507,14 +574,15 @@ struct HelpView: View {
                     }) {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Image(systemName: "arrow.clockwise.circle.fill")
-                                    .foregroundColor(.accentColor)
+                                Image("rotate-ccw-symbol")
+                                    .foregroundColor(.yellow)
                                     .font(.title2)
                                 Text("restart_onboarding")
                                     .foregroundColor(.primary)
                                     .font(.headline)
                                 Spacer()
-                                Image("chevron-right-symbol").foregroundStyle(Color(uiColor: .systemFill))
+                                Image("chevron-right-symbol")
+                                    .foregroundStyle(Color(uiColor: .systemFill))
                             }
 
                             Text("restart_onboarding_description")

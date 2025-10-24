@@ -39,6 +39,8 @@ struct L {
 
     // MARK: - General Actions
     static let add = "add"
+    static let newMoment = "new_moment"
+    static let newResource = "new_resource"
     static let save = "save"
     static let delete = "delete"
     static let cancel = "cancel"
@@ -76,7 +78,9 @@ struct L {
     // MARK: - Date References
     static let today = "today"
     static let tomorrow = "tomorrow"
+    static let yesterday = "yesterday"
     static let inDays = "in_days"
+    static let daysAgo = "days_ago"
 
     // MARK: - Help Section
     static let thanks = "thanks"

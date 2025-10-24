@@ -1,8 +1,5 @@
 # StayHappy
 
-## Todos
-- Help (+ per page)
-
 ## Roadmap & Wishlist
 - Resources: sorting, tags, filter for tags, Emoji picker
 - App Intents
@@ -13,6 +10,7 @@
 - Share highlight: maybe create a combined image with a real layout like Reddit does when sharing images
 - Configurable Widget background color
 - Some suggestions or real world data?
+- App-wide search
 
 ## How to's
 

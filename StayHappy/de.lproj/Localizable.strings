@@ -8,6 +8,8 @@
 
 /* General Actions */
 "add" = "Hinzufügen";
+"new_moment" = "Neuer";
+"new_resource" = "Neue";
 "save" = "Speichern";
 "delete" = "Löschen";
 "cancel" = "Abbrechen";
@@ -37,6 +39,8 @@
 "background" = "Hintergrund";
 "select_photo" = "Foto auswählen";
 "remove_photo" = "Foto entfernen";
+"description" = "Beschreibung";
+"date" = "Datum";
 
 /* Sorting and Filtering */
 "period" = "Zeitraum";
@@ -47,12 +51,20 @@
 /* Date References */
 "today" = "Heute";
 "tomorrow" = "Morgen";
+"yesterday" = "Gestern";
 "in_days" = "In %d Tagen";
+"days_ago" = "Vor %d Tagen";
 
 /* Help Section */
 "about_app" = "So funktioniert's";
 "thanks" = "Danke";
 "buy_me_coffee" = "Kauf mir einen Kaffee";
+
+/* Thanks Content */
+"thanks_family_title" = "An meine Familie";
+"thanks_family_text" = "Das größte Dankeschön geht an meine Frau und meine Kinder, die mich bedingungslos unterstützen, lieben und mir Kraft geben, diese Krankheit durchzustehen.";
+"thanks_therapist_title" = "An meine Therapeutin";
+"thanks_therapist_text" = "Ein weiterer Dank geht an meine Therapeutin, die mich erst auf die Idee für diese App gebracht hat. Das unermüdliche Bohren nach den kleinen Dingen, die mir in den nächsten Tagen Kraft geben könnten, hat letzten Endes wirklich zu einer Veränderung in meinem Denken geführt.\n\nOhne einen positiven Ausblick auf den Rest der Woche verließ ich fast keine Stunde – nun habe ich dieses Konzept in eine App gegossen. Dafür bin ich sehr dankbar und ich hoffe, dass diese Methode auch anderen ein wenig helfen kann.";
 
 /* Form Help */
 "help_examples" = "Hilfe & Beispiele";
@@ -83,7 +95,7 @@
 "coffee_opensource_title" = "Open Source";
 "coffee_opensource_text" = "Der Quellcode der App ist frei auf GitHub verfügbar.";
 "coffee_support_title" = "Unterstützung";
-"coffee_support_text" = "Falls sich jemand mit einem kleinen Obolus bedanken möchte, kann das gerne über BuyMeACoffee tun:";
+"coffee_support_text" = "Wer sich mit einem kleinen Obolus bedanken möchte, kann das gerne über den Dienst BuyMeACoffee tun:";
 "coffee_button_title" = "Kauf mir einen Kaffee";
 "coffee_button_subtitle" = "buymeacoffee.com/stayhappy";
 "coffee_costs_title" = "Projektkosten";

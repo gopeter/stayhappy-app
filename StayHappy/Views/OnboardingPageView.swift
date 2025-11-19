@@ -43,6 +43,7 @@ struct OnboardingPageView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: 80, maxHeight: 80)
+                    .foregroundStyle(.white)
                     .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
             }
         }

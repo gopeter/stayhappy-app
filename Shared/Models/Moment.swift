@@ -55,11 +55,11 @@ extension MomentMutation: Encodable, MutablePersistableRecord {
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
     }
-    
+
     func didSave(_ saved: PersistenceSuccess) {
         WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
     }
-    
+
     func didDelete(deleted: Bool) {
         WidgetCenter.shared.reloadTimelines(ofKind: "app.stayhappy.StayHappy.MomentsWidget")
     }
@@ -73,7 +73,7 @@ extension MomentMutation: Encodable, MutablePersistableRecord {
             updatedAt = try db.transactionDate
         }
     }
-    
+
     mutating func willUpdate(_ db: Database) throws {
         updatedAt = try db.transactionDate
     }
@@ -127,46 +127,48 @@ extension DerivableRequest<Moment> {
     }
 
     func filterByPeriod(_ dateCompareOperator: String, period: WidgetPeriodType? = nil) -> Self {
-        var arguments: [String] = []
+        var arguments: [DatabaseValue] = []
 
         let startOfToday = Calendar.current.startOfDay(for: Date())
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
 
         if period != nil {
             var periodDate = startOfToday
 
             switch period {
-                case .month:
-                    if dateCompareOperator.contains("<") {
-                        periodDate = startOfToday.withAddedDays(days: 30)
-                    } else {
-                        periodDate = startOfToday.withSubtractedDays(days: 30)
-                    }
+            case .month:
+                if dateCompareOperator.contains("<") {
+                    periodDate = startOfToday.withAddedDays(days: 30)
+                }
+                else {
+                    periodDate = startOfToday.withSubtractedDays(days: 30)
+                }
 
-                case .quarter:
-                    if dateCompareOperator.contains("<") {
-                        periodDate = startOfToday.withAddedDays(days: 90)
-                    } else {
-                        periodDate = startOfToday.withSubtractedDays(days: 90)
-                    }
+            case .quarter:
+                if dateCompareOperator.contains("<") {
+                    periodDate = startOfToday.withAddedDays(days: 90)
+                }
+                else {
+                    periodDate = startOfToday.withSubtractedDays(days: 90)
+                }
 
-                case .year:
-                    if dateCompareOperator.contains("<") {
-                        periodDate = startOfToday.withAddedDays(days: 365)
-                    } else {
-                        periodDate = startOfToday.withSubtractedDays(days: 365)
-                    }
+            case .year:
+                if dateCompareOperator.contains("<") {
+                    periodDate = startOfToday.withAddedDays(days: 365)
+                }
+                else {
+                    periodDate = startOfToday.withSubtractedDays(days: 365)
+                }
 
-                case .all:
-                    return self
+            case .all:
+                return self
 
-                default: break
+            default: break
             }
 
-            arguments.append(formatter.string(from: periodDate))
-        } else {
-            arguments.append(formatter.string(from: startOfToday))
+            arguments.append(periodDate.databaseValue)
+        }
+        else {
+            arguments.append(startOfToday.databaseValue)
         }
 
         return filter(sql: "moment.startAt \(dateCompareOperator) ?", arguments: StatementArguments(arguments))
@@ -188,7 +190,7 @@ extension Moment {
             photo: nil
         )
     }
-    
+
     static func makeRandomPastHighlight(index: Int) -> MomentMutation {
         let imageSaver = ImageSaver(
             image: UIImage(named: "highlight"),
@@ -202,7 +204,7 @@ extension Moment {
         catch {
             // ...
         }
-        
+
         return MomentMutation(
             title: "A really long test moment \(index)",
             startAt: Date().withSubtractedHours(hours: 24 * Double(index + 1)),
@@ -245,14 +247,16 @@ struct MomentListRequest: Queryable {
 
         if searchText == "" {
             moments = moments.filterByPeriod(dateCompareOperator)
-        } else {
+        }
+        else {
             moments = moments.filterBySearchText(searchText)
         }
 
         // we want to reverse the order when viewing past moments
         if period == Period.upcoming {
             moments = moments.order(ordering == Ordering.desc ? Moment.Columns.startAt.desc : Moment.Columns.startAt.asc)
-        } else {
+        }
+        else {
             moments = moments.order(ordering == Ordering.asc ? Moment.Columns.startAt.desc : Moment.Columns.startAt.asc)
         }
 
@@ -271,7 +275,8 @@ struct HighlightListRequest: Queryable {
     }
 
     func fetchValue(_ db: Database) throws -> [Moment] {
-        let moments = Moment
+        let moments =
+            Moment
             .all()
             .filterByHighlight()
             .order(Moment.Columns.startAt.desc)

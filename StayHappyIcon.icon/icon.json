@@ -7,13 +7,17 @@
   },
   "groups" : [
     {
+      "blend-mode" : "normal",
+      "blur-material" : null,
       "layers" : [
         {
+          "fill" : "none",
           "glass" : true,
-          "image-name" : "smile.svg",
-          "name" : "smile",
+          "hidden" : false,
+          "image-name" : "Zeichenfläche 1.png",
+          "name" : "Zeichenfläche 1",
           "position" : {
-            "scale" : 32,
+            "scale" : 0.7,
             "translation-in-points" : [
               0,
               0
@@ -21,12 +25,14 @@
           }
         }
       ],
+      "lighting" : "individual",
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.5
       },
+      "specular" : true,
       "translucency" : {
-        "enabled" : true,
+        "enabled" : false,
         "value" : 0.5
       }
     }

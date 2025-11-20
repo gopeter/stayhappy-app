@@ -10,10 +10,10 @@
       "layers" : [
         {
           "glass" : true,
-          "image-name" : "smile 2.svg",
+          "image-name" : "smile.svg",
           "name" : "smile",
           "position" : {
-            "scale" : 30,
+            "scale" : 32,
             "translation-in-points" : [
               0,
               0

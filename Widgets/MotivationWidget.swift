@@ -100,7 +100,6 @@ struct MotivationWidgetProvider: AppIntentTimelineProvider {
                 highlights =
                     try Moment
                     .all()
-                    .filterByPeriod("<")
                     .filterByHighlight()
                     .order(sql: "RANDOM()")
                     .limit(1)

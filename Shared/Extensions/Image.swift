@@ -84,3 +84,69 @@ extension UIImage {
         return pixelBuffer
     }
 }
+
+// MARK: - Preview Placeholder
+
+extension UIImage {
+    /// A deterministic stand-in photo for SwiftUI previews and seeded data.
+    ///
+    /// The `highlight` image in `Preview Content` cannot be relied on: that
+    /// catalog is only bundled into the app target's debug builds, so
+    /// `UIImage(named:)` returns nil in the widget extension and in release
+    /// builds. When that happened, `ImageSaver.writeToDisk()` threw, the sample
+    /// moment was stored with a photo name but no file on disk, and tiles
+    /// silently fell back to their gradient.
+    ///
+    /// - Parameter seed: Varies the colours and the position of the bright
+    ///   feature, so seeded moments stay distinguishable — and so the
+    ///   focal-point crop has something off-centre to aim at.
+    static func previewPhoto(seed: Int) -> UIImage {
+        let size = CGSize(width: 1200, height: 1600)
+
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        format.opaque = true
+
+        let hue = CGFloat(seed % 8) / 8.0
+        let top = UIColor(hue: hue, saturation: 0.55, brightness: 0.75, alpha: 1)
+        let bottom = UIColor(
+            hue: (hue + 0.12).truncatingRemainder(dividingBy: 1),
+            saturation: 0.7,
+            brightness: 0.35,
+            alpha: 1
+        )
+
+        let featureCentre = CGPoint(
+            x: size.width * (0.3 + 0.4 * CGFloat(seed % 3) / 2),
+            y: size.height * (0.2 + 0.5 * CGFloat(seed % 5) / 4)
+        )
+
+        return UIGraphicsImageRenderer(size: size, format: format).image { context in
+            let cg = context.cgContext
+
+            if let gradient = CGGradient(
+                colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                colors: [top.cgColor, bottom.cgColor] as CFArray,
+                locations: [0, 1]
+            ) {
+                cg.drawLinearGradient(
+                    gradient,
+                    start: .zero,
+                    end: CGPoint(x: 0, y: size.height),
+                    options: []
+                )
+            }
+
+            UIColor(white: 1, alpha: 0.85).setFill()
+            let radius: CGFloat = 170
+            cg.fillEllipse(
+                in: CGRect(
+                    x: featureCentre.x - radius,
+                    y: featureCentre.y - radius,
+                    width: radius * 2,
+                    height: radius * 2
+                )
+            )
+        }
+    }
+}

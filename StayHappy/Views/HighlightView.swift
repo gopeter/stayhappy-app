@@ -182,7 +182,7 @@ struct HighlightView: View {
 
 #Preview {
     let imageSaver = ImageSaver(
-        image: UIImage(named: "highlight"),
+        image: UIImage(named: "highlight") ?? .previewPhoto(seed: 0),
         fileName: "preview"
     )
 

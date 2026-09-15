@@ -195,7 +195,10 @@ extension Moment {
 
     static func makeRandomPastHighlight(index: Int) -> MomentMutation {
         let imageSaver = ImageSaver(
-            image: UIImage(named: "highlight"),
+            // `Preview Content` is only bundled into the app target's debug
+            // builds, so the asset is nil in the widget extension. Falling back
+            // to a generated photo keeps seeded data usable everywhere.
+            image: UIImage(named: "highlight") ?? .previewPhoto(seed: index),
             fileName: "preview\(index)"
         )
 

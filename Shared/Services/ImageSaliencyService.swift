@@ -8,6 +8,7 @@
 
 import CoreGraphics
 import Foundation
+import OSLog
 import Vision
 
 /// Finds the point an image should be cropped around.
@@ -24,13 +25,20 @@ enum ImageSaliencyService {
     /// centers on a bright sky or a colourful sign instead.
     static func focalPoint(for cgImage: CGImage) async -> CGPoint {
         if let facePoint = await faceFocalPoint(for: cgImage) {
+            Logger.saliency.debug("Focal point from face detection: \(facePoint.debugDescription)")
             return facePoint
         }
 
         if let salientPoint = await salientFocalPoint(for: cgImage) {
+            Logger.saliency.debug("Focal point from attention saliency: \(salientPoint.debugDescription)")
             return salientPoint
         }
 
+        // Worth logging rather than silently centring: Vision's neural requests
+        // do not run in the iOS Simulator at all (they fail to create an
+        // inference context), so every crop made there is a centre crop. Without
+        // this line that is invisible and looks like bad saliency.
+        Logger.saliency.notice("No focal point found, falling back to the centre of the image")
         return CGPoint(x: 0.5, y: 0.5)
     }
 
@@ -43,7 +51,10 @@ enum ImageSaliencyService {
             let request = DetectFaceRectanglesRequest()
             let faces = try await request.perform(on: cgImage)
 
-            guard !faces.isEmpty else { return nil }
+            guard !faces.isEmpty else {
+                Logger.saliency.debug("Face detection ran but found no faces")
+                return nil
+            }
 
             // Union of all faces, so group photos stay centered on the group
             // rather than on whichever face Vision happened to report first.
@@ -59,6 +70,7 @@ enum ImageSaliencyService {
             )
         }
         catch {
+            Logger.saliency.error("Face detection failed: \(error.localizedDescription)")
             return nil
         }
     }
@@ -71,6 +83,7 @@ enum ImageSaliencyService {
             let observation = try await request.perform(on: cgImage)
 
             guard let primaryObject = observation.salientObjects.first else {
+                Logger.saliency.debug("Saliency ran but found no salient objects")
                 return nil
             }
 
@@ -83,6 +96,7 @@ enum ImageSaliencyService {
             return CGPoint(x: clamped(centerX), y: clamped(centerY))
         }
         catch {
+            Logger.saliency.error("Attention saliency failed: \(error.localizedDescription)")
             return nil
         }
     }

@@ -19,7 +19,7 @@ import WidgetKit
 /// `currentVersion` whenever `ImageProcessingService` or `ImageVariant` changes
 /// in a way that should be reflected in already-generated files, and every
 /// install rebuilds its variants exactly once.
-final class WidgetImageMigrationService {
+final class WidgetImageMigrationService: Sendable {
     static let shared = WidgetImageMigrationService()
 
     /// Version history:
@@ -28,14 +28,16 @@ final class WidgetImageMigrationService {
     ///       fixed pixel sizes, added `_tile_3x1` for the in-app tiles
     private static let currentVersion = 2
 
-    private let userDefaults = UserDefaults.standard
-    private let versionKey = "widget_images_version"
+    // `UserDefaults.standard` is accessed inline rather than stored: it is not
+    // a `Sendable` type, and holding it as a property would keep this service
+    // from being `Sendable` even though it has no mutable state of its own.
+    private static let versionKey = "widget_images_version"
 
     private init() {}
 
     /// Rebuilds the variants if this install hasn't seen the current version.
     func runMigrationIfNeeded() async {
-        let storedVersion = userDefaults.integer(forKey: versionKey)
+        let storedVersion = UserDefaults.standard.integer(forKey: Self.versionKey)
 
         guard storedVersion < Self.currentVersion else { return }
 
@@ -43,7 +45,7 @@ final class WidgetImageMigrationService {
         // crop logic, so existing files are replaced rather than kept.
         await performMigration(regenerateExisting: true)
 
-        userDefaults.set(Self.currentVersion, forKey: versionKey)
+        UserDefaults.standard.set(Self.currentVersion, forKey: Self.versionKey)
         await reloadWidgetTimelines()
     }
 
@@ -51,7 +53,7 @@ final class WidgetImageMigrationService {
     func forceMigration() async {
         await performMigration(regenerateExisting: true)
 
-        userDefaults.set(Self.currentVersion, forKey: versionKey)
+        UserDefaults.standard.set(Self.currentVersion, forKey: Self.versionKey)
         await reloadWidgetTimelines()
     }
 
@@ -131,12 +133,12 @@ final class WidgetImageMigrationService {
 
     /// The image variant version this install has already been migrated to.
     var migratedVersion: Int {
-        userDefaults.integer(forKey: versionKey)
+        UserDefaults.standard.integer(forKey: Self.versionKey)
     }
 
     /// Reset migration status (for testing)
     func resetMigrationStatus() {
-        userDefaults.set(0, forKey: versionKey)
+        UserDefaults.standard.set(0, forKey: Self.versionKey)
     }
 }
 

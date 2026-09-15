@@ -7,6 +7,9 @@
 
 import XCTest
 
+// XCUIApplication is main-actor isolated, so the test methods driving it have
+// to be too.
+@MainActor
 final class StayHappyUITests: XCTestCase {
 
     override func setUpWithError() throws {

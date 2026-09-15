@@ -17,6 +17,10 @@ enum Views: String {
     case help
 }
 
+/// Purely UI state, so it belongs on the main actor. Being explicit about that
+/// is what lets the delayed work below drop its `DispatchQueue.main` hops: the
+/// hops only existed to get back onto the main thread.
+@MainActor
 class GlobalData: ObservableObject {
     @Published var activeView: Views
     @Published var highlightImageToShow: Int64? = nil
@@ -25,7 +29,7 @@ class GlobalData: ObservableObject {
     @Published var fullscreenImage: UIImage? = nil
     @Published var isFullscreenPresented: Bool = false
 
-    internal var highlightTriggerTimer: Timer?
+    private var highlightTriggerTask: Task<Void, Never>?
 
     init(activeView: Views) {
         self.activeView = activeView
@@ -45,7 +49,8 @@ class GlobalData: ObservableObject {
         }
         else {
             // Fallback to old system with much shorter timeout
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            Task {
+                try? await Task.sleep(for: .milliseconds(100))
                 self.highlightImageToShow = momentId
                 self.startSafetyTimer(for: momentId)
             }
@@ -76,32 +81,34 @@ class GlobalData: ObservableObject {
 
     private func startSafetyTimer(for momentId: Int64) {
         // Much shorter timeout - only 2 seconds total
-        highlightTriggerTimer?.invalidate()
-        highlightTriggerTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                if self.highlightImageToShow == momentId {
-                    self.highlightImageToShow = nil
-                }
+        highlightTriggerTask?.cancel()
+        highlightTriggerTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(2))
+
+            guard !Task.isCancelled, let self else { return }
+            if self.highlightImageToShow == momentId {
+                self.highlightImageToShow = nil
             }
         }
     }
 
     func clearHighlightImageTrigger() {
-        highlightTriggerTimer?.invalidate()
-        highlightTriggerTimer = nil
+        highlightTriggerTask?.cancel()
+        highlightTriggerTask = nil
         highlightImageToShow = nil
     }
 
     func closeFullscreenImage() {
         isFullscreenPresented = false
         // Delay clearing the image to allow fade-out animation to complete
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+        Task {
+            try? await Task.sleep(for: .milliseconds(250))
             self.fullscreenImage = nil
         }
     }
 }
 
+@MainActor
 class AppStateManager: ObservableObject {
     @Published var globalData = GlobalData(activeView: .moments)
     @Published var onboardingState = OnboardingState()

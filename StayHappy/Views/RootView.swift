@@ -12,6 +12,7 @@ struct RootView: View {
     @State var visibility = Visibility.hidden
 
     // TODO: check if this is the right place to do this
+    @MainActor
     init() {
         applyUIStyling()
     }
@@ -65,6 +66,10 @@ struct RootView: View {
     }
 }
 
+// UIKit appearance proxies are main-actor isolated. This has to stay in `init`
+// rather than move to `onAppear`, because appearance proxies only affect views
+// created after they are set.
+@MainActor
 private func applyUIStyling() {
     UITabBar.appearance().isHidden = true
 

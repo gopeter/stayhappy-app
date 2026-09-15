@@ -180,6 +180,21 @@ struct MomentFormView: View {
         previewImage = nil
     }
 
+    /// `PhotosPicker`'s label closure is `@Sendable`, so main-actor state can't
+    /// be read inside it. The state is therefore read once here and handed to a
+    /// plain value type.
+    @MainActor
+    private var photoPicker: some View {
+        let label = PhotoPickerLabel(
+            preview: previewImage,
+            isBusy: isProcessingImage || photoImage != nil
+        )
+
+        return PhotosPicker(selection: $photoPickerItem, matching: .images) {
+            label
+        }
+    }
+
     private func generatePreviewImage(from image: UIImage) async {
         // Exactly the variant the highlight tile will later display, so what
         // you approve while editing is what ends up in the list. This used to
@@ -239,39 +254,7 @@ struct MomentFormView: View {
                         }
                     }
 
-                    PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                        if let preview = previewImage {
-                            Image(uiImage: preview)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 150)
-                                .clipped()
-                                .padding(0)
-                        }
-                        else if isProcessingImage {
-                            ZStack {
-                                Color.gray.opacity(0.3)
-                                    .frame(height: 150)
-
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                                    .scaleEffect(1.2)
-                            }
-                        }
-                        else if photoImage != nil {
-                            ZStack {
-                                Color.gray.opacity(0.3)
-                                    .frame(height: 150)
-
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                                    .scaleEffect(1.2)
-                            }
-                        }
-                        else {
-                            Text("select_photo").padding(.horizontal, 20)
-                        }
-                    }
+                    photoPicker
 
                     if photoImage != nil {
                         Button(
@@ -359,6 +342,38 @@ struct MomentFormView: View {
                     }
                 }
             }
+    }
+}
+
+/// The `PhotosPicker` label, as a plain value type so it can be constructed
+/// outside the picker's `@Sendable` closure.
+private struct PhotoPickerLabel: View {
+    let preview: UIImage?
+    /// A photo is selected but its preview is still being rendered.
+    let isBusy: Bool
+
+    var body: some View {
+        if let preview {
+            // Shown at the tile's own aspect ratio, so the preview matches the
+            // highlight tile exactly instead of being cropped again here.
+            Image(uiImage: preview)
+                .resizable()
+                .aspectRatio(ImageVariant.tile3x1.aspectRatio, contentMode: .fit)
+                .padding(0)
+        }
+        else if isBusy {
+            ZStack {
+                Color.gray.opacity(0.3)
+                    .aspectRatio(ImageVariant.tile3x1.aspectRatio, contentMode: .fit)
+
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(1.2)
+            }
+        }
+        else {
+            Text("select_photo").padding(.horizontal, 20)
+        }
     }
 }
 

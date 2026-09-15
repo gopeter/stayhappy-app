@@ -14,8 +14,8 @@ enum WidgetPeriodType: String, AppEnum {
     case year
     case all
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("widget_period"))
-    static var caseDisplayRepresentations: [WidgetPeriodType: DisplayRepresentation] = [
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("widget_period"))
+    static let caseDisplayRepresentations: [WidgetPeriodType: DisplayRepresentation] = [
         .month: DisplayRepresentation(title: LocalizedStringResource("period_month")),
         .quarter: DisplayRepresentation(title: LocalizedStringResource("period_quarter")),
         .year: DisplayRepresentation(title: LocalizedStringResource("period_year")),
@@ -28,8 +28,8 @@ enum WidgetMotivationType: String, AppEnum {
     case highlights
     case all
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("widget_placeholder"))
-    static var caseDisplayRepresentations: [WidgetMotivationType: DisplayRepresentation] = [
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("widget_placeholder"))
+    static let caseDisplayRepresentations: [WidgetMotivationType: DisplayRepresentation] = [
         .resources: DisplayRepresentation(title: LocalizedStringResource("motivation_resources")),
         .highlights: DisplayRepresentation(title: LocalizedStringResource("motivation_highlights")),
         .all: DisplayRepresentation(title: LocalizedStringResource("motivation_all")),
@@ -37,7 +37,7 @@ enum WidgetMotivationType: String, AppEnum {
 }
 
 struct MomentsWidgetConfigurationIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = LocalizedStringResource("moments_widget_configuration")
+    static let title = LocalizedStringResource("moments_widget_configuration")
 
     @Parameter(title: LocalizedStringResource("widget_period"), default: .all)
     var period: WidgetPeriodType
@@ -47,7 +47,7 @@ struct MomentsWidgetConfigurationIntent: WidgetConfigurationIntent {
 }
 
 struct MotivationWidgetConfigurationIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = LocalizedStringResource("motivation_widget_configuration")
+    static let title = LocalizedStringResource("motivation_widget_configuration")
 
     @Parameter(title: LocalizedStringResource("widget_content"), default: .all)
     var content: WidgetMotivationType

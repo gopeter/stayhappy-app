@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct ResourcesTile: View {
     @Environment(\.widgetFamily) var widgetFamily

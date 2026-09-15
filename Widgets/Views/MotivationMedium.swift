@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct MotivationMedium: View {
     @Environment(\.widgetFamily) var widgetFamily

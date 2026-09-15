@@ -121,16 +121,6 @@ struct MotivationWidgetProvider: AppIntentTimelineProvider {
 
         return (resources: resources, highlights: highlights)
     }
-
-    private func loadProcessedImage(for moment: Moment?, size: CGSize) -> UIImage? {
-        guard let moment = moment,
-            let photoFileName = moment.photo
-        else {
-            return nil
-        }
-
-        return ImageProcessingService.shared.processedImage(for: photoFileName, size: size)
-    }
 }
 
 struct MotivationWidgtEntry: TimelineEntry {

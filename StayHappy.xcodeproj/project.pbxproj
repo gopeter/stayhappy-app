@@ -87,7 +87,6 @@
 		45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6E12B4EF0B8003A42F8 /* StayHappyApp.swift */; };
 		45B6F6E82B4EF0BA003A42F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6E72B4EF0BA003A42F8 /* Assets.xcassets */; };
 		45B6F6EB2B4EF0BA003A42F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B6F6EA2B4EF0BA003A42F8 /* Preview Assets.xcassets */; };
-		45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */; };
 		45B6F7012B4EF0BA003A42F8 /* StayHappyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */; };
 		45B6F7032B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */; };
 		45BBE2382B628E5B0076D062 /* MomentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBE2372B628E5B0076D062 /* MomentsView.swift */; };
@@ -204,7 +203,6 @@
 		45B6F6EC2B4EF0BA003A42F8 /* StayHappy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StayHappy.entitlements; sourceTree = "<group>"; };
 		45B6F6ED2B4EF0BA003A42F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45B6F6F22B4EF0BA003A42F8 /* StayHappyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StayHappyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyTests.swift; sourceTree = "<group>"; };
 		45B6F6FC2B4EF0BA003A42F8 /* StayHappyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StayHappyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B6F7002B4EF0BA003A42F8 /* StayHappyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyUITests.swift; sourceTree = "<group>"; };
 		45B6F7022B4EF0BA003A42F8 /* StayHappyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayHappyUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -422,7 +420,6 @@
 		45B6F6F52B4EF0BA003A42F8 /* StayHappyTests */ = {
 			isa = PBXGroup;
 			children = (
-				45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */,
 				455CC73F3059D2C6008B7187 /* DatabaseMigrationTests.swift */,
 				455CC7443059DF39008B7187 /* ImageCropTests.swift */,
 			);
@@ -779,7 +776,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */,
 				455CC7403059D2C6008B7187 /* DatabaseMigrationTests.swift in Sources */,
 				455CC7453059DF39008B7187 /* ImageCropTests.swift in Sources */,
 			);

@@ -22,11 +22,9 @@ struct HighlightsTile: View {
         self.highlight = highlights[0]
         self.size = size
 
-        if highlight.photo != nil {
-            let photoUrl = FileManager.documentsDirectory.appendingPathComponent(
-                "\(String(describing: highlight.photo!))\(size == .systemMedium ? "_widget_2x1" : "_widget_1x1").jpg"
-            )
-            self.photoImage = UIImage(contentsOfFile: photoUrl.path)
+        if let photo = highlight.photo {
+            let variant: ImageVariant = size == .systemMedium ? .widget2x1 : .widget1x1
+            self.photoImage = ImageProcessingService.shared.processedImage(for: photo, variant: variant)
         }
     }
 

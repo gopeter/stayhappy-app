@@ -22,21 +22,22 @@ class ImageSaver {
         self.filePath = FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg")
     }
 
-    // Get screen width for widget sizing
-    private var screenWidth: CGFloat {
-        return UIScreen.main.bounds.width
-    }
-
-    func writeToDisk() throws {
-        if self.image == nil {
+    /// Writes the original photo and all of its variants to disk.
+    ///
+    /// This is `async` on purpose: the variants used to be generated in a
+    /// detached `Task` that nobody awaited, so callers went on to reload the
+    /// widget timelines before the files existed — and the widget then rendered
+    /// the uncropped original as a fallback.
+    func writeToDisk() async throws {
+        guard let image else {
             throw RuntimeError("Image not defined")
         }
 
-        // Save original image
-        self.writeToDisk(image: self.image!, fileName: self.fileName)
+        writeToDisk(image: image, fileName: fileName)
+        await generateVariants(from: image)
 
-        // Generate widget-optimized versions
-        self.generateWidgetImages()
+        // The previous generation of variants for this name is now stale.
+        ImageProcessingService.shared.removeCachedImages(for: fileName)
     }
 
     func writeToDisk(image: UIImage, fileName: String) {
@@ -45,40 +46,32 @@ class ImageSaver {
         }
     }
 
-    // Generate widget-optimized images using intelligent processing
-    private func generateWidgetImages() {
-        guard let originalImage = self.image else { return }
+    private func generateVariants(from image: UIImage) async {
+        for variant in ImageVariant.allCases {
+            guard let processed = await ImageProcessingService.shared.processImage(image, variant: variant) else {
+                continue
+            }
 
-        Task {
-            // Generate 2x1 aspect ratio (for medium widgets)
-            let widget2x1Size = CGSize(width: screenWidth * 0.9, height: (screenWidth * 0.9) / 2.0)
-            let widget2x1 = await ImageProcessingService.shared.processImage(originalImage, targetSize: widget2x1Size)
-            writeToDisk(image: widget2x1, fileName: "\(fileName)_widget_2x1")
-
-            // Generate 1x1 aspect ratio (for small widgets)
-            let widget1x1Size = CGSize(width: screenWidth * 0.45, height: screenWidth * 0.45)
-            let widget1x1 = await ImageProcessingService.shared.processImage(originalImage, targetSize: widget1x1Size)
-            writeToDisk(image: widget1x1, fileName: "\(fileName)_widget_1x1")
+            writeToDisk(image: processed, fileName: variant.fileName(for: fileName))
         }
     }
 
     func deleteFromDisk() {
         let fileManager = FileManager.default
+        let fileName = self.fileName
+        let filePath = self.filePath
 
-        DispatchQueue.global(qos: .background).async {
-            do {
-                // Delete original image
-                try fileManager.removeItem(at: self.filePath)
+        ImageProcessingService.shared.removeCachedImages(for: fileName)
 
-                // Delete widget variants
-                let widget2x1Path = FileManager.documentsDirectory.appendingPathComponent("\(self.fileName)_widget_2x1.jpg")
-                let widget1x1Path = FileManager.documentsDirectory.appendingPathComponent("\(self.fileName)_widget_1x1.jpg")
+        Task.detached(priority: .utility) {
+            try? fileManager.removeItem(at: filePath)
 
-                try? fileManager.removeItem(at: widget2x1Path)
-                try? fileManager.removeItem(at: widget1x1Path)
-            }
-            catch {
-                print("Error removing file: \(error)")
+            // Driven off ImageVariant, so a newly added variant is cleaned up
+            // automatically instead of being orphaned on disk forever.
+            for variant in ImageVariant.allCases {
+                let variantPath = FileManager.documentsDirectory
+                    .appendingPathComponent("\(variant.fileName(for: fileName)).jpg")
+                try? fileManager.removeItem(at: variantPath)
             }
         }
     }

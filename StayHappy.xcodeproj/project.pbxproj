@@ -38,6 +38,10 @@
 		4558FB862B874D6C009D506C /* HighlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB852B874D6C009D506C /* HighlightView.swift */; };
 		4558FB9F2B87A601009D506C /* HappyGradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4558FB9E2B87A601009D506C /* HappyGradients.swift */; };
 		4558FBA22B87B0D5009D506C /* Hue in Frameworks */ = {isa = PBXBuildFile; productRef = 4558FBA12B87B0D5009D506C /* Hue */; };
+		455CC7403059D2C6008B7187 /* DatabaseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455CC73F3059D2C6008B7187 /* DatabaseMigrationTests.swift */; };
+		455CC7423059DD49008B7187 /* ImageVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455CC7413059DD49008B7187 /* ImageVariant.swift */; };
+		455CC7433059DD49008B7187 /* ImageVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455CC7413059DD49008B7187 /* ImageVariant.swift */; };
+		455CC7453059DF39008B7187 /* ImageCropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455CC7443059DF39008B7187 /* ImageCropTests.swift */; };
 		455FECA72B90FAFF006A2592 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 455FECA62B90FAFF006A2592 /* README.md */; };
 		45783E742E5F9BD000DDAC08 /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45783E732E5F9BD000DDAC08 /* OnboardingData.swift */; };
 		45783E752E5F9BD000DDAC08 /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45783E732E5F9BD000DDAC08 /* OnboardingData.swift */; };
@@ -166,6 +170,9 @@
 		455736AC2E98104500EF22DC /* WidgetImageMigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetImageMigrationService.swift; sourceTree = "<group>"; };
 		4558FB852B874D6C009D506C /* HighlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightView.swift; sourceTree = "<group>"; };
 		4558FB9E2B87A601009D506C /* HappyGradients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HappyGradients.swift; sourceTree = "<group>"; };
+		455CC73F3059D2C6008B7187 /* DatabaseMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseMigrationTests.swift; sourceTree = "<group>"; };
+		455CC7413059DD49008B7187 /* ImageVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageVariant.swift; sourceTree = "<group>"; };
+		455CC7443059DF39008B7187 /* ImageCropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropTests.swift; sourceTree = "<group>"; };
 		455FECA62B90FAFF006A2592 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45783E732E5F9BD000DDAC08 /* OnboardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingData.swift; sourceTree = "<group>"; };
 		45783E762E5F9BDE00DDAC08 /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
@@ -416,6 +423,8 @@
 			isa = PBXGroup;
 			children = (
 				45B6F6F62B4EF0BA003A42F8 /* StayHappyTests.swift */,
+				455CC73F3059D2C6008B7187 /* DatabaseMigrationTests.swift */,
+				455CC7443059DF39008B7187 /* ImageCropTests.swift */,
 			);
 			path = StayHappyTests;
 			sourceTree = "<group>";
@@ -486,6 +495,7 @@
 				45F8C8F02BE96F0A004D8718 /* ImageSaliencyService.swift */,
 				45F8C8FE2BEB96E7004D8718 /* QuickLookService.swift */,
 				455736AC2E98104500EF22DC /* WidgetImageMigrationService.swift */,
+				455CC7413059DD49008B7187 /* ImageVariant.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -712,6 +722,7 @@
 				45ADE78E2BFFC6CD00303B4B /* HighlightsTile.swift in Sources */,
 				45AFCBB82BE4E5C0009D1FD4 /* Date.swift in Sources */,
 				45AFCBB52BE4CFFF009D1FD4 /* Calendar.swift in Sources */,
+				455CC7423059DD49008B7187 /* ImageVariant.swift in Sources */,
 				45AFCB9F2BE03A8A009D1FD4 /* FileManager.swift in Sources */,
 				454D8CC62E93B23400AF382D /* MomentTile.swift in Sources */,
 				45AFCBA02BE03A92009D1FD4 /* HappyGradients.swift in Sources */,
@@ -746,6 +757,7 @@
 				459BE7832B8E9C1000433B60 /* TitleCased.swift in Sources */,
 				454328DC2B7635AC007956A0 /* FormView.swift in Sources */,
 				45B6F6E22B4EF0B8003A42F8 /* StayHappyApp.swift in Sources */,
+				455CC7433059DD49008B7187 /* ImageVariant.swift in Sources */,
 				45BBE23C2B67E83B0076D062 /* NavigationBarView.swift in Sources */,
 				45AF8E792BB0D247006AF22E /* Error.swift in Sources */,
 				454328D82B763480007956A0 /* Resource.swift in Sources */,
@@ -768,6 +780,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				45B6F6F72B4EF0BA003A42F8 /* StayHappyTests.swift in Sources */,
+				455CC7403059D2C6008B7187 /* DatabaseMigrationTests.swift in Sources */,
+				455CC7453059DF39008B7187 /* ImageCropTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1243,7 +1257,7 @@
 			repositoryURL = "https://github.com/groue/GRDB.swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 6.29.3;
+				minimumVersion = 7.11.1;
 			};
 		};
 		454014FB2B722437003A7E24 /* XCRemoteSwiftPackageReference "GRDBQuery" */ = {
@@ -1251,7 +1265,7 @@
 			repositoryURL = "https://github.com/groue/GRDBQuery";
 			requirement = {
 				kind = exactVersion;
-				version = 0.8.0;
+				version = 0.11.0;
 			};
 		};
 		4558FBA02B87B0D5009D506C /* XCRemoteSwiftPackageReference "Hue" */ = {
@@ -1291,7 +1305,7 @@
 			repositoryURL = "https://github.com/EmergeTools/Pow";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.3;
+				minimumVersion = 1.0.6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

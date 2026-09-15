@@ -106,7 +106,7 @@ struct MomentFormView: View {
         }
     }
 
-    func saveMoment() {
+    func saveMoment() async {
         var photo: String? = moment?.photo
 
         // remove image from file system if ...
@@ -129,7 +129,10 @@ struct MomentFormView: View {
             let imageSaver = ImageSaver(image: photoImage!, fileName: photo!)
 
             do {
-                try imageSaver.writeToDisk()
+                // Awaited, so the variants are on disk before the widget
+                // timelines are told to reload below. Previously this returned
+                // immediately and the widget rendered the uncropped original.
+                try await imageSaver.writeToDisk()
                 imageSaver.reloadWidgets()
             }
             catch {
@@ -177,14 +180,16 @@ struct MomentFormView: View {
         previewImage = nil
     }
 
-    @MainActor
     private func generatePreviewImage(from image: UIImage) async {
-        // Generate preview with same aspect ratio as highlight tiles (2:1 for medium widgets)
-        let screenWidth = UIScreen.main.bounds.width
-        let previewSize = CGSize(width: screenWidth - 40, height: 150)
+        // Exactly the variant the highlight tile will later display, so what
+        // you approve while editing is what ends up in the list. This used to
+        // compute its own size from the screen width, producing a third,
+        // different aspect ratio.
+        let processedImage = await ImageProcessingService.shared.processImage(image, variant: .tile3x1)
 
-        let processedImage = await ImageProcessingService.shared.processImage(image, targetSize: previewSize)
-        previewImage = processedImage
+        await MainActor.run {
+            previewImage = processedImage
+        }
     }
 
     var body: some View {
@@ -301,7 +306,7 @@ struct MomentFormView: View {
 
             Section {
                 Button(
-                    action: saveMoment,
+                    action: { Task { await saveMoment() } },
                     label: {
                         Text("save")
                     }

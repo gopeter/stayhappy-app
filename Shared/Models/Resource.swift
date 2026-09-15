@@ -5,6 +5,8 @@
 //  Created by Peter Oesteritz on 09.02.24.
 //
 
+// GRDBQuery infers `ValueObservationQueryable.ValuePublisher` as `AnyPublisher`,
+// so Combine has to stay in scope even though this file names no Combine type.
 import Combine
 import Foundation
 import GRDB
@@ -88,7 +90,9 @@ struct Resource: Identifiable, Equatable, Hashable {
 }
 
 extension Resource: Codable, FetchableRecord, PersistableRecord {
-    fileprivate enum Columns {
+    // GRDB 7 makes `Columns` a `TableRecord` requirement, so it has to be at
+    // least as accessible as `Resource` itself.
+    enum Columns {
         static let title = Column(CodingKeys.title)
         static let createdAt = Column(CodingKeys.createdAt)
     }
@@ -118,19 +122,14 @@ extension Resource {
 
 // MARK: - Resource Model Requests
 
-struct ResourceListRequest: Queryable {
+struct ResourceListRequest: ValueObservationQueryable {
+    typealias Context = AppDatabase
+
     var searchText: String = ""
 
     static var defaultValue: [Resource] { [] }
 
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Resource], Error> {
-        ValueObservation
-            .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.reader, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-
-    func fetchValue(_ db: Database) throws -> [Resource] {
+    func fetch(_ db: Database) throws -> [Resource] {
         var resources = Resource.all()
 
         if searchText != "" {

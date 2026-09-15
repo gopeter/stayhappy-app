@@ -122,17 +122,14 @@ struct MotivationWidgetProvider: AppIntentTimelineProvider {
         return (resources: resources, highlights: highlights)
     }
 
-    private func loadProcessedImage(for moment: Moment?, size: CGSize) async -> UIImage? {
+    private func loadProcessedImage(for moment: Moment?, size: CGSize) -> UIImage? {
         guard let moment = moment,
             let photoFileName = moment.photo
         else {
             return nil
         }
 
-        return await ImageProcessingService.shared.getProcessedImage(
-            for: photoFileName,
-            size: size
-        )
+        return ImageProcessingService.shared.processedImage(for: photoFileName, size: size)
     }
 }
 

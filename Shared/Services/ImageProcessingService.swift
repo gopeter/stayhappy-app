@@ -7,249 +7,188 @@
 
 import UIKit
 
+/// Renders and reads the pre-generated image variants for a photo.
+///
+/// `@unchecked Sendable` is justified here because the only stored state is an
+/// `NSCache`, which is documented as thread-safe. (The previous version also
+/// guarded a plain Swift `Set` behind a dispatch queue and kept an entire disk
+/// cache that was never written to; both are gone.)
 final class ImageProcessingService: @unchecked Sendable {
     static let shared = ImageProcessingService()
 
-    private var cache: NSCache<NSString, UIImage> = NSCache()
-    private var cacheKeys: Set<String> = Set()
-    private let cacheQueue = DispatchQueue(label: "ImageProcessingService.cache", attributes: .concurrent)
+    private let cache = NSCache<NSString, UIImage>()
 
-    // Disk cache directory
-    private let diskCacheDirectory: URL
+    /// Source images are normalized to this many pixels on their longest edge
+    /// before analysis and cropping. It has to stay above the widest variant
+    /// (1200px) so that cropping never has to upscale.
+    private static let maxSourcePixelDimension: CGFloat = 2048
+
+    /// Saliency and face detection run on a much smaller copy — the focal point
+    /// is normalized, so the extra detail buys nothing but latency.
+    private static let maxAnalysisPixelDimension: CGFloat = 512
 
     private init() {
-        cache.countLimit = 50  // Limit cache to 50 images
-        cache.totalCostLimit = 100 * 1024 * 1024  // 100MB limit
-
-        // Setup disk cache directory
-        diskCacheDirectory = FileManager.documentsDirectory.appendingPathComponent("ProcessedImageCache", isDirectory: true)
-        createCacheDirectoryIfNeeded()
+        cache.countLimit = 50
+        cache.totalCostLimit = 100 * 1024 * 1024  // 100MB
     }
 
-    private func createCacheDirectoryIfNeeded() {
-        do {
-            try FileManager.default.createDirectory(at: diskCacheDirectory, withIntermediateDirectories: true, attributes: nil)
+    // MARK: - Reading pre-generated variants
+
+    /// Loads the pre-generated variant for a photo, falling back to the
+    /// original image when the variant hasn't been generated (yet).
+    func processedImage(for fileName: String, variant: ImageVariant) -> UIImage? {
+        let variantFileName = variant.fileName(for: fileName)
+
+        if let cached = cache.object(forKey: variantFileName as NSString) {
+            return cached
         }
-        catch {
-            // Silent failure - cache will be disabled if directory can't be created
+
+        let variantURL = FileManager.documentsDirectory.appendingPathComponent("\(variantFileName).jpg")
+
+        guard let image = UIImage(contentsOfFile: variantURL.path) else {
+            let originalURL = FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg")
+            return UIImage(contentsOfFile: originalURL.path)
         }
+
+        let cost = Int(image.size.width * image.size.height * 4)
+        cache.setObject(image, forKey: variantFileName as NSString, cost: cost)
+
+        return image
     }
 
-    // MARK: - Public Interface
-
-    /// Gets the appropriate pre-generated widget image
-    /// - Parameters:
-    ///   - fileName: The base filename of the image
-    ///   - size: The widget size (used to determine aspect ratio)
-    /// - Returns: Pre-generated widget image or nil if not found
-    func getProcessedImage(for fileName: String, size: CGSize) async -> UIImage? {
-        // Determine which pre-generated image to use based on aspect ratio
-        let aspectRatio = size.width / size.height
-        let widgetSuffix: String
-
-        if aspectRatio > 1.5 {
-            // Wide widget (medium) - use 2x1 variant
-            widgetSuffix = "_widget_2x1"
-        }
-        else {
-            // Square-ish widget (small) - use 1x1 variant
-            widgetSuffix = "_widget_1x1"
-        }
-
-        let widgetFileName = "\(fileName)\(widgetSuffix)"
-        let cacheKey = "\(widgetFileName)-\(Int(size.width))x\(Int(size.height))"
-
-        // Check memory cache first
-        if let cachedImage = cache.object(forKey: cacheKey as NSString) {
-            return cachedImage
-        }
-
-        // Try to load pre-generated widget image
-        let widgetImagePath = FileManager.documentsDirectory.appendingPathComponent("\(widgetFileName).jpg")
-        guard let widgetImage = UIImage(contentsOfFile: widgetImagePath.path) else {
-            // Fallback: try original image if widget image doesn't exist
-            let originalImagePath = FileManager.documentsDirectory.appendingPathComponent("\(fileName).jpg")
-            return UIImage(contentsOfFile: originalImagePath.path)
-        }
-
-        // Cache the widget image in memory
-        let cost = Int(widgetImage.size.width * widgetImage.size.height * 4)
-        cacheQueue.async(flags: .barrier) {
-            self.cache.setObject(widgetImage, forKey: cacheKey as NSString, cost: cost)
-            self.cacheKeys.insert(cacheKey)
-        }
-
-        return widgetImage
+    /// Convenience for callers that only know the size they want to fill.
+    func processedImage(for fileName: String, size: CGSize) -> UIImage? {
+        processedImage(for: fileName, variant: .bestMatch(for: size))
     }
 
-    // MARK: - Private Processing Methods
+    // MARK: - Generating variants
 
-    public func processImage(_ image: UIImage, targetSize: CGSize) async -> UIImage {
-        let focalPoint = await getSalientFocalPoint(image)
-
-        // Scale down first to avoid memory issues with large images
-        let scaledImage = await scaleImageDown(image, maxDimension: 1024)
-
-        // Then intelligent crop around focal point
-        let result = await intelligentScaleAndCrop(scaledImage, targetSize: targetSize, focalPoint: focalPoint)
-        return result
-    }
-
-    private func getSalientFocalPoint(_ originalImage: UIImage) async -> CGPoint {
-        // Create very small image ONLY for saliency (512px max)
-        let saliencyImage = await scaleImageDown(originalImage, maxDimension: 512)
-
-        // Use saliency on small image
-        let imageSaliency = ImageSaliencyService(uiImage: saliencyImage)
-        let focalPoint = await imageSaliency.focalPoint()
-
-        return focalPoint
-    }
-
-    private func scaleImageDown(_ image: UIImage, maxDimension: CGFloat) async -> UIImage {
-        let currentSize = image.size
-        if max(currentSize.width, currentSize.height) <= maxDimension {
-            return image
-        }
-
-        let scale = maxDimension / max(currentSize.width, currentSize.height)
-        let newSize = CGSize(width: currentSize.width * scale, height: currentSize.height * scale)
-
-        return autoreleasepool {
-            let renderer = UIGraphicsImageRenderer(size: newSize)
-            return renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: newSize))
-            }
-        }
-    }
-
-    private func intelligentScaleAndCrop(_ image: UIImage, targetSize: CGSize, focalPoint: CGPoint) async -> UIImage {
-        // Step 1: Crop around focal point
-        let croppedImage = await cropAroundFocalPoint(image, focalPoint: focalPoint, targetAspectRatio: targetSize.width / targetSize.height)
-
-        // Step 2: Scale to target size
-        return await scaleToFinalSize(croppedImage, targetSize: targetSize)
-    }
-
-    private func cropAroundFocalPoint(_ image: UIImage, focalPoint: CGPoint, targetAspectRatio: CGFloat) async -> UIImage {
-        let sourceSize = image.size
-        let sourceAspectRatio = sourceSize.width / sourceSize.height
-
-        // Calculate crop dimensions maintaining target aspect ratio
-        let cropWidth: CGFloat
-        let cropHeight: CGFloat
-
-        if sourceAspectRatio > targetAspectRatio {
-            // Image is wider - base on height
-            cropHeight = sourceSize.height
-            cropWidth = cropHeight * targetAspectRatio
-        }
-        else {
-            // Image is taller - base on width
-            cropWidth = sourceSize.width
-            cropHeight = cropWidth / targetAspectRatio
-        }
-
-        // Calculate crop position centered around focal point
-        let focalX = focalPoint.x * sourceSize.width
-        let focalY = focalPoint.y * sourceSize.height
-
-        let cropX = max(0, min(focalX - cropWidth / 2, sourceSize.width - cropWidth))
-        let cropY = max(0, min(focalY - cropHeight / 2, sourceSize.height - cropHeight))
-
-        return autoreleasepool {
-            let renderer = UIGraphicsImageRenderer(size: CGSize(width: cropWidth, height: cropHeight))
-            return renderer.image { _ in
-                // Draw the image with offset to crop the desired region
-                image.draw(at: CGPoint(x: -cropX, y: -cropY))
-            }
-        }
-    }
-
-    private func scaleToFinalSize(_ image: UIImage, targetSize: CGSize) async -> UIImage {
-        return autoreleasepool {
-            let renderer = UIGraphicsImageRenderer(size: targetSize)
-            return renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: targetSize))
-            }
-        }
-    }
-
-    // MARK: - Disk Cache Methods
-
-    private func saveToDiskCache(image: UIImage, cacheKey: String) async {
-        let cacheFileURL = diskCacheDirectory.appendingPathComponent("\(cacheKey).jpg")
-
-        guard let jpegData = image.jpegData(compressionQuality: 0.9) else {
-            return
-        }
-
-        do {
-            try jpegData.write(to: cacheFileURL)
-        }
-        catch {
-            // Silent failure for cache operations
-        }
-    }
-
-    private func loadFromDiskCache(cacheKey: String) async -> UIImage? {
-        let cacheFileURL = diskCacheDirectory.appendingPathComponent("\(cacheKey).jpg")
-
-        guard FileManager.default.fileExists(atPath: cacheFileURL.path) else {
+    /// Crops `image` around its focal point and renders it at `variant`'s size.
+    func processImage(_ image: UIImage, variant: ImageVariant) async -> UIImage? {
+        // One orientation-correcting, downscaling pass. Everything after this
+        // works in a single top-left origin pixel space.
+        guard let source = normalizedCGImage(from: image, maxPixelDimension: Self.maxSourcePixelDimension) else {
             return nil
         }
 
-        return UIImage(contentsOfFile: cacheFileURL.path)
+        let focalPoint = await focalPoint(for: source)
+
+        let sourceSize = CGSize(width: source.width, height: source.height)
+        let rect = cropRect(in: sourceSize, aspectRatio: variant.aspectRatio, focalPoint: focalPoint)
+
+        // `cropping(to:)` is a pure window onto the existing pixels, so the
+        // only resampling in the whole pipeline is the final render below.
+        guard let cropped = source.cropping(to: rect) else { return nil }
+
+        return render(cropped, at: variant.pixelSize)
     }
 
-    private func removeFromDiskCache(cacheKey: String) {
-        let cacheFileURL = diskCacheDirectory.appendingPathComponent("\(cacheKey).jpg")
-
-        do {
-            try FileManager.default.removeItem(at: cacheFileURL)
+    private func focalPoint(for source: CGImage) async -> CGPoint {
+        guard let analysisImage = downscaledCGImage(source, maxPixelDimension: Self.maxAnalysisPixelDimension) else {
+            return CGPoint(x: 0.5, y: 0.5)
         }
-        catch {
-            // Silent failure for cache operations
+
+        return await ImageSaliencyService.focalPoint(for: analysisImage)
+    }
+
+    /// The largest rect with `aspectRatio` that fits inside `imageSize`,
+    /// positioned so it is centered on `focalPoint` without leaving the image.
+    ///
+    /// Internal rather than private so `ImageCropTests` can pin the geometry;
+    /// this is the part that decides whether a subject survives the crop.
+    func cropRect(in imageSize: CGSize, aspectRatio: CGFloat, focalPoint: CGPoint) -> CGRect {
+        var cropWidth = imageSize.width
+        var cropHeight = cropWidth / aspectRatio
+
+        if cropHeight > imageSize.height {
+            cropHeight = imageSize.height
+            cropWidth = cropHeight * aspectRatio
+        }
+
+        let focalX = focalPoint.x * imageSize.width
+        let focalY = focalPoint.y * imageSize.height
+
+        let x = min(max(0, focalX - cropWidth / 2), imageSize.width - cropWidth)
+        let y = min(max(0, focalY - cropHeight / 2), imageSize.height - cropHeight)
+
+        return CGRect(x: x, y: y, width: cropWidth, height: cropHeight).integral
+    }
+
+    // MARK: - Rendering helpers
+
+    private func renderFormat() -> UIGraphicsImageRendererFormat {
+        let format = UIGraphicsImageRendererFormat.default()
+        // Sizes throughout this service are explicit pixel counts. Without
+        // this the renderer would silently multiply them by the screen scale.
+        format.scale = 1
+        format.opaque = true
+        return format
+    }
+
+    /// Applies `image`'s EXIF orientation and downscales it, so that Vision and
+    /// the crop both see the image the way the user sees it.
+    private func normalizedCGImage(from image: UIImage, maxPixelDimension: CGFloat) -> CGImage? {
+        let pixelSize = CGSize(
+            width: image.size.width * image.scale,
+            height: image.size.height * image.scale
+        )
+
+        guard pixelSize.width > 0, pixelSize.height > 0 else { return nil }
+
+        let longestEdge = max(pixelSize.width, pixelSize.height)
+        let factor = longestEdge > maxPixelDimension ? maxPixelDimension / longestEdge : 1
+        let targetSize = CGSize(
+            width: (pixelSize.width * factor).rounded(),
+            height: (pixelSize.height * factor).rounded()
+        )
+
+        return autoreleasepool {
+            let renderer = UIGraphicsImageRenderer(size: targetSize, format: renderFormat())
+            // `draw(in:)` honours imageOrientation, which is exactly the
+            // normalization we want. `UIImage.cgImage` would not.
+            return renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: targetSize))
+            }.cgImage
         }
     }
 
-    // MARK: - Cache Management
+    private func downscaledCGImage(_ cgImage: CGImage, maxPixelDimension: CGFloat) -> CGImage? {
+        let size = CGSize(width: cgImage.width, height: cgImage.height)
+        let longestEdge = max(size.width, size.height)
 
-    /// Clears the entire image cache (both memory and disk)
+        guard longestEdge > maxPixelDimension else { return cgImage }
+
+        let factor = maxPixelDimension / longestEdge
+        let targetSize = CGSize(width: (size.width * factor).rounded(), height: (size.height * factor).rounded())
+
+        return autoreleasepool {
+            let renderer = UIGraphicsImageRenderer(size: targetSize, format: renderFormat())
+            return renderer.image { _ in
+                UIImage(cgImage: cgImage).draw(in: CGRect(origin: .zero, size: targetSize))
+            }.cgImage
+        }
+    }
+
+    private func render(_ cgImage: CGImage, at size: CGSize) -> UIImage {
+        autoreleasepool {
+            let renderer = UIGraphicsImageRenderer(size: size, format: renderFormat())
+            return renderer.image { _ in
+                UIImage(cgImage: cgImage).draw(in: CGRect(origin: .zero, size: size))
+            }
+        }
+    }
+
+    // MARK: - Cache management
+
+    /// Drops every in-memory variant.
     func clearCache() {
-        cacheQueue.async(flags: .barrier) {
-            self.cache.removeAllObjects()
-            self.cacheKeys.removeAll()
-        }
-
-        // Clear disk cache
-        Task {
-            do {
-                let files = try FileManager.default.contentsOfDirectory(at: diskCacheDirectory, includingPropertiesForKeys: nil)
-                for file in files {
-                    try FileManager.default.removeItem(at: file)
-                }
-            }
-            catch {
-                // Silent failure for cache operations
-            }
-        }
+        cache.removeAllObjects()
     }
 
-    /// Removes cached images for a specific filename (both memory and disk)
-    /// - Parameter fileName: The base filename to remove from cache
+    /// Drops the in-memory variants belonging to one photo.
     func removeCachedImages(for fileName: String) {
-        cacheQueue.async(flags: .barrier) {
-            let keysToRemove = self.cacheKeys.filter { $0.hasPrefix(fileName) }
-            for key in keysToRemove {
-                self.cache.removeObject(forKey: key as NSString)
-                self.cacheKeys.remove(key)
-
-                // Remove from disk cache too
-                Task {
-                    self.removeFromDiskCache(cacheKey: key)
-                }
-            }
+        for variant in ImageVariant.allCases {
+            cache.removeObject(forKey: variant.fileName(for: fileName) as NSString)
         }
     }
 }

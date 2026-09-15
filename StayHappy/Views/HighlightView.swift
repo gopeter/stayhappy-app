@@ -21,6 +21,19 @@ struct HighlightView: View {
         self.deviceSize = deviceSize
     }
 
+    private var tileWidth: CGFloat {
+        deviceSize.width - 40
+    }
+
+    /// Derived from the variant's aspect ratio instead of a hard-coded 120pt.
+    ///
+    /// The height used to be fixed, so the tile's ratio changed with the screen
+    /// width (3.02:1 on an iPhone 17 Pro, 2.79:1 on an SE) while the image was
+    /// always 2:1 — and SwiftUI silently center-cropped the difference away.
+    private var tileHeight: CGFloat {
+        (tileWidth / ImageVariant.tile3x1.aspectRatio).rounded()
+    }
+
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(
@@ -36,14 +49,14 @@ struct HighlightView: View {
                         endRadius: 0
                     )
             )
-            .frame(width: self.deviceSize.width - 40, height: 120)
+            .frame(width: tileWidth, height: tileHeight)
             .padding(.horizontal, 20)
             .background {
                 if thumbnailImage != nil {
                     Image(uiImage: thumbnailImage!)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: self.deviceSize.width - 40, height: 120, alignment: .center)
+                        .frame(width: tileWidth, height: tileHeight, alignment: .center)
                         .cornerRadius(10)
                         .padding(.horizontal, 20)
                         .clipped()
@@ -150,13 +163,12 @@ struct HighlightView: View {
         // Check if we need to open the image after loading the original image
         checkAndOpenImage()
 
-        // Generate thumbnail using ImageProcessingService
-        Task {
-            let targetSize = CGSize(width: viewSize.width - 40, height: 120)
-
-            let processedImage = await ImageProcessingService.shared.getProcessedImage(
+        // Load the pre-generated tile variant. Detached so the JPEG decode
+        // happens off the main actor instead of on it.
+        Task.detached(priority: .userInitiated) {
+            let processedImage = ImageProcessingService.shared.processedImage(
                 for: photoFileName,
-                size: targetSize
+                variant: .tile3x1
             )
 
             await MainActor.run {
@@ -174,12 +186,14 @@ struct HighlightView: View {
         fileName: "preview"
     )
 
-    do {
-        try imageSaver.writeToDisk()
-        imageSaver.reloadWidgets()
-    }
-    catch {
-        // ...
+    Task {
+        do {
+            try await imageSaver.writeToDisk()
+            imageSaver.reloadWidgets()
+        }
+        catch {
+            // ...
+        }
     }
 
     return HighlightView(

@@ -11,7 +11,7 @@ import Foundation
 import GRDB
 import os.log
 
-struct AppDatabase {
+struct AppDatabase: Sendable {
     /// Creates an `AppDatabase`, and makes sure the database schema
     /// is ready.
     ///
@@ -101,6 +101,10 @@ extension AppDatabase {
                 // Use default AppDatabase configuration
                 configuration: AppDatabase.makeConfiguration())
             
+            // Snapshot the database before any migration of this build runs.
+            // Must happen before `AppDatabase(_:)`, which migrates.
+            backupBeforeGRDB7MigrationIfNeeded(dbPool, in: directoryURL)
+            
             // Create the AppDatabase
             let appDatabase = try AppDatabase(dbPool)
             
@@ -116,6 +120,51 @@ extension AppDatabase {
             // * The database could not be migrated to its latest schema version.
             // Check the error message to determine what the actual problem was.
             fatalError("Unresolved error \(error)")
+        }
+    }
+    
+    /// Marker file recording that the pre-GRDB-7 snapshot has already been taken.
+    private static let grdb7BackupMarkerName = ".grdb7-backup-done"
+    
+    /// Takes a one-time snapshot of the database before the first migration run
+    /// of the GRDB 7 build, so an unexpected schema problem can never be a
+    /// one-way door.
+    ///
+    /// Uses SQLite's online backup API through GRDB rather than copying files,
+    /// so the snapshot stays consistent even though the database runs in WAL
+    /// mode and may have uncheckpointed content in its `-wal` sidecar.
+    private static func backupBeforeGRDB7MigrationIfNeeded(
+        _ dbPool: DatabasePool,
+        in directoryURL: URL
+    ) {
+        let fileManager = FileManager.default
+        let markerURL = directoryURL.appendingPathComponent(grdb7BackupMarkerName)
+        
+        guard !fileManager.fileExists(atPath: markerURL.path) else { return }
+        
+        do {
+            // A database without a migrations table has never been migrated,
+            // so it is a fresh install with nothing worth preserving.
+            let isExistingDatabase = try dbPool.read { db in
+                try db.tableExists("grdb_migrations")
+            }
+            
+            if isExistingDatabase {
+                let backupURL = directoryURL.appendingPathComponent("db.sqlite.bak-pre-grdb7")
+                try? fileManager.removeItem(at: backupURL)
+                
+                let backup = try DatabaseQueue(path: backupURL.path)
+                try dbPool.backup(to: backup)
+                
+                NSLog("Pre-GRDB7 database backup written to \(backupURL.path)")
+            }
+            
+            try Data().write(to: markerURL)
+        }
+        catch {
+            // A failed backup must not stop the app from launching. The
+            // migration itself is non-destructive; this is only a safety net.
+            NSLog("Pre-GRDB7 database backup failed: \(error)")
         }
     }
     
@@ -189,9 +238,13 @@ extension AppDatabase {
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         
-#if DEBUG
-        migrator.eraseDatabaseOnSchemaChange = true
-#endif
+        // Erasing the database on schema change is convenient while iterating
+        // on migrations, but it destroys data silently. Gate it behind the same
+        // `-reset` launch argument that tests already use (see `makeShared()`),
+        // so a debug build on a real device can never wipe real data.
+        if CommandLine.arguments.contains("-reset") {
+            migrator.eraseDatabaseOnSchemaChange = true
+        }
         
         migrator.registerMigration("createEvent") { db in
             try db.create(table: "event") { t in

@@ -9,119 +9,98 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject var globalData: GlobalData
-    @State var visibility = Visibility.hidden
 
-    // TODO: check if this is the right place to do this
-    @MainActor
-    init() {
-        applyUIStyling()
+    /// Lifts the search tab out of the tab bar into its own trailing bubble.
+    ///
+    /// `TabRole.prominent` arrived in iOS 27, one version above this app's
+    /// deployment target, so on iOS 26 the tab simply stays inside the capsule
+    /// alongside the other four.
+    private var searchRole: TabRole? {
+        if #available(iOS 27, *) {
+            return .prominent
+        }
+        return nil
     }
 
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            TabView(selection: $globalData.activeView) {
-                MomentsView().tag(Views.moments)
-                ResourcesView().tag(Views.resources)
-                HighlightsView().tag(Views.highlights)
-                HelpView().tag(Views.help)
+        TabView(selection: $globalData.activeView) {
+            // `Tab(_:image:…)` takes an asset catalog name, so the app's own
+            // symbolsets go straight into the system tab bar and pick up
+            // Liquid Glass without any custom chrome.
+            Tab("moments", image: "calendar-range-symbol", value: Views.moments) {
+                MomentsView()
             }
 
-            NavigationBarView()
-        }
+            Tab("resources", image: "coffee-symbol", value: Views.resources) {
+                ResourcesView()
+            }
 
-        .ignoresSafeArea(.keyboard)
-        .overlay {
-            // Global fullscreen image overlay - completely independent
-            if globalData.isFullscreenPresented, let image = globalData.fullscreenImage {
-                Color.clear
-                    .background(.ultraThinMaterial)
-                    .ignoresSafeArea(.all)
-                    .opacity(globalData.isFullscreenPresented ? 1.0 : 0.0)
-                    .overlay {
-                        ImageViewer(image: image)
-                            .ignoresSafeArea(.all)
-                            .opacity(globalData.isFullscreenPresented ? 1.0 : 0.0)
-                    }
-                    .overlay(alignment: .bottom) {
-                        FullscreenImageNavigationBar(
-                            image: image,
-                            onClose: {
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    globalData.closeFullscreenImage()
-                                }
-                            }
-                        )
-                        .opacity(globalData.isFullscreenPresented ? 1.0 : 0.0)
-                        .padding(.bottom, 34)
-                    }
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            globalData.closeFullscreenImage()
-                        }
-                    }
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.3), value: globalData.isFullscreenPresented)
+            Tab("highlights", image: "heart-symbol", value: Views.highlights) {
+                HighlightsView()
+            }
+
+            Tab("help", image: "badge-help-symbol", value: Views.help) {
+                HelpView()
+            }
+
+            // `searchable` deliberately lives inside `SearchView` instead of on
+            // this `TabView`: applied here it propagates into every tab and
+            // leaves a search drawer under each list's large title, which
+            // `toolbar(removing: .search)` in those tabs does not take away.
+            //
+            // That rules out `role: .search`, whose separate bubble *is* that
+            // tab-bar search integration. `.prominent` buys the same bubble
+            // without it — see `searchRole`.
+            Tab("search", image: "search-symbol", value: Views.search, role: searchRole) {
+                SearchView()
+            }
+        }
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .tint(Color("AccentColor"))
+        .fullScreenCover(isPresented: $globalData.isFullscreenPresented) {
+            if let image = globalData.fullscreenImage {
+                FullscreenPhotoView(image: image) {
+                    globalData.closeFullscreenImage()
+                }
             }
         }
     }
 }
 
-// UIKit appearance proxies are main-actor isolated. This has to stay in `init`
-// rather than move to `onAppear`, because appearance proxies only affect views
-// created after they are set.
-@MainActor
-private func applyUIStyling() {
-    UITabBar.appearance().isHidden = true
+// MARK: - Fullscreen Photo
 
-    let searchBar = UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
-    searchBar.setImage(UIImage(named: "search-symbol"), for: .search, state: .normal)
-    searchBar.setImage(UIImage(named: "x-circle-symbol"), for: .clear, state: .normal)
-    searchBar.backgroundColor = .clear
-}
-
-// MARK: - Fullscreen Image Navigation
-
-struct FullscreenImageNavigationBar: View {
+/// A photo at full size with its two actions in a real toolbar.
+///
+/// Following the Photos app: dismissal is a navigation-level action at the top
+/// leading edge, sharing is a content action in the bottom bar. Both are
+/// rendered by the system, so they get Liquid Glass without custom styling.
+private struct FullscreenPhotoView: View {
     let image: UIImage
     let onClose: () -> Void
+
     @State private var showShareSheet = false
 
     var body: some View {
-        HStack(spacing: 0) {
-            Spacer()
+        NavigationStack {
+            ImageViewer(image: image)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(action: onClose) {
+                            Label("close", image: "x-symbol")
+                        }
+                    }
 
-            Button(action: { showShareSheet = true }) {
-                Image("share-symbol")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(Color.gray)
-            }
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
-            .buttonStyle(HighlightButtonStyle())
-
-            Spacer()
-
-            Button(action: onClose) {
-                Image("minimize-symbol")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20.0, height: 20.0)
-                    .foregroundStyle(Color.gray)
-            }
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 54, maxHeight: 54)
-            .buttonStyle(HighlightButtonStyle())
-
-            Spacer()
-        }
-        .frame(width: 120, height: 54)
-        .background(
-            RoundedRectangle(cornerRadius: 18)
-                .fill(Color("ToolbarBackgroundColor"))
-                .shadow(color: Color.black.opacity(0.35), radius: 5, y: 2)
-        )
-        .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [image])
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            showShareSheet = true
+                        } label: {
+                            Label("share", image: "share-symbol")
+                        }
+                    }
+                }
+                .sheet(isPresented: $showShareSheet) {
+                    ShareSheet(activityItems: [image])
+                }
         }
     }
 }

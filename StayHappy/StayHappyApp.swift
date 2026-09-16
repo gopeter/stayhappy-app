@@ -15,6 +15,12 @@ enum Views: String {
     case resources
     case highlights
     case help
+
+    /// A real destination: the dedicated search area. It takes the trailing
+    /// prominent slot in the tab bar, which is what lets its field open above
+    /// the keyboard instead of pushing the headline aside. Creating is a
+    /// navigation-bar button in each list instead of a tab.
+    case search
 }
 
 /// Purely UI state, so it belongs on the main actor. Being explicit about that
@@ -99,12 +105,10 @@ class GlobalData: ObservableObject {
     }
 
     func closeFullscreenImage() {
+        // The fullscreen cover animates its own dismissal, so the image can be
+        // released straight away — no delay needed to protect a fade-out.
         isFullscreenPresented = false
-        // Delay clearing the image to allow fade-out animation to complete
-        Task {
-            try? await Task.sleep(for: .milliseconds(250))
-            self.fullscreenImage = nil
-        }
+        fullscreenImage = nil
     }
 }
 

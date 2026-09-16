@@ -38,7 +38,7 @@ struct HighlightView: View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(
                 thumbnailImage == nil
-                    ? HappyGradients(rawValue: moment.background)!.radial(
+                    ? HappyGradients.named(moment.background).radial(
                         startRadius: -50,
                         endRadius: self.deviceSize.width
                     )
@@ -208,6 +208,8 @@ struct HighlightView: View {
             createdAt: Date(),
             updatedAt: Date()
         ),
-        deviceSize: UIScreen.main.bounds.size
+        // A fixed size rather than UIScreen.main: previews have no window, and
+        // the real view now gets its size from a GeometryReader anyway.
+        deviceSize: CGSize(width: 402, height: 874)
     ).environmentObject(GlobalData(activeView: .highlights))
 }

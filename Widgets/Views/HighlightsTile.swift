@@ -34,7 +34,7 @@ struct HighlightsTile: View {
             RoundedRectangle(cornerRadius: 0, style: .continuous)
                 .fill(
                     photoImage == nil
-                        ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: geometry.size.width)
+                        ? HappyGradients.named(highlight.background).radial(startRadius: -50, endRadius: geometry.size.width)
                         : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0)
                 )
                 .frame(maxWidth: .infinity)

@@ -398,6 +398,17 @@ extension HappyGradients {
 }
 
 extension HappyGradients {
+    /// The gradient stored under `rawValue`, or a fallback if there is none.
+    ///
+    /// Moments persist their background as a raw string, so a row can name a
+    /// gradient this build no longer has — a renamed case, or a hand-edited
+    /// database. Force-unwrapping there took down the whole Highlights tab, the
+    /// moment form and the widget, with no way to recover short of deleting the
+    /// moment that can no longer be opened.
+    static func named(_ rawValue: String) -> HappyGradients {
+        HappyGradients(rawValue: rawValue) ?? .stayHappy
+    }
+
     func smoothColors(fromColor: UIColor, toColor: UIColor) -> [Color] {
         return SmoothGradientGenerator()
             .generate(

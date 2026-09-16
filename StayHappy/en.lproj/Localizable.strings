@@ -13,6 +13,10 @@
 "save" = "Save";
 "delete" = "Delete";
 "cancel" = "Cancel";
+"close" = "Close";
+"share" = "Share";
+"search_prompt" = "Search moments and resources";
+"search_no_results" = "No results";
 
 /* Moments */
 "no_moments_found" = "No moments found";
@@ -47,6 +51,10 @@
 "ordering" = "Ordering";
 "ascending" = "Ascending";
 "descending" = "Descending";
+"filter" = "Filter";
+/* Short forms for the segmented quick filter under the headline */
+"upcoming" = "Upcoming";
+"past" = "Past";
 
 /* Date References */
 "today" = "Today";

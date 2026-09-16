@@ -245,7 +245,7 @@ struct MomentFormView: View {
 
                                 Circle()
                                     .frame(width: 30, height: 30)
-                                    .foregroundStyle(HappyGradients(rawValue: background)!.radial(startRadius: 0, endRadius: 50))
+                                    .foregroundStyle(HappyGradients.named(background).radial(startRadius: 0, endRadius: 50))
 
                                 Image("chevron-right-symbol")
                                     .foregroundStyle(Color(uiColor: .systemFill))
@@ -287,15 +287,10 @@ struct MomentFormView: View {
                     }
             }
 
-            Section {
-                Button(
-                    action: { Task { await saveMoment() } },
-                    label: {
-                        Text("save")
-                    }
-                ).disabled(disableForm)
-
-                if moment != nil {
+            // Saving moved to the checkmark in the toolbar, so this section
+            // only remains for the destructive action when editing.
+            if moment != nil {
+                Section {
                     Button(
                         role: .destructive,
                         action: deleteMoment,
@@ -303,8 +298,8 @@ struct MomentFormView: View {
                             Text("delete")
                         }
                     )
-                }
-            }.listRowBackground(Color("CardBackgroundColor"))
+                }.listRowBackground(Color("CardBackgroundColor"))
+            }
 
             Section {
                 Button(
@@ -324,6 +319,16 @@ struct MomentFormView: View {
             .listRowInsets(EdgeInsets(top: -30, leading: 0, bottom: 0, trailing: 0))
         }.scrollContentBackground(.hidden)
             .animation(.none, value: isHighlight)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        Task { await saveMoment() }
+                    } label: {
+                        Label("save", image: "check-symbol")
+                    }
+                    .disabled(disableForm)
+                }
+            }
             .sheet(isPresented: $showingHelpSheet) {
                 MomentHelpView()
             }

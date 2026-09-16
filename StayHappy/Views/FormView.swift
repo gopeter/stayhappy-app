@@ -36,40 +36,6 @@ struct FormView: View {
                 .ignoresSafeArea(.all)
 
             VStack(spacing: 0) {
-                if isInSheet {
-                    HStack {
-                        Text(selection == Selection.resource ? "new_resource" : "new_moment").font(.title).fontWeight(.bold)
-                        Menu {
-                            Picker("select_entry_type", selection: $selection) {
-                                Text("moment").tag(Selection.moment)
-                                Text("resource").tag(Selection.resource)
-                            }
-                        } label: {
-                            HStack {
-                                Text(selection == Selection.resource ? "Resource" : "Moment").font(.title).fontWeight(.bold)
-                                Image("chevron-down-symbol").padding(.top, 5)
-                            }
-                        }
-
-                        Spacer()
-
-                        if isInSheet {
-                            Button(
-                                action: {
-                                    dismiss()
-                                },
-                                label: {
-                                    Image("x-symbol")
-                                        .resizable()
-                                        .frame(width: 18.0, height: 18.0)
-
-                                }
-                            )
-                        }
-                    }.padding(.horizontal, 20)
-                        .padding(.top, moment == nil && resource == nil ? 40 : 20)
-                }
-
                 if moment != nil {
                     MomentFormView(moment: moment)
                         .navigationTitle("moment")
@@ -90,9 +56,42 @@ struct FormView: View {
                 Spacer()
             }
         }
+        // Presentation-level chrome lives here because only `FormView` knows
+        // whether it is being shown as a sheet. The save action is contributed
+        // by the child form, which is where the data lives.
+        .toolbar {
+            if isInSheet {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Label("close", image: "x-symbol")
+                    }
+                }
+
+                ToolbarItem(placement: .principal) {
+                    Menu {
+                        Picker("select_entry_type", selection: $selection) {
+                            Text("moment").tag(Selection.moment)
+                            Text("resource").tag(Selection.resource)
+                        }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(selection == Selection.resource ? "new_resource" : "new_moment")
+                            Text(selection == Selection.resource ? "resource" : "moment")
+                            Image("chevron-down-symbol")
+                                .font(.caption2)
+                        }
+                        .font(.headline)
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    FormView(for: .moment, isInSheet: false)
+    NavigationStack {
+        FormView(for: .moment)
+    }
 }

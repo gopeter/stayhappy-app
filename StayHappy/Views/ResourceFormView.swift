@@ -62,13 +62,10 @@ struct ResourceFormView: View {
             Section {
                 TextField("description", text: $title).focused($isFocused)
             } header: {
+                // See `MomentFormView`: an empty placeholder view still
+                // reserves the section's header height.
                 if resource != nil {
                     Text("update_resource")
-                }
-                else {
-                    Color.clear
-                        .frame(width: 0, height: 0)
-                        .accessibilityHidden(true)
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
 
@@ -108,6 +105,10 @@ struct ResourceFormView: View {
                     Button(action: addResource) {
                         Label("save", image: "check-symbol")
                     }
+                    // See `MomentFormView`: the prominent glass variant fills
+                    // the capsule with the tint instead of only the glyph.
+                    .buttonStyle(.glassProminent)
+                    .tint(.yellow)
                     .disabled(disableForm)
                 }
             }

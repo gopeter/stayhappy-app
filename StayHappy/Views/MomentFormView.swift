@@ -215,13 +215,11 @@ struct MomentFormView: View {
                 // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                 Toggle("Highlight", isOn: $isHighlight)
             } header: {
+                // No placeholder view in the `else` branch: a zero-sized
+                // `Color` is still a view, so the grouped section kept its
+                // full header height and pushed the card down the sheet.
                 if moment != nil {
                     Text("update_moment")
-                }
-                else {
-                    Color.clear
-                        .frame(width: 0, height: 0)
-                        .accessibilityHidden(true)
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
 
@@ -326,6 +324,10 @@ struct MomentFormView: View {
                     } label: {
                         Label("save", image: "check-symbol")
                     }
+                    // `.glass` (the toolbar default) only tints the glyph;
+                    // the prominent variant fills the whole capsule.
+                    .buttonStyle(.glassProminent)
+                    .tint(.yellow)
                     .disabled(disableForm)
                 }
             }

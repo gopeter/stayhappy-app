@@ -17,6 +17,7 @@
 "share" = "Share";
 "search_prompt" = "Search moments and resources";
 "search_no_results" = "No results";
+"show_photo" = "Show photo full screen";
 
 /* Moments */
 "no_moments_found" = "No moments found";

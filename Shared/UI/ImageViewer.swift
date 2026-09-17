@@ -34,7 +34,12 @@ struct ImageViewer: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .edgesIgnoringSafeArea(.all)
-        }.background(BackgroundBlurView())
+        }
+        // No backdrop of its own: the presentation behind it supplies the
+        // material. A `UIVisualEffectView` here only covered the area inside
+        // the safe area, so it drew a visible edge against the material above
+        // and below it — and it was pinned to the light blur style regardless
+        // of the colour scheme.
     }
 
     private func makeMagnificationGesture(size: CGSize) -> some Gesture {
@@ -98,16 +103,4 @@ struct ImageViewer: View {
         
         self.lastTranslation = .zero
     }
-}
-
-struct BackgroundBlurView: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = .clear
-        }
-        return view
-    }
-
-    func updateUIView(_ uiView: UIView, context: Context) {}
 }

@@ -107,23 +107,33 @@ struct MomentFormView: View {
     }
 
     func saveMoment() async {
-        var photo: String? = moment?.photo
+        // Only a highlight keeps its photo. The switch itself discards nothing
+        // — everything is cleaned up here, so turning it off and on again
+        // before saving leaves the selection untouched.
+        let keepsPhoto = isHighlight && photoImage != nil
+
+        // `nil` whenever no photo survives this save: the file is deleted below
+        // in that case, and keeping the old name here left the row pointing at
+        // a photo that no longer existed on disk.
+        var photo: String? = keepsPhoto ? moment?.photo : nil
 
         // remove image from file system if ...
         if moment?.photo != nil {
             // ... photoPickerItem is set, a new photo was chosen
-            // ... photoImage is nil, the present photo was deleted
-            if photoPickerItem != nil || photoImage == nil {
+            // ... no photo is kept: it was removed, or the moment is not a
+            //     highlight anymore
+            if photoPickerItem != nil || !keepsPhoto {
                 let imageSaver = ImageSaver(fileName: moment!.photo!)
                 imageSaver.deleteFromDisk()
             }
         }
 
         // save image to file system if ...
-        if  // ... no photo was given and a photo was selected
-        (moment?.photo == nil && photoImage != nil)
-            // ... a photo was given and a new one was chosen
-            || (moment?.photo != nil && photoPickerItem != nil && photoImage != nil)
+        if keepsPhoto,
+            // ... no photo was given and a photo was selected
+            moment?.photo == nil
+                // ... a photo was given and a new one was chosen
+                || photoPickerItem != nil
         {
             photo = UUID().uuidString
             let imageSaver = ImageSaver(image: photoImage!, fileName: photo!)
@@ -178,6 +188,9 @@ struct MomentFormView: View {
     func removeImage() {
         photoImage = nil
         previewImage = nil
+        // Otherwise the picked item would still count as "a new photo was
+        // chosen" when saving.
+        photoPickerItem = nil
     }
 
     /// `PhotosPicker`'s label closure is `@Sendable`, so main-actor state can't

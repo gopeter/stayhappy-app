@@ -83,6 +83,11 @@ private struct FullscreenPhotoView: View {
     var body: some View {
         NavigationStack {
             ImageViewer(image: image)
+                // A `fullScreenCover` brings its own opaque background, so the
+                // app behind it was hidden and `ImageViewer`'s blur had nothing
+                // left to blur — hence the plain white surface. The material
+                // restores the frosted look the overlay had before.
+                .presentationBackground(.ultraThinMaterial)
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button(action: onClose) {

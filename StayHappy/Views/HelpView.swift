@@ -95,6 +95,10 @@ private extension View {
             // floating further apart than the title sits from the first card.
             // 16pt matches the gap the large title already leaves above it.
             .listSectionSpacing(16)
+            // The large title sits directly on top of the first card
+            // otherwise; this gives the headline room to breathe without
+            // widening the gaps between the cards.
+            .contentMargins(.top, 12, for: .scrollContent)
             .scrollContentBackground(.hidden)
             .background(Color("AppBackgroundColor"))
     }
@@ -459,6 +463,8 @@ struct HelpView: View {
                     )
                 }.listRowBackground(Color("CardBackgroundColor"))
             }.navigationLinkIndicatorVisibility(.hidden)
+                // Same headline spacing as the screens this list leads to.
+                .contentMargins(.top, 12, for: .scrollContent)
                 .background(Color("AppBackgroundColor"))
                 .scrollContentBackground(.hidden)
                 .navigationTitle("help")

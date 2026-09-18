@@ -134,6 +134,7 @@ extension MomentsView {
                     .accessibilityLabel(Text("ordering"))
             }
             .buttonStyle(.glass)
+            .foregroundStyle(.black)
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 16)

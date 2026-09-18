@@ -10,6 +10,8 @@ import WidgetKit
 
 struct MotivationMedium: View {
     @Environment(\.widgetFamily) var widgetFamily
+    /// See `MomentTile`: the label follows the widget's background.
+    @Environment(\.happyGradient) private var gradient
 
     var entry: MotivationWidgtEntry
 
@@ -31,7 +33,7 @@ struct MotivationMedium: View {
         {
             Text(NSLocalizedString("start_adding_moments", comment: ""))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
+                .foregroundStyle(gradient.textColor)
                 .padding(24)
                 .frame(maxWidth: .infinity)
                 .frame(maxHeight: .infinity)

@@ -34,6 +34,16 @@ struct HighlightView: View {
         (tileWidth / ImageVariant.tile3x1.aspectRatio).rounded()
     }
 
+    /// Always white, carried by its shadow.
+    ///
+    /// The tiles sit in a single scrolling list, and switching the label
+    /// between white and a dark tint per tile made that list look inconsistent
+    /// — the contrast of one tile is not worth the restlessness of the whole
+    /// column. The widget does switch: there, one background covers everything
+    /// and nothing sits next to it to clash with.
+    private let labelColor: Color = .white
+    private let labelShadowColor: Color = .black.opacity(0.4)
+
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(
@@ -62,6 +72,23 @@ struct HighlightView: View {
                         .clipped()
                 }
             }
+            // A scrim under the labels, the way the system darkens the bottom
+            // of a photo it puts text on. Fixed for every tile, so the column
+            // stays calm, and it carries the white text on the pale gradients
+            // where the shadow alone gave out.
+            .overlay {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(
+                        EllipticalGradient(
+                            colors: [.black.opacity(0.38), .clear],
+                            center: .bottomLeading,
+                            startRadiusFraction: 0,
+                            endRadiusFraction: 0.75
+                        )
+                    )
+                    .frame(width: tileWidth, height: tileHeight)
+                    .padding(.horizontal, 20)
+            }
             .overlay {
                 VStack {
                     Spacer()
@@ -71,10 +98,10 @@ struct HighlightView: View {
                                 moment.startAt.formatted(
                                     .dateTime.day().month().year()
                                 )
-                            ).foregroundStyle(.white)
+                            ).foregroundStyle(labelColor)
                                 .font(.caption)
                                 .shadow(
-                                    color: .black.opacity(0.4),
+                                    color: labelShadowColor,
                                     radius: 2,
                                     x: 0,
                                     y: 1
@@ -82,9 +109,9 @@ struct HighlightView: View {
                             Text(moment.title)
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(labelColor)
                                 .shadow(
-                                    color: .black.opacity(0.4),
+                                    color: labelShadowColor,
                                     radius: 3,
                                     x: 0,
                                     y: 1
@@ -106,9 +133,9 @@ struct HighlightView: View {
                                 },
                                 label: {
                                     Image("maximize-symbol")
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(labelColor)
                                         .shadow(
-                                            color: .black.opacity(0.4),
+                                            color: labelShadowColor,
                                             radius: 3,
                                             x: 0,
                                             y: 1
@@ -178,6 +205,33 @@ struct HighlightView: View {
             }
         }
     }
+}
+
+/// The extremes of the palette side by side: the gradients where white text
+/// has the least room, and the dark ones the scrim must not turn to mud.
+#Preview("Lightest and darkest") {
+    ScrollView {
+        VStack(spacing: 12) {
+            ForEach(["lemonGate", "newYork", "saintPetersburg", "stayHappy", "deepBlue", "nightParty"], id: \.self) { background in
+                HighlightView(
+                    moment: Moment(
+                        id: 1,
+                        title: "Arctic Monkeys Concert",
+                        startAt: Date(),
+                        endAt: Date(),
+                        isHighlight: true,
+                        background: background,
+                        photo: nil,
+                        createdAt: Date(),
+                        updatedAt: Date()
+                    ),
+                    deviceSize: CGSize(width: 402, height: 874)
+                )
+            }
+        }
+    }
+    .background(Color("AppBackgroundColor"))
+    .environmentObject(GlobalData(activeView: .highlights))
 }
 
 #Preview {

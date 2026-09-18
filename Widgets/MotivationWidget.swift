@@ -134,15 +134,23 @@ struct MotivationWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: MotivationWidgtEntry
 
+    /// See `MomentsWidgetEntryView`: `named(_:)` falls back to the default
+    /// gradient rather than trapping on an unknown name.
+    private var gradient: HappyGradients {
+        HappyGradients.named(entry.configuration.background.id)
+    }
+
     @ViewBuilder
     var body: some View {
         switch widgetFamily {
         case .systemSmall:
             MotivationSmall(entry: entry)
-                .background(HappyGradients.stayHappy.linear())
+                .background(gradient.linear())
+                .environment(\.happyGradient, gradient)
         case .systemMedium:
             MotivationMedium(entry: entry)
-                .background(HappyGradients.stayHappy.linear())
+                .background(gradient.linear())
+                .environment(\.happyGradient, gradient)
         default:
             Text(NSLocalizedString("not_available", comment: ""))
         }

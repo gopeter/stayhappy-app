@@ -158,15 +158,23 @@ struct MomentsWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: MomentsWidgtEntry
 
+    /// Falls back to the default gradient for an unknown name, so a widget
+    /// configured with a gradient a later build no longer ships keeps working.
+    private var gradient: HappyGradients {
+        HappyGradients.named(entry.configuration.background.id)
+    }
+
     @ViewBuilder
     var body: some View {
         switch widgetFamily {
         case .systemSmall:
             MomentsSmall(entry: entry)
-                .background(HappyGradients.stayHappy.linear())
+                .background(gradient.linear())
+                .environment(\.happyGradient, gradient)
         case .systemMedium:
             MomentsMedium(entry: entry)
-                .background(HappyGradients.stayHappy.linear())
+                .background(gradient.linear())
+                .environment(\.happyGradient, gradient)
         default:
             Text(NSLocalizedString("not_available", comment: ""))
         }

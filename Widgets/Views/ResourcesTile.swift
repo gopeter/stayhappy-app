@@ -10,6 +10,8 @@ import WidgetKit
 
 struct ResourcesTile: View {
     @Environment(\.widgetFamily) var widgetFamily
+    /// See `MomentTile`: the label follows the widget's background.
+    @Environment(\.happyGradient) private var gradient
 
     var resources: [Resource]
 
@@ -21,7 +23,7 @@ struct ResourcesTile: View {
                 }.joined(separator: " ")
             )
             .minimumScaleFactor(0.8)
-            .foregroundStyle(.white)
+            .foregroundStyle(gradient.textColor)
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
 

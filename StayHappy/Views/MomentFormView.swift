@@ -9,62 +9,135 @@ import PhotosUI
 import SwiftUI
 import os.log
 
+/// The gradient picker, as a grid grouped by colour family.
+///
+/// 117 full-width cards in one flat scroll meant a lot of scrolling to compare
+/// colours that look alike, so the swatches are laid out side by side, grouped
+/// the same way the widget configuration groups them, and searchable by name.
 struct BackgroundOptionView: View {
     @Environment(\.dismiss) var dismiss
 
     var gradients: [String]
     @Binding var selectedGradient: String
 
+    @State private var searchText = ""
+
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 3)
+
+    private var matches: [HappyGradients] {
+        let all = gradients.compactMap { HappyGradients(rawValue: $0) }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !query.isEmpty else { return all }
+        return all.filter { $0.displayName.localizedCaseInsensitiveContains(query) }
+    }
+
+    private var groups: [(family: HappyGradients.Family, gradients: [HappyGradients])] {
+        let matches = matches
+
+        return HappyGradients.Family.allCases.compactMap { family in
+            let gradients = matches
+                .filter { $0.family == family }
+                .sorted { $0.displayName < $1.displayName }
+
+            return gradients.isEmpty ? nil : (family, gradients)
+        }
+    }
+
     var body: some View {
         ScrollView {
-            VStack(spacing: 10) {
-                Button(
-                    action: {
-                        self.selectedGradient = self.gradients.randomElement()!
-                        dismiss()
-                    },
-                    label: {
-                        HStack {
-                            Spacer()
-                            Text("choose_random_color").padding(.vertical, 14)
-                            Spacer()
+            if groups.isEmpty {
+                ContentUnavailableView.search(text: searchText)
+                    .padding(.top, 60)
+            }
+            else {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(groups, id: \.family) { group in
+                        Section {
+                            ForEach(group.gradients, id: \.self) { gradient in
+                                GradientSwatch(
+                                    gradient: gradient,
+                                    isSelected: selectedGradient == gradient.rawValue
+                                ) {
+                                    selectedGradient = gradient.rawValue
+                                    dismiss()
+                                }
+                            }
+                        } header: {
+                            Text(LocalizedStringKey(group.family.localizationKey))
+                                .font(.footnote)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                )
-
-                ForEach(0..<gradients.count, id: \.self) { index in
-                    Button(
-                        action: {
-                            self.selectedGradient = self.gradients[index]
-                        },
-                        label: {
-                            HStack {
-                                Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 24, height: 24)
-                                    .foregroundStyle(.text.opacity(self.selectedGradient == self.gradients[index] ? 1 : 0.3))
-                                    .padding(.trailing, 10)
-
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(HappyGradients(rawValue: self.gradients[index])!.linear())
-                                    .frame(height: 80)
-                                    .overlay {
-                                        Text(self.gradients[index].titleCased()).foregroundStyle(.white).shadow(
-                                            color: .black.opacity(0.4),
-                                            radius: 3,
-                                            x: 0,
-                                            y: 1
-                                        )
-                                    }
-                            }
-                        }
-                    ).padding(.horizontal, 20)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 8)
+            }
+        }
+        .navigationTitle("background")
+        .navigationBarTitleDisplayMode(.inline)
+        .background(Color("AppBackgroundColor"))
+        .searchable(text: $searchText)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    if let random = gradients.randomElement() {
+                        selectedGradient = random
+                    }
+                    dismiss()
+                } label: {
+                    // Icon only: spelled out, the label is wide enough to
+                    // squeeze the navigation title.
+                    Label("choose_random_color", image: "sparkles-symbol")
                 }
             }
-        }.navigationTitle("background")
-            .navigationBarTitleDisplayMode(.inline)
-            .background(Color("AppBackgroundColor"))
+        }
+    }
+}
+
+/// One gradient in the picker.
+///
+/// Selection is a ring around the swatch rather than a symbol beside it: it
+/// leaves the colour itself unobscured, which matters for a gradient, and it
+/// is what the system's own colour pickers use.
+private struct GradientSwatch: View {
+    let gradient: HappyGradients
+    let isSelected: Bool
+    let action: () -> Void
+
+    private let cornerRadius: CGFloat = 12
+    private let ringGap: CGFloat = 4
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(gradient.linear())
+                    .aspectRatio(1, contentMode: .fit)
+                    .overlay {
+                        // Concentric with the swatch: the ring's radius grows
+                        // by exactly the gap, so both curves share a centre.
+                        RoundedRectangle(cornerRadius: cornerRadius + ringGap, style: .continuous)
+                            .stroke(Color("AccentColor"), lineWidth: 2.5)
+                            .padding(-ringGap)
+                            .opacity(isSelected ? 1 : 0)
+                    }
+
+                Text(gradient.displayName)
+                    .font(.caption2)
+                    .foregroundStyle(isSelected ? Color("AccentColor") : .secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            // Room for the ring, which is drawn outside the swatch.
+            .padding(ringGap + 2)
+        }
+        .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
+        .accessibilityLabel(gradient.displayName)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }
 

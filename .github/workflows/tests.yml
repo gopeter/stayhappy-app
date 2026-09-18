@@ -81,6 +81,16 @@ jobs:
             -scheme StayHappy \
             -clonedSourcePackagesDirPath .spm
 
+      # Zu den Test-Flags:
+      #   -parallel-testing-enabled NO
+      #     Im Scheme sind beide Test-Targets als parallelisierbar markiert.
+      #     Xcode startet dafür mehrere Simulator-Klone gleichzeitig, was auf
+      #     einem Runner mit wenigen Kernen den App-Start so ausbremst, dass
+      #     UI-Tests in ein Timeout laufen. Seriell dauert die Suite länger,
+      #     ist aber stabil.
+      #   -test-timeouts-enabled / -default-test-execution-time-allowance
+      #     Ohne Timeout hängt ein blockierter Test erst am 600-Sekunden-
+      #     Diagnose-Sammler und verbrennt Runner-Minuten, statt zu scheitern.
       - name: Run tests
         run: |
           set -o pipefail
@@ -91,6 +101,9 @@ jobs:
             -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" \
             -clonedSourcePackagesDirPath .spm \
             -resultBundlePath TestResults.xcresult \
+            -parallel-testing-enabled NO \
+            -test-timeouts-enabled YES \
+            -default-test-execution-time-allowance 240 \
             -skipMacroValidation \
             -skipPackagePluginValidation \
             CODE_SIGN_IDENTITY=- \

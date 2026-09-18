@@ -5,8 +5,15 @@
 //  Created by Peter Oesteritz on 23.05.24.
 //
 
+import GRDB
 import GRDBQuery
 import SwiftUI
+
+// GRDBQuery's convenience queryable protocols require their context to provide
+// a database reader. `AppDatabase.reader` already satisfies this, so the app can
+// keep using `AppDatabase` as the query context instead of GRDBQuery's own
+// `DatabaseContext`.
+extension AppDatabase: TopLevelDatabaseReader {}
 
 private struct AppDatabaseKey: EnvironmentKey {
     static var defaultValue: AppDatabase { ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" ? .random() : .shared }
@@ -23,7 +30,7 @@ extension EnvironmentValues {
 // wrapper, defined in the GRDBQuery package. Its documentation recommends to
 // define a dedicated initializer for `appDatabase` access, so we comply:
 
-extension Query where Request.DatabaseContext == AppDatabase {
+extension Query where Request.Context == AppDatabase {
     /// Convenience initializer for requests that feed from `AppDatabase`.
     init(_ request: Request) {
         self.init(request, in: \.appDatabase)

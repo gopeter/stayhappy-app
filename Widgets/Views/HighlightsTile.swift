@@ -22,12 +22,21 @@ struct HighlightsTile: View {
         self.highlight = highlights[0]
         self.size = size
 
-        if highlight.photo != nil {
-            let photoUrl = FileManager.documentsDirectory.appendingPathComponent(
-                "\(String(describing: highlight.photo!))\(size == .systemMedium ? "_widget_2x1" : "_widget_1x1").jpg"
-            )
-            self.photoImage = UIImage(contentsOfFile: photoUrl.path)
+        if let photo = highlight.photo {
+            let variant: ImageVariant = size == .systemMedium ? .widget2x1 : .widget1x1
+            self.photoImage = ImageProcessingService.shared.processedImage(for: photo, variant: variant)
         }
+    }
+
+    /// The tile paints the highlight's own gradient, not the widget's, so the
+    /// label follows that one. Over a photo it stays white: what is under it
+    /// is unknown.
+    private var labelColor: Color {
+        photoImage == nil ? HappyGradients.named(highlight.background).textColor : .white
+    }
+
+    private var labelShadowColor: Color {
+        photoImage == nil ? HappyGradients.named(highlight.background).textShadowColor : .black.opacity(0.4)
     }
 
     var body: some View {
@@ -36,7 +45,7 @@ struct HighlightsTile: View {
             RoundedRectangle(cornerRadius: 0, style: .continuous)
                 .fill(
                     photoImage == nil
-                        ? HappyGradients(rawValue: highlight.background)!.radial(startRadius: -50, endRadius: geometry.size.width)
+                        ? HappyGradients.named(highlight.background).radial(startRadius: -50, endRadius: geometry.size.width)
                         : RadialGradient(gradient: Gradient(colors: [.clear, .clear]), center: .center, startRadius: 0, endRadius: 0)
                 )
                 .frame(maxWidth: .infinity)
@@ -55,15 +64,15 @@ struct HighlightsTile: View {
                         HStack(alignment: .bottom) {
                             VStack(alignment: .leading, spacing: 3) {
                                 Spacer()
-                                Text(highlight.startAt.formatted(.dateTime.day().month().year())).foregroundStyle(.white)
+                                Text(highlight.startAt.formatted(.dateTime.day().month().year())).foregroundStyle(labelColor)
                                     .font(.caption)
-                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                    .shadow(color: labelShadowColor, radius: 2, x: 0, y: 1)
                                     .padding(0)
 
                                 Text(highlight.title)
                                     .fontWeight(.bold)
-                                    .foregroundStyle(.white)
-                                    .shadow(color: .black.opacity(0.4), radius: 2, x: 0, y: 1)
+                                    .foregroundStyle(labelColor)
+                                    .shadow(color: labelShadowColor, radius: 2, x: 0, y: 1)
                                     .padding(0)
                             }
 

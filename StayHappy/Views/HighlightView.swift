@@ -21,11 +21,34 @@ struct HighlightView: View {
         self.deviceSize = deviceSize
     }
 
+    private var tileWidth: CGFloat {
+        deviceSize.width - 40
+    }
+
+    /// Derived from the variant's aspect ratio instead of a hard-coded 120pt.
+    ///
+    /// The height used to be fixed, so the tile's ratio changed with the screen
+    /// width (3.02:1 on an iPhone 17 Pro, 2.79:1 on an SE) while the image was
+    /// always 2:1 — and SwiftUI silently center-cropped the difference away.
+    private var tileHeight: CGFloat {
+        (tileWidth / ImageVariant.tile3x1.aspectRatio).rounded()
+    }
+
+    /// Always white, carried by its shadow.
+    ///
+    /// The tiles sit in a single scrolling list, and switching the label
+    /// between white and a dark tint per tile made that list look inconsistent
+    /// — the contrast of one tile is not worth the restlessness of the whole
+    /// column. The widget does switch: there, one background covers everything
+    /// and nothing sits next to it to clash with.
+    private let labelColor: Color = .white
+    private let labelShadowColor: Color = .black.opacity(0.4)
+
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(
                 thumbnailImage == nil
-                    ? HappyGradients(rawValue: moment.background)!.radial(
+                    ? HappyGradients.named(moment.background).radial(
                         startRadius: -50,
                         endRadius: self.deviceSize.width
                     )
@@ -36,18 +59,35 @@ struct HighlightView: View {
                         endRadius: 0
                     )
             )
-            .frame(width: self.deviceSize.width - 40, height: 120)
+            .frame(width: tileWidth, height: tileHeight)
             .padding(.horizontal, 20)
             .background {
                 if thumbnailImage != nil {
                     Image(uiImage: thumbnailImage!)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: self.deviceSize.width - 40, height: 120, alignment: .center)
+                        .frame(width: tileWidth, height: tileHeight, alignment: .center)
                         .cornerRadius(10)
                         .padding(.horizontal, 20)
                         .clipped()
                 }
+            }
+            // A scrim under the labels, the way the system darkens the bottom
+            // of a photo it puts text on. Fixed for every tile, so the column
+            // stays calm, and it carries the white text on the pale gradients
+            // where the shadow alone gave out.
+            .overlay {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(
+                        EllipticalGradient(
+                            colors: [.black.opacity(0.38), .clear],
+                            center: .bottomLeading,
+                            startRadiusFraction: 0,
+                            endRadiusFraction: 0.75
+                        )
+                    )
+                    .frame(width: tileWidth, height: tileHeight)
+                    .padding(.horizontal, 20)
             }
             .overlay {
                 VStack {
@@ -58,10 +98,10 @@ struct HighlightView: View {
                                 moment.startAt.formatted(
                                     .dateTime.day().month().year()
                                 )
-                            ).foregroundStyle(.white)
+                            ).foregroundStyle(labelColor)
                                 .font(.caption)
                                 .shadow(
-                                    color: .black.opacity(0.4),
+                                    color: labelShadowColor,
                                     radius: 2,
                                     x: 0,
                                     y: 1
@@ -69,9 +109,9 @@ struct HighlightView: View {
                             Text(moment.title)
                                 .font(.title3)
                                 .fontWeight(.bold)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(labelColor)
                                 .shadow(
-                                    color: .black.opacity(0.4),
+                                    color: labelShadowColor,
                                     radius: 3,
                                     x: 0,
                                     y: 1
@@ -93,9 +133,9 @@ struct HighlightView: View {
                                 },
                                 label: {
                                     Image("maximize-symbol")
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(labelColor)
                                         .shadow(
-                                            color: .black.opacity(0.4),
+                                            color: labelShadowColor,
                                             radius: 3,
                                             x: 0,
                                             y: 1
@@ -150,13 +190,12 @@ struct HighlightView: View {
         // Check if we need to open the image after loading the original image
         checkAndOpenImage()
 
-        // Generate thumbnail using ImageProcessingService
-        Task {
-            let targetSize = CGSize(width: viewSize.width - 40, height: 120)
-
-            let processedImage = await ImageProcessingService.shared.getProcessedImage(
+        // Load the pre-generated tile variant. Detached so the JPEG decode
+        // happens off the main actor instead of on it.
+        Task.detached(priority: .userInitiated) {
+            let processedImage = ImageProcessingService.shared.processedImage(
                 for: photoFileName,
-                size: targetSize
+                variant: .tile3x1
             )
 
             await MainActor.run {
@@ -168,18 +207,47 @@ struct HighlightView: View {
     }
 }
 
+/// The extremes of the palette side by side: the gradients where white text
+/// has the least room, and the dark ones the scrim must not turn to mud.
+#Preview("Lightest and darkest") {
+    ScrollView {
+        VStack(spacing: 12) {
+            ForEach(["lemonGate", "newYork", "saintPetersburg", "stayHappy", "deepBlue", "nightParty"], id: \.self) { background in
+                HighlightView(
+                    moment: Moment(
+                        id: 1,
+                        title: "Arctic Monkeys Concert",
+                        startAt: Date(),
+                        endAt: Date(),
+                        isHighlight: true,
+                        background: background,
+                        photo: nil,
+                        createdAt: Date(),
+                        updatedAt: Date()
+                    ),
+                    deviceSize: CGSize(width: 402, height: 874)
+                )
+            }
+        }
+    }
+    .background(Color("AppBackgroundColor"))
+    .environmentObject(GlobalData(activeView: .highlights))
+}
+
 #Preview {
     let imageSaver = ImageSaver(
-        image: UIImage(named: "highlight"),
+        image: UIImage(named: "highlight") ?? .previewPhoto(seed: 0),
         fileName: "preview"
     )
 
-    do {
-        try imageSaver.writeToDisk()
-        imageSaver.reloadWidgets()
-    }
-    catch {
-        // ...
+    Task {
+        do {
+            try await imageSaver.writeToDisk()
+            imageSaver.reloadWidgets()
+        }
+        catch {
+            // ...
+        }
     }
 
     return HighlightView(
@@ -194,6 +262,8 @@ struct HighlightView: View {
             createdAt: Date(),
             updatedAt: Date()
         ),
-        deviceSize: UIScreen.main.bounds.size
+        // A fixed size rather than UIScreen.main: previews have no window, and
+        // the real view now gets its size from a GeometryReader anyway.
+        deviceSize: CGSize(width: 402, height: 874)
     ).environmentObject(GlobalData(activeView: .highlights))
 }

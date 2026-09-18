@@ -398,6 +398,149 @@ extension HappyGradients {
 }
 
 extension HappyGradients {
+    /// The gradient stored under `rawValue`, or a fallback if there is none.
+    ///
+    /// Moments persist their background as a raw string, so a row can name a
+    /// gradient this build no longer has — a renamed case, or a hand-edited
+    /// database. Force-unwrapping there took down the whole Highlights tab, the
+    /// moment form and the widget, with no way to recover short of deleting the
+    /// moment that can no longer be opened.
+    static func named(_ rawValue: String) -> HappyGradients {
+        HappyGradients(rawValue: rawValue) ?? .stayHappy
+    }
+
+    /// "Love Kiss" for `loveKiss` — the case names are the only names these
+    /// gradients have, so they double as the labels in pickers.
+    var displayName: String {
+        rawValue.titleCased()
+    }
+
+    /// One representative colour for the whole gradient.
+    ///
+    /// Used where a gradient has to be shown as a single dot, such as the
+    /// tinted symbol next to an option in the widget configuration, which the
+    /// system renders and where no gradient can be drawn.
+    var swatchColor: UIColor {
+        let colors = baseColors(name: self)
+        let ramp = SmoothGradientGenerator().generate(
+            from: UIColor(hex: colors[0]),
+            to: UIColor(hex: colors[1]),
+            interpolation: .hcl,
+            precision: .high
+        )
+
+        // The middle of the rendered ramp, not the average of the two end
+        // points: averaging a dark blue with a bright yellow in RGB gives a
+        // muddy olive that appears nowhere in the gradient.
+        return ramp[ramp.count / 2]
+    }
+
+    /// The colour families the gradients are grouped into.
+    ///
+    /// 117 gradients in one flat list are impossible to scan, and the names
+    /// give no hint of the colour, so the list is sorted by what people
+    /// actually look for: the hue.
+    enum Family: String, CaseIterable, Sendable {
+        case red
+        case orange
+        case yellow
+        case green
+        case turquoise
+        case blue
+        case purple
+        case pink
+        case neutral
+
+        var localizationKey: String {
+            "color_family_\(rawValue)"
+        }
+    }
+
+    /// A text colour that stays readable on this gradient.
+    ///
+    /// White is right on the dark half of the palette but disappears on the
+    /// pale ones. Rather than falling back to black, the colour is taken from
+    /// the gradient itself and darkened until it clears the WCAG AA contrast
+    /// ratio, so the label still reads as part of the colour.
+    var textColor: Color {
+        Color(uiColor: textUIColor)
+    }
+
+    /// Whether white has run out of room on this gradient.
+    ///
+    /// Measured at the ramp's middle, which is roughly where these labels
+    /// sit: the bottom leading corner of a top-leading-to-bottom-trailing
+    /// gradient. The cut-off sits where white drops below a contrast ratio of
+    /// about 2.1 — strict WCAG would flip 90 of the 117 gradients, including
+    /// mid-tones like Love Kiss where white plus its shadow reads fine.
+    private var needsDarkLabel: Bool {
+        swatchColor.relativeLuminance > 0.45
+    }
+
+    var textUIColor: UIColor {
+        let base = swatchColor
+
+        guard needsDarkLabel else { return .white }
+
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        base.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+
+        // Slightly more saturated as it darkens, otherwise a pastel turns into
+        // a plain grey. Stops at the first step that is contrasty enough.
+        for factor in stride(from: 0.45, through: 0.05, by: -0.05) {
+            let candidate = UIColor(
+                hue: hue,
+                saturation: min(saturation * 1.3, 1),
+                brightness: brightness * factor,
+                alpha: 1
+            )
+
+            if candidate.contrastRatio(against: base) >= 4.5 {
+                return candidate
+            }
+        }
+
+        return .black
+    }
+
+    /// Lifts the label off the parts of the gradient that run against it —
+    /// the colour above is chosen for the middle of the ramp, the ends can be
+    /// lighter or darker than that.
+    var textShadowColor: Color {
+        needsDarkLabel
+            ? .white.opacity(0.5)
+            : .black.opacity(0.4)
+    }
+
+    /// Derived from the swatch's hue rather than hand-assigned: a new gradient
+    /// added to the list above lands in the right section on its own.
+    var family: Family {
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        swatchColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+
+        // Washed-out and near-black or near-white colours have a hue, but it
+        // carries no meaning to the eye.
+        guard saturation > 0.18, brightness > 0.15 else { return .neutral }
+
+        switch hue * 360 {
+        case ..<15: return .red
+        case ..<40: return .orange
+        case ..<70: return .yellow
+        case ..<160: return .green
+        case ..<200: return .turquoise
+        case ..<250: return .blue
+        case ..<300: return .purple
+        case ..<345: return .pink
+        default: return .red
+        }
+    }
+
     func smoothColors(fromColor: UIColor, toColor: UIColor) -> [Color] {
         return SmoothGradientGenerator()
             .generate(
@@ -406,5 +549,52 @@ extension HappyGradients {
                 interpolation: .hcl,
                 precision: .high
             ).map { Color(uiColor: $0) }
+    }
+}
+
+// MARK: - Environment
+
+extension EnvironmentValues {
+    /// The gradient drawn behind the current content.
+    ///
+    /// Widget tiles sit on the background their widget was configured with,
+    /// several levels below where that choice is known, and they only need it
+    /// to pick a legible label colour — a value passed down the environment
+    /// rather than through four initialisers.
+    @Entry var happyGradient: HappyGradients = .stayHappy
+}
+
+// MARK: - Contrast
+
+extension UIColor {
+    /// Relative luminance as WCAG defines it — perceptual, so a pure yellow
+    /// counts as far brighter than a pure blue of the same HSB brightness.
+    var relativeLuminance: CGFloat {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        func linear(_ rawComponent: CGFloat) -> CGFloat {
+            // The HCL interpolation behind the gradients can land outside the
+            // sRGB gamut, and a component above 1 would inflate the result.
+            let component = min(max(rawComponent, 0), 1)
+
+            return component <= 0.03928
+                ? component / 12.92
+                : pow((component + 0.055) / 1.055, 2.4)
+        }
+
+        return 0.2126 * linear(red) + 0.7152 * linear(green) + 0.0722 * linear(blue)
+    }
+
+    /// The WCAG contrast ratio between two colours, from 1 (identical) to 21
+    /// (black on white). 4.5 is the AA threshold for body text.
+    func contrastRatio(against other: UIColor) -> CGFloat {
+        let lighter = max(relativeLuminance, other.relativeLuminance)
+        let darker = min(relativeLuminance, other.relativeLuminance)
+
+        return (lighter + 0.05) / (darker + 0.05)
     }
 }

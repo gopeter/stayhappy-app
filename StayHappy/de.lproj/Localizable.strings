@@ -13,6 +13,11 @@
 "save" = "Speichern";
 "delete" = "Löschen";
 "cancel" = "Abbrechen";
+"close" = "Schließen";
+"share" = "Teilen";
+"search_prompt" = "Momente und Ressourcen durchsuchen";
+"search_no_results" = "Keine Treffer";
+"show_photo" = "Foto in groß anzeigen";
 
 /* Moments */
 "no_moments_found" = "Keine Momente gefunden";
@@ -47,6 +52,10 @@
 "ordering" = "Sortierung";
 "ascending" = "Aufsteigend";
 "descending" = "Absteigend";
+"filter" = "Filter";
+/* Short forms for the segmented quick filter under the headline */
+"upcoming" = "Anstehend";
+"past" = "Erlebt";
 
 /* Date References */
 "today" = "Heute";
@@ -138,6 +147,18 @@
 "widget_period" = "Zeitraum";
 "widget_placeholder" = "Platzhalter";
 "widget_content" = "Inhalt";
+"widget_background" = "Hintergrund";
+
+/* Colour families, used to group the gradients in the widget configuration */
+"color_family_red" = "Rot";
+"color_family_orange" = "Orange";
+"color_family_yellow" = "Gelb";
+"color_family_green" = "Grün";
+"color_family_turquoise" = "Türkis";
+"color_family_blue" = "Blau";
+"color_family_purple" = "Violett";
+"color_family_pink" = "Pink";
+"color_family_neutral" = "Neutral";
 "period_month" = "Monat";
 "period_quarter" = "Quartal";
 "period_year" = "Jahr";

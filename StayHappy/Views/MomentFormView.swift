@@ -9,62 +9,135 @@ import PhotosUI
 import SwiftUI
 import os.log
 
+/// The gradient picker, as a grid grouped by colour family.
+///
+/// 117 full-width cards in one flat scroll meant a lot of scrolling to compare
+/// colours that look alike, so the swatches are laid out side by side, grouped
+/// the same way the widget configuration groups them, and searchable by name.
 struct BackgroundOptionView: View {
     @Environment(\.dismiss) var dismiss
 
     var gradients: [String]
     @Binding var selectedGradient: String
 
+    @State private var searchText = ""
+
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 3)
+
+    private var matches: [HappyGradients] {
+        let all = gradients.compactMap { HappyGradients(rawValue: $0) }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !query.isEmpty else { return all }
+        return all.filter { $0.displayName.localizedCaseInsensitiveContains(query) }
+    }
+
+    private var groups: [(family: HappyGradients.Family, gradients: [HappyGradients])] {
+        let matches = matches
+
+        return HappyGradients.Family.allCases.compactMap { family in
+            let gradients = matches
+                .filter { $0.family == family }
+                .sorted { $0.displayName < $1.displayName }
+
+            return gradients.isEmpty ? nil : (family, gradients)
+        }
+    }
+
     var body: some View {
         ScrollView {
-            VStack(spacing: 10) {
-                Button(
-                    action: {
-                        self.selectedGradient = self.gradients.randomElement()!
-                        dismiss()
-                    },
-                    label: {
-                        HStack {
-                            Spacer()
-                            Text("choose_random_color").padding(.vertical, 14)
-                            Spacer()
+            if groups.isEmpty {
+                ContentUnavailableView.search(text: searchText)
+                    .padding(.top, 60)
+            }
+            else {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(groups, id: \.family) { group in
+                        Section {
+                            ForEach(group.gradients, id: \.self) { gradient in
+                                GradientSwatch(
+                                    gradient: gradient,
+                                    isSelected: selectedGradient == gradient.rawValue
+                                ) {
+                                    selectedGradient = gradient.rawValue
+                                    dismiss()
+                                }
+                            }
+                        } header: {
+                            Text(LocalizedStringKey(group.family.localizationKey))
+                                .font(.footnote)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                )
-
-                ForEach(0..<gradients.count, id: \.self) { index in
-                    Button(
-                        action: {
-                            self.selectedGradient = self.gradients[index]
-                        },
-                        label: {
-                            HStack {
-                                Image(self.selectedGradient == self.gradients[index] ? "check-circle-symbol" : "circle-symbol")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 24, height: 24)
-                                    .foregroundStyle(.text.opacity(self.selectedGradient == self.gradients[index] ? 1 : 0.3))
-                                    .padding(.trailing, 10)
-
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(HappyGradients(rawValue: self.gradients[index])!.linear())
-                                    .frame(height: 80)
-                                    .overlay {
-                                        Text(self.gradients[index].titleCased()).foregroundStyle(.white).shadow(
-                                            color: .black.opacity(0.4),
-                                            radius: 3,
-                                            x: 0,
-                                            y: 1
-                                        )
-                                    }
-                            }
-                        }
-                    ).padding(.horizontal, 20)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 8)
+            }
+        }
+        .navigationTitle("background")
+        .navigationBarTitleDisplayMode(.inline)
+        .background(Color("AppBackgroundColor"))
+        .searchable(text: $searchText)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    if let random = gradients.randomElement() {
+                        selectedGradient = random
+                    }
+                    dismiss()
+                } label: {
+                    // Icon only: spelled out, the label is wide enough to
+                    // squeeze the navigation title.
+                    Label("choose_random_color", image: "sparkles-symbol")
                 }
             }
-        }.navigationTitle("background")
-            .navigationBarTitleDisplayMode(.inline)
-            .background(Color("AppBackgroundColor"))
+        }
+    }
+}
+
+/// One gradient in the picker.
+///
+/// Selection is a ring around the swatch rather than a symbol beside it: it
+/// leaves the colour itself unobscured, which matters for a gradient, and it
+/// is what the system's own colour pickers use.
+private struct GradientSwatch: View {
+    let gradient: HappyGradients
+    let isSelected: Bool
+    let action: () -> Void
+
+    private let cornerRadius: CGFloat = 12
+    private let ringGap: CGFloat = 4
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(gradient.linear())
+                    .aspectRatio(1, contentMode: .fit)
+                    .overlay {
+                        // Concentric with the swatch: the ring's radius grows
+                        // by exactly the gap, so both curves share a centre.
+                        RoundedRectangle(cornerRadius: cornerRadius + ringGap, style: .continuous)
+                            .stroke(Color("AccentColor"), lineWidth: 2.5)
+                            .padding(-ringGap)
+                            .opacity(isSelected ? 1 : 0)
+                    }
+
+                Text(gradient.displayName)
+                    .font(.caption2)
+                    .foregroundStyle(isSelected ? Color("AccentColor") : .secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            // Room for the ring, which is drawn outside the swatch.
+            .padding(ringGap + 2)
+        }
+        .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.15), value: isSelected)
+        .accessibilityLabel(gradient.displayName)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }
 
@@ -106,30 +179,43 @@ struct MomentFormView: View {
         }
     }
 
-    func saveMoment() {
-        var photo: String? = moment?.photo
+    func saveMoment() async {
+        // Only a highlight keeps its photo. The switch itself discards nothing
+        // — everything is cleaned up here, so turning it off and on again
+        // before saving leaves the selection untouched.
+        let keepsPhoto = isHighlight && photoImage != nil
+
+        // `nil` whenever no photo survives this save: the file is deleted below
+        // in that case, and keeping the old name here left the row pointing at
+        // a photo that no longer existed on disk.
+        var photo: String? = keepsPhoto ? moment?.photo : nil
 
         // remove image from file system if ...
         if moment?.photo != nil {
             // ... photoPickerItem is set, a new photo was chosen
-            // ... photoImage is nil, the present photo was deleted
-            if photoPickerItem != nil || photoImage == nil {
+            // ... no photo is kept: it was removed, or the moment is not a
+            //     highlight anymore
+            if photoPickerItem != nil || !keepsPhoto {
                 let imageSaver = ImageSaver(fileName: moment!.photo!)
                 imageSaver.deleteFromDisk()
             }
         }
 
         // save image to file system if ...
-        if  // ... no photo was given and a photo was selected
-        (moment?.photo == nil && photoImage != nil)
-            // ... a photo was given and a new one was chosen
-            || (moment?.photo != nil && photoPickerItem != nil && photoImage != nil)
+        if keepsPhoto,
+            // ... no photo was given and a photo was selected
+            moment?.photo == nil
+                // ... a photo was given and a new one was chosen
+                || photoPickerItem != nil
         {
             photo = UUID().uuidString
             let imageSaver = ImageSaver(image: photoImage!, fileName: photo!)
 
             do {
-                try imageSaver.writeToDisk()
+                // Awaited, so the variants are on disk before the widget
+                // timelines are told to reload below. Previously this returned
+                // immediately and the widget rendered the uncropped original.
+                try await imageSaver.writeToDisk()
                 imageSaver.reloadWidgets()
             }
             catch {
@@ -175,16 +261,36 @@ struct MomentFormView: View {
     func removeImage() {
         photoImage = nil
         previewImage = nil
+        // Otherwise the picked item would still count as "a new photo was
+        // chosen" when saving.
+        photoPickerItem = nil
     }
 
+    /// `PhotosPicker`'s label closure is `@Sendable`, so main-actor state can't
+    /// be read inside it. The state is therefore read once here and handed to a
+    /// plain value type.
     @MainActor
-    private func generatePreviewImage(from image: UIImage) async {
-        // Generate preview with same aspect ratio as highlight tiles (2:1 for medium widgets)
-        let screenWidth = UIScreen.main.bounds.width
-        let previewSize = CGSize(width: screenWidth - 40, height: 150)
+    private var photoPicker: some View {
+        let label = PhotoPickerLabel(
+            preview: previewImage,
+            isBusy: isProcessingImage || photoImage != nil
+        )
 
-        let processedImage = await ImageProcessingService.shared.processImage(image, targetSize: previewSize)
-        previewImage = processedImage
+        return PhotosPicker(selection: $photoPickerItem, matching: .images) {
+            label
+        }
+    }
+
+    private func generatePreviewImage(from image: UIImage) async {
+        // Exactly the variant the highlight tile will later display, so what
+        // you approve while editing is what ends up in the list. This used to
+        // compute its own size from the screen width, producing a third,
+        // different aspect ratio.
+        let processedImage = await ImageProcessingService.shared.processImage(image, variant: .tile3x1)
+
+        await MainActor.run {
+            previewImage = processedImage
+        }
     }
 
     var body: some View {
@@ -195,13 +301,11 @@ struct MomentFormView: View {
                 // DatePicker("End", selection: $endAt, displayedComponents: [.date])
                 Toggle("Highlight", isOn: $isHighlight)
             } header: {
+                // No placeholder view in the `else` branch: a zero-sized
+                // `Color` is still a view, so the grouped section kept its
+                // full header height and pushed the card down the sheet.
                 if moment != nil {
                     Text("update_moment")
-                }
-                else {
-                    Color.clear
-                        .frame(width: 0, height: 0)
-                        .accessibilityHidden(true)
                 }
             }.listRowBackground(Color("CardBackgroundColor"))
 
@@ -225,7 +329,7 @@ struct MomentFormView: View {
 
                                 Circle()
                                     .frame(width: 30, height: 30)
-                                    .foregroundStyle(HappyGradients(rawValue: background)!.radial(startRadius: 0, endRadius: 50))
+                                    .foregroundStyle(HappyGradients.named(background).radial(startRadius: 0, endRadius: 50))
 
                                 Image("chevron-right-symbol")
                                     .foregroundStyle(Color(uiColor: .systemFill))
@@ -234,39 +338,7 @@ struct MomentFormView: View {
                         }
                     }
 
-                    PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                        if let preview = previewImage {
-                            Image(uiImage: preview)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 150)
-                                .clipped()
-                                .padding(0)
-                        }
-                        else if isProcessingImage {
-                            ZStack {
-                                Color.gray.opacity(0.3)
-                                    .frame(height: 150)
-
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                                    .scaleEffect(1.2)
-                            }
-                        }
-                        else if photoImage != nil {
-                            ZStack {
-                                Color.gray.opacity(0.3)
-                                    .frame(height: 150)
-
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                                    .scaleEffect(1.2)
-                            }
-                        }
-                        else {
-                            Text("select_photo").padding(.horizontal, 20)
-                        }
-                    }
+                    photoPicker
 
                     if photoImage != nil {
                         Button(
@@ -299,15 +371,10 @@ struct MomentFormView: View {
                     }
             }
 
-            Section {
-                Button(
-                    action: saveMoment,
-                    label: {
-                        Text("save")
-                    }
-                ).disabled(disableForm)
-
-                if moment != nil {
+            // Saving moved to the checkmark in the toolbar, so this section
+            // only remains for the destructive action when editing.
+            if moment != nil {
+                Section {
                     Button(
                         role: .destructive,
                         action: deleteMoment,
@@ -315,8 +382,8 @@ struct MomentFormView: View {
                             Text("delete")
                         }
                     )
-                }
-            }.listRowBackground(Color("CardBackgroundColor"))
+                }.listRowBackground(Color("CardBackgroundColor"))
+            }
 
             Section {
                 Button(
@@ -336,6 +403,20 @@ struct MomentFormView: View {
             .listRowInsets(EdgeInsets(top: -30, leading: 0, bottom: 0, trailing: 0))
         }.scrollContentBackground(.hidden)
             .animation(.none, value: isHighlight)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        Task { await saveMoment() }
+                    } label: {
+                        Label("save", image: "check-symbol")
+                    }
+                    // `.glass` (the toolbar default) only tints the glyph;
+                    // the prominent variant fills the whole capsule.
+                    .buttonStyle(.glassProminent)
+                    .tint(.yellow)
+                    .disabled(disableForm)
+                }
+            }
             .sheet(isPresented: $showingHelpSheet) {
                 MomentHelpView()
             }
@@ -354,6 +435,38 @@ struct MomentFormView: View {
                     }
                 }
             }
+    }
+}
+
+/// The `PhotosPicker` label, as a plain value type so it can be constructed
+/// outside the picker's `@Sendable` closure.
+private struct PhotoPickerLabel: View {
+    let preview: UIImage?
+    /// A photo is selected but its preview is still being rendered.
+    let isBusy: Bool
+
+    var body: some View {
+        if let preview {
+            // Shown at the tile's own aspect ratio, so the preview matches the
+            // highlight tile exactly instead of being cropped again here.
+            Image(uiImage: preview)
+                .resizable()
+                .aspectRatio(ImageVariant.tile3x1.aspectRatio, contentMode: .fit)
+                .padding(0)
+        }
+        else if isBusy {
+            ZStack {
+                Color.gray.opacity(0.3)
+                    .aspectRatio(ImageVariant.tile3x1.aspectRatio, contentMode: .fit)
+
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(1.2)
+            }
+        }
+        else {
+            Text("select_photo").padding(.horizontal, 20)
+        }
     }
 }
 

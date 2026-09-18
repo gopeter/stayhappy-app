@@ -7,9 +7,12 @@
 
 import XCTest
 
+// XCUIApplication is main-actor isolated, so the test methods driving it have
+// to be too.
+@MainActor
 final class StayHappyUITestsLaunchTests: XCTestCase {
 
-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
+    override nonisolated class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
 

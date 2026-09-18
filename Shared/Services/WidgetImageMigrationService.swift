@@ -7,41 +7,74 @@
 
 import Foundation
 import GRDB
+import OSLog
 import UIKit
 import WidgetKit
 
-final class WidgetImageMigrationService {
+/// Keeps the on-disk image variants in sync with the current rendering logic.
+///
+/// This used to be a one-shot boolean ("have the widget images been created
+/// yet?"), which meant it could only ever *create missing* files — a change to
+/// the crop logic would never reach existing users. It is now versioned: bump
+/// `currentVersion` whenever `ImageProcessingService` or `ImageVariant` changes
+/// in a way that should be reflected in already-generated files, and every
+/// install rebuilds its variants exactly once.
+final class WidgetImageMigrationService: Sendable {
     static let shared = WidgetImageMigrationService()
 
-    private let userDefaults = UserDefaults.standard
-    private let migrationKey = "widget_images_migration_completed"
+    /// Version history:
+    ///   1 — initial generation of `_widget_2x1` / `_widget_1x1`
+    ///   2 — focal point now prefers faces, crop no longer double-resamples,
+    ///       fixed pixel sizes, added `_tile_3x1` for the in-app tiles
+    private static let currentVersion = 2
+
+    // `UserDefaults.standard` is accessed inline rather than stored: it is not
+    // a `Sendable` type, and holding it as a property would keep this service
+    // from being `Sendable` even though it has no mutable state of its own.
+    private static let versionKey = "widget_images_version"
 
     private init() {}
 
-    // Get screen width for widget sizing
-    private var screenWidth: CGFloat {
-        return UIScreen.main.bounds.width
-    }
-
-    /// Check if migration is needed and run it
+    /// Rebuilds the variants if this install hasn't seen the current version.
     func runMigrationIfNeeded() async {
-        // Check if migration was already completed
-        if userDefaults.bool(forKey: migrationKey) {
+        let storedVersion = UserDefaults.standard.integer(forKey: Self.versionKey)
+
+        guard storedVersion < Self.currentVersion else { return }
+
+        Logger.debug.notice("Regenerating image variants: version \(storedVersion) -> \(Self.currentVersion)")
+
+        // Anything older than the current version was produced by different
+        // crop logic, so existing files are replaced rather than kept.
+        let result = await performMigration(regenerateExisting: true)
+
+        if result.regenerated > 0 {
+            await reloadWidgetTimelines()
+        }
+
+        // The version is only recorded once nothing failed. Otherwise an
+        // interrupted or failing run (low memory, no disk space, app killed
+        // mid-migration) would mark this install as migrated and leave the old
+        // crops in place permanently. Missing source files don't count — those
+        // will never succeed, so retrying them forever is pointless.
+        guard result.failed == 0 else {
+            Logger.debug.error(
+                "Image variant regeneration incomplete (\(result.regenerated) done, \(result.failed) failed); retrying on next launch"
+            )
             return
         }
 
-        await performMigration()
-
-        // Mark migration as completed
-        userDefaults.set(true, forKey: migrationKey)
+        UserDefaults.standard.set(Self.currentVersion, forKey: Self.versionKey)
+        Logger.debug.notice("Image variants now at version \(Self.currentVersion) (\(result.regenerated) regenerated, \(result.skipped) skipped)")
     }
 
-    /// Force migration (useful for testing or manual triggers)
+    /// Rebuilds every variant regardless of the stored version.
     func forceMigration() async {
-        userDefaults.set(false, forKey: migrationKey)
-        await performMigration()
-        
-        userDefaults.set(true, forKey: migrationKey)
+        let result = await performMigration(regenerateExisting: true)
+
+        if result.failed == 0 {
+            UserDefaults.standard.set(Self.currentVersion, forKey: Self.versionKey)
+        }
+
         await reloadWidgetTimelines()
     }
 
@@ -53,121 +86,128 @@ final class WidgetImageMigrationService {
         }
     }
 
-    private func performMigration() async {
+    /// What happened to one moment's variants.
+    private enum RegenerationOutcome {
+        case regenerated
+        /// Nothing to do, or the original photo is gone — retrying won't help.
+        case skipped
+        /// Something went wrong that could succeed on a later launch.
+        case failed
+    }
+
+    private struct MigrationResult {
+        var regenerated = 0
+        var skipped = 0
+        var failed = 0
+    }
+
+    private func performMigration(regenerateExisting: Bool) async -> MigrationResult {
+        var result = MigrationResult()
+
         do {
-            // Get all moments with photos
-            let moments = try await getMomentsWithPhotos()
+            let moments = try momentsWithPhotos()
 
-            var successCount = 0
-            var errorCount = 0
-
-            // Process images in batches to avoid memory issues
+            // Batched so a large library doesn't hold several decoded
+            // full-resolution images in memory at once.
             let batchSize = 5
             for batch in moments.chunked(into: batchSize) {
-                await withTaskGroup(of: Bool.self) { group in
+                let outcomes = await withTaskGroup(of: RegenerationOutcome.self) { group -> [RegenerationOutcome] in
                     for moment in batch {
                         group.addTask {
-                            await self.processWidgetImagesForMoment(moment)
+                            await self.regenerateVariants(for: moment, regenerateExisting: regenerateExisting)
                         }
                     }
 
-                    for await success in group {
-                        if success {
-                            successCount += 1
-                        }
-                        else {
-                            errorCount += 1
-                        }
+                    var collected: [RegenerationOutcome] = []
+                    for await outcome in group {
+                        collected.append(outcome)
+                    }
+                    return collected
+                }
+
+                for outcome in outcomes {
+                    switch outcome {
+                    case .regenerated: result.regenerated += 1
+                    case .skipped: result.skipped += 1
+                    case .failed: result.failed += 1
                     }
                 }
 
                 // Small delay between batches to prevent overwhelming the system
-                try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
-            }
-
-            // Reload widget timelines after successful migration
-            if successCount > 0 {
-                await reloadWidgetTimelines()
+                try? await Task.sleep(for: .milliseconds(100))
             }
         }
         catch {
-            // ... silent error
+            // Couldn't even read the moment list, so nothing was regenerated.
+            // Counted as a failure so the version is not recorded.
+            Logger.debug.error("Widget image migration failed: \(error.localizedDescription)")
+            result.failed += 1
+        }
+
+        return result
+    }
+
+    private func momentsWithPhotos() throws -> [Moment] {
+        try AppDatabase.shared.reader.read { db in
+            try Moment
+                .all()
+                .filter(sql: "photo IS NOT NULL AND photo != ''")
+                .fetchAll(db)
         }
     }
 
-    private func getMomentsWithPhotos() async throws -> [Moment] {
-        return try await withCheckedThrowingContinuation { continuation in
+    private func regenerateVariants(for moment: Moment, regenerateExisting: Bool) async -> RegenerationOutcome {
+        guard let photoFileName = moment.photo else { return .skipped }
+
+        let variantsToBuild = ImageVariant.allCases.filter { variant in
+            let path = FileManager.documentsDirectory
+                .appendingPathComponent("\(variant.fileName(for: photoFileName)).jpg")
+            return regenerateExisting || !FileManager.default.fileExists(atPath: path.path)
+        }
+
+        guard !variantsToBuild.isEmpty else { return .skipped }
+
+        let originalPath = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
+
+        guard let originalImage = UIImage(contentsOfFile: originalPath.path) else {
+            // The original is gone, so the variants can never be rebuilt.
+            // Not a failure: retrying on every launch would never succeed.
+            Logger.debug.notice("Skipping \(photoFileName): original photo is missing")
+            return .skipped
+        }
+
+        for variant in variantsToBuild {
+            guard let processed = await ImageProcessingService.shared.processImage(originalImage, variant: variant),
+                let jpegData = processed.jpegData(compressionQuality: 0.85)
+            else {
+                Logger.debug.error("Failed to render \(variant.rawValue) for \(photoFileName)")
+                return .failed
+            }
+
+            let destination = FileManager.documentsDirectory
+                .appendingPathComponent("\(variant.fileName(for: photoFileName)).jpg")
+
             do {
-                let appDatabase = AppDatabase.shared
-                let moments = try appDatabase.reader.read { db in
-                    try Moment
-                        .all()
-                        .filter(sql: "photo IS NOT NULL AND photo != ''")
-                        .fetchAll(db)
-                }
-                continuation.resume(returning: moments)
+                try jpegData.write(to: destination, options: [.atomic])
             }
             catch {
-                continuation.resume(throwing: error)
+                Logger.debug.error("Failed to write \(variant.rawValue) for \(photoFileName): \(error.localizedDescription)")
+                return .failed
             }
         }
+
+        ImageProcessingService.shared.removeCachedImages(for: photoFileName)
+        return .regenerated
     }
 
-    private func processWidgetImagesForMoment(_ moment: Moment) async -> Bool {
-        guard let photoFileName = moment.photo else {
-            return false
-        }
-
-        let originalImagePath = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName).jpg")
-
-        // Check if widget images already exist
-        let widget2x1Path = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName)_widget_2x1.jpg")
-        let widget1x1Path = FileManager.documentsDirectory.appendingPathComponent("\(photoFileName)_widget_1x1.jpg")
-
-        if FileManager.default.fileExists(atPath: widget2x1Path.path) && FileManager.default.fileExists(atPath: widget1x1Path.path) {
-            return true
-        }
-
-        // Load original image
-        guard FileManager.default.fileExists(atPath: originalImagePath.path),
-            let originalImage = UIImage(contentsOfFile: originalImagePath.path)
-        else {
-            return false
-        }
-
-        do {
-            // Generate 2x1 aspect ratio (for medium widgets)
-            let widget2x1Size = CGSize(width: screenWidth * 0.9, height: (screenWidth * 0.9) / 2.0)
-            let widget2x1 = await ImageProcessingService.shared.processImage(originalImage, targetSize: widget2x1Size)
-            try saveImage(widget2x1, to: widget2x1Path)
-
-            // Generate 1x1 aspect ratio (for small widgets)
-            let widget1x1Size = CGSize(width: screenWidth * 0.45, height: screenWidth * 0.45)
-            let widget1x1 = await ImageProcessingService.shared.processImage(originalImage, targetSize: widget1x1Size)
-            try saveImage(widget1x1, to: widget1x1Path)
-
-            return true
-        }
-        catch {
-            return false
-        }
-    }
-
-    private func saveImage(_ image: UIImage, to url: URL) throws {
-        guard let jpegData = image.jpegData(compressionQuality: 0.85) else {
-            throw RuntimeError("Failed to convert image to JPEG data")
-        }
-        try jpegData.write(to: url, options: [.atomic])
-    }
-
-    /// Check migration status
-    var isMigrationCompleted: Bool {
-        return userDefaults.bool(forKey: migrationKey)
+    /// The image variant version this install has already been migrated to.
+    var migratedVersion: Int {
+        UserDefaults.standard.integer(forKey: Self.versionKey)
     }
 
     /// Reset migration status (for testing)
     func resetMigrationStatus() {
-        userDefaults.set(false, forKey: migrationKey)
+        UserDefaults.standard.set(0, forKey: Self.versionKey)
     }
 }
 

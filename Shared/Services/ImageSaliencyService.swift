@@ -6,85 +6,104 @@
 //  Rewritten using modern Vision async/await API
 //
 
+import CoreGraphics
 import Foundation
-import UIKit
+import OSLog
 import Vision
 
-class ImageSaliencyService {
-    private let image: UIImage
+/// Finds the point an image should be cropped around.
+///
+/// Callers pass a CGImage whose orientation has already been normalized (see
+/// `ImageProcessingService`), so every coordinate here lives in the same
+/// top-left origin space the crop later uses.
+enum ImageSaliencyService {
 
-    // MARK: - Init
+    /// The focal point as a normalized coordinate with a top-left origin.
+    ///
+    /// Faces win over generic saliency: for an app about personal memories the
+    /// subject is usually a person, and attention-based saliency happily
+    /// centers on a bright sky or a colourful sign instead.
+    static func focalPoint(for cgImage: CGImage) async -> CGPoint {
+        if let facePoint = await faceFocalPoint(for: cgImage) {
+            Logger.saliency.debug("Focal point from face detection: \(facePoint.debugDescription)")
+            return facePoint
+        }
 
-    init(uiImage: UIImage) {
-        self.image = uiImage
+        if let salientPoint = await salientFocalPoint(for: cgImage) {
+            Logger.saliency.debug("Focal point from attention saliency: \(salientPoint.debugDescription)")
+            return salientPoint
+        }
+
+        // Worth logging rather than silently centring: Vision's neural requests
+        // do not run in the iOS Simulator at all (they fail to create an
+        // inference context), so every crop made there is a centre crop. Without
+        // this line that is invisible and looks like bad saliency.
+        Logger.saliency.notice("No focal point found, falling back to the centre of the image")
+        return CGPoint(x: 0.5, y: 0.5)
     }
 
-    // MARK: - Public Interface
+    // MARK: - Faces
 
-    /// Returns the focal point as percentage using modern Vision async/await API
-    func focalPoint() async -> CGPoint {
+    private static func faceFocalPoint(for cgImage: CGImage) async -> CGPoint? {
+        let imageSize = CGSize(width: cgImage.width, height: cgImage.height)
+
         do {
-            let saliencyObservation = try await performSaliencyAnalysis()
-            let focalPoint = calculateFocalPoint(from: saliencyObservation)
-            return focalPoint
+            let request = DetectFaceRectanglesRequest()
+            let faces = try await request.perform(on: cgImage)
+
+            guard !faces.isEmpty else {
+                Logger.saliency.debug("Face detection ran but found no faces")
+                return nil
+            }
+
+            // Union of all faces, so group photos stay centered on the group
+            // rather than on whichever face Vision happened to report first.
+            let boxes = faces.map { $0.boundingBox.toImageCoordinates(imageSize, origin: .upperLeft) }
+            guard var union = boxes.first else { return nil }
+            for box in boxes.dropFirst() {
+                union = union.union(box)
+            }
+
+            return CGPoint(
+                x: clamped(union.midX / imageSize.width),
+                y: clamped(union.midY / imageSize.height)
+            )
         }
         catch {
-            return CGPoint(x: 0.5, y: 0.5)
+            Logger.saliency.error("Face detection failed: \(error.localizedDescription)")
+            return nil
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Attention-based saliency
 
-    private func performSaliencyAnalysis() async throws -> SaliencyImageObservation {
-        guard let cgImage = image.cgImage else {
-            throw SaliencyError.invalidImage
+    private static func salientFocalPoint(for cgImage: CGImage) async -> CGPoint? {
+        do {
+            let request = GenerateAttentionBasedSaliencyImageRequest()
+            let observation = try await request.perform(on: cgImage)
+
+            guard let primaryObject = observation.salientObjects.first else {
+                Logger.saliency.debug("Saliency ran but found no salient objects")
+                return nil
+            }
+
+            let boundingBox = primaryObject.boundingBox
+
+            let centerX = boundingBox.origin.x + boundingBox.width / 2
+            // Vision reports a bottom-left origin; the crop expects top-left.
+            let centerY = 1.0 - (boundingBox.origin.y + boundingBox.height / 2)
+
+            return CGPoint(x: clamped(centerX), y: clamped(centerY))
         }
-
-        let request = GenerateAttentionBasedSaliencyImageRequest()
-        let observation = try await request.perform(on: cgImage)
-
-        return observation
+        catch {
+            Logger.saliency.error("Attention saliency failed: \(error.localizedDescription)")
+            return nil
+        }
     }
 
-    private func calculateFocalPoint(from observation: SaliencyImageObservation) -> CGPoint {
-        // Check if we have salient objects
-        guard !observation.salientObjects.isEmpty else {
-            return CGPoint(x: 0.5, y: 0.5)
-        }
+    // MARK: - Helpers
 
-        // Get the first (most prominent) salient object
-        let primaryObject = observation.salientObjects.first!
-        let boundingBox = primaryObject.boundingBox
-
-        // Calculate center of bounding box (Vision coordinates are normalized 0-1)
-        let centerX = boundingBox.origin.x + boundingBox.width / 2
-        let centerY = 1.0 - (boundingBox.origin.y + boundingBox.height / 2)  // Convert from Vision (bottom-left origin) to UIKit (top-left origin)
-
-        // Ensure values are within bounds
-        let focalPoint = CGPoint(
-            x: max(0.0, min(1.0, centerX)),
-            y: max(0.0, min(1.0, centerY))
-        )
-
-        return focalPoint
-    }
-}
-
-// MARK: - Error Handling
-
-enum SaliencyError: Error, LocalizedError {
-    case invalidImage
-    case analysisTimeout
-    case visionFrameworkError(Error)
-
-    var errorDescription: String? {
-        switch self {
-        case .invalidImage:
-            return "Could not convert UIImage to CGImage"
-        case .analysisTimeout:
-            return "Saliency analysis timed out"
-        case .visionFrameworkError(let error):
-            return "Vision Framework error: \(error.localizedDescription)"
-        }
+    private static func clamped(_ value: CGFloat) -> CGFloat {
+        max(0.0, min(1.0, value))
     }
 }

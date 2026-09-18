@@ -5,6 +5,8 @@
 //  Created by Peter Oesteritz on 10.01.24.
 //
 
+// GRDBQuery infers `ValueObservationQueryable.ValuePublisher` as `AnyPublisher`,
+// so Combine has to stay in scope even though this file names no Combine type.
 import Combine
 import Foundation
 import GRDB
@@ -193,16 +195,22 @@ extension Moment {
 
     static func makeRandomPastHighlight(index: Int) -> MomentMutation {
         let imageSaver = ImageSaver(
-            image: UIImage(named: "highlight"),
+            // `Preview Content` is only bundled into the app target's debug
+            // builds, so the asset is nil in the widget extension. Falling back
+            // to a generated photo keeps seeded data usable everywhere.
+            image: UIImage(named: "highlight") ?? .previewPhoto(seed: index),
             fileName: "preview\(index)"
         )
 
-        do {
-            try imageSaver.writeToDisk()
-            imageSaver.reloadWidgets()
-        }
-        catch {
-            // ...
+        // Preview/seed data only, so fire-and-forget is acceptable here.
+        Task {
+            do {
+                try await imageSaver.writeToDisk()
+                imageSaver.reloadWidgets()
+            }
+            catch {
+                // ...
+            }
         }
 
         return MomentMutation(
@@ -217,13 +225,15 @@ extension Moment {
 
 // MARK: - Moment Model Requests
 
-struct MomentListRequest: Queryable {
-    enum Period {
+struct MomentListRequest: ValueObservationQueryable {
+    typealias Context = AppDatabase
+
+    enum Period: Sendable {
         case upcoming
         case past
     }
 
-    enum Ordering {
+    enum Ordering: Sendable {
         case asc
         case desc
     }
@@ -234,14 +244,7 @@ struct MomentListRequest: Queryable {
 
     static var defaultValue: [Moment] { [] }
 
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        ValueObservation
-            .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.dbWriter, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-
-    func fetchValue(_ db: Database) throws -> [Moment] {
+    func fetch(_ db: Database) throws -> [Moment] {
         let dateCompareOperator = period == Period.upcoming ? ">=" : "<"
         var moments = Moment.all()
 
@@ -264,17 +267,12 @@ struct MomentListRequest: Queryable {
     }
 }
 
-struct HighlightListRequest: Queryable {
+struct HighlightListRequest: ValueObservationQueryable {
+    typealias Context = AppDatabase
+
     static var defaultValue: [Moment] { [] }
 
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[Moment], Error> {
-        ValueObservation
-            .tracking(fetchValue(_:))
-            .publisher(in: appDatabase.reader, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-
-    func fetchValue(_ db: Database) throws -> [Moment] {
+    func fetch(_ db: Database) throws -> [Moment] {
         let moments =
             Moment
             .all()

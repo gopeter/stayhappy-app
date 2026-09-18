@@ -30,44 +30,14 @@ struct FormView: View {
         }
     }
 
-    var body: some View {
+    private var formContent: some View {
         ZStack {
             Color("AppBackgroundColor")
                 .ignoresSafeArea(.all)
 
             VStack(spacing: 0) {
                 if isInSheet {
-                    HStack {
-                        Text(selection == Selection.resource ? "new_resource" : "new_moment").font(.title).fontWeight(.bold)
-                        Menu {
-                            Picker("select_entry_type", selection: $selection) {
-                                Text("moment").tag(Selection.moment)
-                                Text("resource").tag(Selection.resource)
-                            }
-                        } label: {
-                            HStack {
-                                Text(selection == Selection.resource ? "Resource" : "Moment").font(.title).fontWeight(.bold)
-                                Image("chevron-down-symbol").padding(.top, 5)
-                            }
-                        }
-
-                        Spacer()
-
-                        if isInSheet {
-                            Button(
-                                action: {
-                                    dismiss()
-                                },
-                                label: {
-                                    Image("x-symbol")
-                                        .resizable()
-                                        .frame(width: 18.0, height: 18.0)
-
-                                }
-                            )
-                        }
-                    }.padding(.horizontal, 20)
-                        .padding(.top, moment == nil && resource == nil ? 40 : 20)
+                    sheetHeader
                 }
 
                 if moment != nil {
@@ -91,8 +61,73 @@ struct FormView: View {
             }
         }
     }
+
+    /// "Neuer Moment" / "Neue Ressource" — the article and the type name are
+    /// separate keys so the type can also be used on its own in the picker.
+    private var sheetTitle: String {
+        selection == Selection.resource
+            ? "\(L.newResource.localized) \("resource".localized)"
+            : "\(L.newMoment.localized) \("moment".localized)"
+    }
+
+    private var typePicker: some View {
+        Picker("select_entry_type", selection: $selection) {
+            Text("moment").tag(Selection.moment)
+            Text("resource").tag(Selection.resource)
+        }
+    }
+
+    /// The headline and the type switcher, as content rather than toolbar
+    /// chrome. Both navigation-bar routes were dead ends: a `.principal` item
+    /// is drawn at inline size while the bar still reserves its empty
+    /// large-title row underneath — which is what left the form hanging low —
+    /// and a `Menu` in iOS 27's `.largeTitle` placement renders at the right
+    /// size but never receives taps.
+    private var sheetHeader: some View {
+        Menu {
+            typePicker
+        } label: {
+            HStack(spacing: 6) {
+                Text(sheetTitle)
+                Image("chevron-down-symbol")
+                    .font(.body)
+            }
+            .font(.title)
+            .fontWeight(.bold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        // The headline is text, not an action, so it must not take the accent
+        // tint the bar's buttons use.
+        .tint(.primary)
+        .padding(.horizontal, 20)
+        .padding(.top, 8)
+    }
+
+    // Presentation-level chrome lives here because only `FormView` knows
+    // whether it is being shown as a sheet. The save action is contributed
+    // by the child form, which is where the data lives.
+    var body: some View {
+        formContent
+            // Without an explicit inline mode the bar keeps an empty
+            // large-title row below the buttons, since the sheet sets no
+            // navigation title of its own.
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if isInSheet {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Label("close", image: "x-symbol")
+                        }
+                    }
+                }
+            }
+    }
 }
 
 #Preview {
-    FormView(for: .moment, isInSheet: false)
+    NavigationStack {
+        FormView(for: .moment)
+    }
 }

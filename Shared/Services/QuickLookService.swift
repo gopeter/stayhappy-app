@@ -13,11 +13,10 @@ actor QuicklookService {
     
     private let generator = QLThumbnailGenerator.shared
     
-    func image(for url: URL, size: CGSize) async -> UIImage {
-        let deviceScale = await UIScreen.main.scale
-        return await image(for: url, size: size, scale: deviceScale)
-    }
-    
+    /// Callers pass the scale explicitly. The previous convenience overload
+    /// defaulted it from `UIScreen.main.scale`, which is deprecated in iOS 26
+    /// because it has no meaning in a multi-window context — the scale has to
+    /// come from the view's own trait collection.
     func image(for url: URL, size: CGSize, scale: CGFloat) async -> UIImage {
         let request = QLThumbnailGenerator.Request(
             fileAt: url,

@@ -13,6 +13,11 @@
 "save" = "Save";
 "delete" = "Delete";
 "cancel" = "Cancel";
+"close" = "Close";
+"share" = "Share";
+"search_prompt" = "Search moments and resources";
+"search_no_results" = "No results";
+"show_photo" = "Show photo full screen";
 
 /* Moments */
 "no_moments_found" = "No moments found";
@@ -47,6 +52,10 @@
 "ordering" = "Ordering";
 "ascending" = "Ascending";
 "descending" = "Descending";
+"filter" = "Filter";
+/* Short forms for the segmented quick filter under the headline */
+"upcoming" = "Upcoming";
+"past" = "Past";
 
 /* Date References */
 "today" = "Today";
@@ -138,6 +147,18 @@
 "widget_period" = "Period";
 "widget_placeholder" = "Placeholder";
 "widget_content" = "Content";
+"widget_background" = "Background";
+
+/* Colour families, used to group the gradients in the widget configuration */
+"color_family_red" = "Red";
+"color_family_orange" = "Orange";
+"color_family_yellow" = "Yellow";
+"color_family_green" = "Green";
+"color_family_turquoise" = "Turquoise";
+"color_family_blue" = "Blue";
+"color_family_purple" = "Purple";
+"color_family_pink" = "Pink";
+"color_family_neutral" = "Neutral";
 "period_month" = "Month";
 "period_quarter" = "Quarter";
 "period_year" = "Year";

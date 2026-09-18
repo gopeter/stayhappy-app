@@ -73,11 +73,8 @@ struct OnboardingView: View {
                     }
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .foregroundColor(.white.opacity(0.9))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .buttonStyle(.glass)
+                    .tint(.white)
                 }
             }
             .padding(.horizontal, 20)
@@ -99,56 +96,60 @@ struct OnboardingView: View {
     }
 
     // MARK: - Bottom Navigation
+
+    /// Both buttons sit in one `GlassEffectContainer` so the system treats them
+    /// as a single pane of glass: their highlights and refraction are sampled
+    /// together instead of each button dimming the gradient behind it on its own.
+    ///
+    /// The previous `.ultraThinMaterial` background was the pre-iOS-26 approach
+    /// — a flat blur with no specular edge, which is what made these read as
+    /// plain rectangles against the colourful pages.
     private var bottomNavigationSection: some View {
-        HStack {
-            // Back button
-            if !onboardingState.isFirstPage {
+        GlassEffectContainer(spacing: 16) {
+            HStack {
+                // Back button
+                if !onboardingState.isFirstPage {
+                    Button(action: {
+                        onboardingState.previousPage()
+                    }) {
+                        HStack(spacing: 8) {
+                            Image("chevron-left-symbol")
+                            Text(NSLocalizedString("onboarding_back", comment: ""))
+                        }
+                        .font(.headline)
+                        .frame(height: 28)
+                    }
+                    .buttonStyle(.glass)
+                    .tint(.white)
+                }
+
+                Spacer()
+
+                // Next/Continue button — the primary action, so it gets the
+                // prominent variant rather than a second identical button.
                 Button(action: {
-                    onboardingState.previousPage()
+                    if onboardingState.isLastPage {
+                        onboardingState.completeOnboarding()
+                    }
+                    else {
+                        onboardingState.nextPage()
+                    }
                 }) {
                     HStack(spacing: 8) {
-                        Image("chevron-left-symbol")
-                            .font(.headline)
-                        Text(NSLocalizedString("onboarding_back", comment: ""))
-                            .font(.headline)
+                        Text(NSLocalizedString(onboardingState.isLastPage ? "onboarding_finish_button" : "onboarding_next", comment: ""))
+                        if !onboardingState.isLastPage {
+                            Image("chevron-right-symbol")
+                        }
                     }
-                    .foregroundColor(.white.opacity(0.85))
-                    .frame(height: 44)
-                    .padding(.horizontal, 20)
-                    .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                    .font(.headline)
+                    .frame(height: 28)
                 }
-                .buttonStyle(OnboardingButtonStyle())
+                .buttonStyle(.glassProminent)
+                .tint(.white)
+                .foregroundStyle(.black)
             }
-
-            Spacer()
-
-            // Next/Continue button
-            Button(action: {
-                if onboardingState.isLastPage {
-                    onboardingState.completeOnboarding()
-                }
-                else {
-                    onboardingState.nextPage()
-                }
-            }) {
-                HStack(spacing: 8) {
-                    Text(NSLocalizedString(onboardingState.isLastPage ? "onboarding_finish_button" : "onboarding_next", comment: ""))
-                        .font(.headline)
-                    if !onboardingState.isLastPage {
-                        Image("chevron-right-symbol")
-                            .font(.headline)
-                    }
-                }
-                .foregroundColor(.white)
-                .frame(height: 44)
-                .padding(.horizontal, 20)
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 22))
-            }
-            .buttonStyle(OnboardingButtonStyle())
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Action Handlers (not needed anymore)

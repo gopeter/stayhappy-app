@@ -12,16 +12,38 @@ concurrency:
 jobs:
   test:
     name: Unit & UI Tests
-    # Das Deployment Target ist iOS 26, daher wird ein Runner mit Xcode 26 benötigt.
-    runs-on: macos-26
+    # `RootView` referenziert `TabRole.prominent`, also iOS-27-API. Das Symbol
+    # muss zur Compile-Zeit existieren (die `#available`-Abfrage schaltet es nur
+    # zur Laufzeit ab), deshalb reicht das `macos-26`-Image mit Xcode 26 nicht:
+    # dessen neuestes iOS-SDK ist 26.x. `xcode-27` ist GitHubs Preview-Image.
+    runs-on: xcode-27
     timeout-minutes: 60
+
+    env:
+      # Niedrigste iOS-SDK-Major-Version, mit der das Projekt kompiliert.
+      REQUIRED_IOS_SDK_MAJOR: 27
 
     steps:
       - uses: actions/checkout@v4
 
+      # Wählt das neueste installierte Xcode, dessen iOS-SDK neu genug ist, und
+      # bricht sonst mit einer klaren Meldung ab, statt den Fehler erst als
+      # "cannot be resolved without a contextual type" im Compile-Log zu zeigen.
       - name: Select Xcode
         run: |
-          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n1)"
+          selected=""
+          for app in $(ls -d /Applications/Xcode*.app | sort -Vr); do
+            sdk=$("$app/Contents/Developer/usr/bin/xcodebuild" -version -sdk iphonesimulator SDKVersion 2>/dev/null | head -n1)
+            echo "$app -> iOS SDK ${sdk:-unbekannt}"
+            if [ -z "$selected" ] && [ -n "$sdk" ] && [ "${sdk%%.*}" -ge "$REQUIRED_IOS_SDK_MAJOR" ]; then
+              selected="$app"
+            fi
+          done
+          if [ -z "$selected" ]; then
+            echo "::error::Kein Xcode mit iOS-${REQUIRED_IOS_SDK_MAJOR}-SDK auf diesem Runner gefunden."
+            exit 1
+          fi
+          sudo xcode-select -s "$selected"
           xcodebuild -version
 
       # Die aufgelösten SPM-Abhängigkeiten werden gecacht, damit nicht bei jedem

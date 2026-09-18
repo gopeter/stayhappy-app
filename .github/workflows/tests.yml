@@ -1,0 +1,86 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Unit & UI Tests
+    # Das Deployment Target ist iOS 26, daher wird ein Runner mit Xcode 26 benötigt.
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n1)"
+          xcodebuild -version
+
+      # Die aufgelösten SPM-Abhängigkeiten werden gecacht, damit nicht bei jedem
+      # Push alle Pakete neu geklont werden. Der Key hängt an Package.resolved.
+      - name: Cache Swift Packages
+        uses: actions/cache@v4
+        with:
+          path: .spm
+          key: ${{ runner.os }}-spm-${{ hashFiles('StayHappy.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: ${{ runner.os }}-spm-
+
+      # Der Runner hat je nach Image unterschiedliche Gerätenamen installiert,
+      # deshalb wird das neueste verfügbare iPhone zur Laufzeit ermittelt.
+      - name: Pick iOS Simulator
+        id: simulator
+        run: |
+          UDID=$(xcrun simctl list devices available --json | python3 -c '
+          import json, sys
+
+          devices = json.load(sys.stdin)["devices"]
+          for runtime in sorted((k for k in devices if "iOS" in k), reverse=True):
+              for device in devices[runtime]:
+                  if device["name"].startswith("iPhone"):
+                      print(device["udid"])
+                      sys.exit(0)
+          sys.exit("Kein iPhone-Simulator auf dem Runner gefunden")
+          ')
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          xcrun simctl list devices available | grep "$UDID"
+
+      - name: Resolve package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project StayHappy.xcodeproj \
+            -scheme StayHappy \
+            -clonedSourcePackagesDirPath .spm
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project StayHappy.xcodeproj \
+            -scheme StayHappy \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" \
+            -clonedSourcePackagesDirPath .spm \
+            -resultBundlePath TestResults.xcresult \
+            -skipMacroValidation \
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY=- \
+            DEVELOPMENT_TEAM="" \
+            | xcbeautify --renderer github-actions
+        env:
+          NSUnbufferedIO: YES
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+          if-no-files-found: ignore
